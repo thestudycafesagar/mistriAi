@@ -1,0 +1,263 @@
+/* page.module.css — Main page layout */
+
+/* ── Page shell ─────────────────────────────────────────────────────────────── */
+.page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Hero / Header ──────────────────────────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: var(--space-12) var(--space-6) var(--space-8);
+}
+
+.logoMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
+  background: linear-gradient(135deg, var(--accent-primary) 0%, #38bdf8 100%);
+  font-size: 28px;
+  margin-bottom: var(--space-5);
+  box-shadow: 0 8px 32px var(--accent-glow);
+  animation: pulse-glow 3s ease infinite;
+}
+
+.heroTitle {
+  font-size: clamp(2rem, 5vw, 3rem);
+  background: linear-gradient(135deg, #f1f5f9 30%, var(--accent-hover) 70%, #38bdf8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: var(--space-3);
+}
+
+.heroSubtitle {
+  font-size: clamp(15px, 2vw, 17px);
+  color: var(--text-secondary);
+  max-width: 560px;
+  margin: 0 auto var(--space-6);
+  line-height: 1.7;
+}
+
+.heroBadges {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 14px;
+  border-radius: var(--radius-full);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* ── Main content ───────────────────────────────────────────────────────────── */
+.main {
+  flex: 1;
+  padding: 0 var(--space-6) var(--space-12);
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* Upload state layout */
+.uploadLayout {
+  max-width: 640px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* Split view state layout */
+.splitLayout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-6);
+  align-items: start;
+}
+
+@media (max-width: 1024px) {
+  .splitLayout {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Panels ─────────────────────────────────────────────────────────────────── */
+.previewPanel {
+  position: sticky;
+  top: var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  height: calc(100vh - 120px);
+}
+
+.pdfPreview {
+  width: 100%;
+  height: 100%;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--bg-surface);
+  overflow: hidden;
+}
+
+.pdfObject {
+  width: 100%;
+  height: 100%;
+  border: none;
+}
+
+.card {
+  padding: var(--space-6);
+}
+
+.cardTitle {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+/* ── Error alert ────────────────────────────────────────────────────────────── */
+.errorAlert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  background: var(--error-subtle);
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  color: var(--error);
+  animation: fadeInUp 0.3s ease both;
+}
+
+.errorIcon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+.errorMsg  { line-height: 1.5; }
+
+/* ── Right panel (results) ──────────────────────────────────────────────────── */
+.rightPanel {
+  min-width: 0;
+}
+
+/* ── Empty state placeholder ────────────────────────────────────────────────── */
+.placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 420px;
+  padding: var(--space-10) var(--space-6);
+  text-align: center;
+  gap: var(--space-4);
+}
+
+.placeholderIcon {
+  font-size: 64px;
+  opacity: 0.15;
+}
+
+.placeholderTitle {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.placeholderDesc {
+  font-size: 14px;
+  color: var(--text-muted);
+  opacity: 0.7;
+  max-width: 300px;
+  line-height: 1.6;
+}
+
+.featureList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 280px;
+  text-align: left;
+}
+
+.featureList li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* ── Info panel (schema details) ────────────────────────────────────────────── */
+.schemaPanel {
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg-elevated);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+}
+
+.schemaPanelTitle {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+  margin-bottom: var(--space-3);
+}
+
+.schemaFields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.schemaField {
+  padding: 2px 8px;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-family: var(--font-mono);
+  color: var(--text-muted);
+}
+
+/* ── Footer ─────────────────────────────────────────────────────────────────── */
+.footer {
+  border-top: 1px solid var(--border-subtle);
+  padding: var(--space-5) var(--space-6);
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-4);
+}
+
+.footerDot {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--border-default);
+}

@@ -1,0 +1,168 @@
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+
+# Mistri AI Project Architecture & Guidelines
+
+This document provides a comprehensive overview of the **Mistri AI** project (formerly DocExtract AI) to help human developers and AI agents understand the codebase, data flows, and architectural constraints.
+
+## 📌 Project Overview
+**Mistri AI** is a Next.js (App Router) web application designed to instantly extract structured tabular data from **Bank Statements, Sales Invoices, and Purchase Invoices** using the **Mistral OCR AI** model. The application features a premium side-by-side UI for verifying original documents against the extracted JSON/Table data, and allows users to export the data directly to CSV for accounting software (e.g., Tally).
+
+## 🛠 Tech Stack & Constraints
+- **Framework:** Next.js 14+ (App Router)
+- **Language:** TypeScript / React
+- **Styling:** Pure CSS Modules (`.module.css`). **STRICT RULE: Do NOT use Tailwind CSS.**
+- **AI/OCR Provider:** Mistral AI (`@mistralai/mistralai` SDK) using `mistral-ocr-latest` model.
+- **Queueing:** `p-queue` for server-side rate limiting.
+- **PDF Manipulation:** `pdf-lib` for in-memory PDF chunking.
+
+---
+
+## 📂 Project Structure & Key Files
+
+### 1. Frontend Components & Layout
+- **`src/app/page.tsx`**: The main orchestrator and state manager. 
+  - **State:** Holds the uploaded `file`, selected `activeDocType`, extraction `result`, and an `elapsedTime` stopwatch timer.
+  - **Layout Logic:** When no result is present, it shows a centered `<UploadForm />`. Once data is successfully extracted, it switches to a side-by-side layout (Split View), rendering an `<iframe>` / `<img>` preview of the document on the left, and the `<ResultsTable />` on the right.
+- **`src/app/layout.tsx`**: The root layout, containing global fonts, metadata, and the basic HTML shell.
+- **`src/components/UploadForm/UploadForm.tsx`**: A drag-and-drop file upload component. It validates file types (PDF, JPEG, PNG, etc.), sizes (max 25MB), and makes the `POST` request to `/api/extract` via native `fetch`. It also displays the live extraction timer.
+- **`src/components/ResultsTable/ResultsTable.tsx`**: Displays the extracted data. Shows total parse time (`elapsedTime`, passed down from `page.tsx`'s stopwatch) both as a header badge and in the footer. For bank statements, also shows compact "Dr ₹X" / "Cr ₹Y" total badges directly in the top header row (`.headerDebit`/`.headerCredit` in the CSS module) for at-a-glance totals, in addition to the fuller `summaryBar` (totals + reconciliation badge) below the header. Features a segmented tab control to switch between:
+  - **Table View:** A sortable, structured grid with an **Export CSV** button.
+  - **JSON View:** A syntax-highlighted raw JSON viewer with a **Copy JSON** button.
+- **`src/components/StatusBadge/StatusBadge.tsx`**: A small pill badge showing status (Idle, Processing, Error, Success).
+
+### 2. Backend API Routes
+Three route files, all thin wrappers around the shared `handleExtractRequest()` in `src/lib/extractHandler.ts` — validation, queueing, retries, and response shape are defined ONCE there and apply identically to all three. A route file only declares which `docType`(s) it accepts and the `maxDuration` route-segment config (which Next.js requires to be a static export in the route file itself, so it can't live in the shared module).
+
+- **`src/app/api/extract/route.ts`**: Generic endpoint used by the web UI (`UploadForm.tsx` posts here). Accepts `docType` as a form field: `BANK_STATEMENT` | `SALES_INVOICE` | `PURCHASE_INVOICE`.
+- **`src/app/api/extract/bank-statement/route.ts`**: Dedicated endpoint for external API consumers. No `docType` field needed — always extracts as `BANK_STATEMENT`.
+- **`src/app/api/extract/invoice/route.ts`**: Dedicated endpoint for external API consumers extracting invoices. Requires `docType`: `SALES_INVOICE` or `PURCHASE_INVOICE` — both share this one route since they're the same line-item shape with a different ledger direction.
+- **`src/lib/extractHandler.ts`**: The actual logic behind all three routes.
+  - Validates `file` presence, `docType` (against whichever `allowedDocTypes` the calling route passed in, or skips this check entirely if the route passed a `fixedDocType`), MIME type, and size.
+  - Checks `ocrCache` for an exact-duplicate-file hit first; on a miss, enqueues via `enqueueOcr()` (`src/lib/queue.ts`) and stores the result in `ocrCache` after. Returns `{ success, docType, rowCount, columns, data, processingTimeMs, cached }` on success, plus `bankSummary` (see below) when `docType === 'BANK_STATEMENT'`.
+  - If the queue is saturated (`QueueSaturatedError`), returns `503` with a `Retry-After` header rather than accepting the request and queueing it anyway — see queue.ts below.
+  - Every response — success or error — is plain JSON, so any external caller (not just this repo's frontend) can integrate against these three URLs directly.
+- **`src/app/api/health/route.ts`**: `GET /api/health` — no auth, no file upload, no Mistral call. Reports `200 "ok"` if a Mistral API key is configured (via `hasMistralApiKey()`), `503 "degraded"` if the process is up but not configured to actually extract anything. Response body is currently just `{ status, service }` (simplified by hand from the original design, which also surfaced queue stats and `ledgerMemory` size via `getQueueStats()`/`getLearnedCount()` — those imports are still there if you want to reinstate them). Safe to poll from an uptime monitor.
+
+**External API consumers:** see [`API-DOCS.md`](API-DOCS.md) at the repo root — a standalone document (no internal implementation details) meant to be handed directly to third parties who'll call the hosted endpoints. Keep it in sync with `extractHandler.ts` / `schemas.ts` if the request/response shape changes. Note it currently documents these routes as unauthenticated — flag to whoever's distributing the base URL that this means anyone with the link can consume the server owner's Mistral credits.
+
+### 3. Core Libraries & Logic
+- **`src/lib/mistral.ts`**: The core AI engine logic.
+  - **Image Processing:** Converts images to base64 Data URLs and runs `client.ocr.process()`.
+  - **PDF Processing (Chunking Logic):** Mistral API has capacity limits and rejects large PDFs (e.g. 30+ pages) with a `429 Tier Capacity` or `400` error. To solve this, `pdf-lib` is used to split large PDFs into chunks — `PAGES_PER_CHUNK` is a **per-`docType` map**, not a single constant: `BANK_STATEMENT: 1`, `SALES_INVOICE`/`PURCHASE_INVOICE: 20`. Larger chunks mean more content competing for the same per-call output budget, and the Mistral SDK exposes **no** finish-reason/truncation/token-usage signal (confirmed against its response types — `OCRResponse` only has `pages`, `model`, `documentAnnotation`, and a page/byte-count `usageInfo`) telling us if a chunk's JSON annotation was quietly cut short. That failure is invisible — the JSON still parses cleanly, just with fewer rows than the source actually contains — so it can only be prevented, not detected after the fact.
+    - `BANK_STATEMENT`'s value chased missing/mismatched-amount reports down through 8 → 5 → 3 → 2, each round reducing but not eliminating the problem, because every one of those sizes still let more than one page share a single OCR call — and multiple pages per call turned out to be the actual unreliable case, at ANY size above one. Direct user-reported comparisons were consistent: a single page reliably reconciles exactly (every entry, every amount); anything with 2+ pages in one call didn't, even well under previously-suspected density ceilings, and even when sent as one large unsplit request instead of several small chunks (tried and reverted — see git history/prior conversation). Set to **1**: every bank statement page gets its own OCR call, unconditionally, regardless of total document length. This means a 40-page statement is 40 separate Mistral calls — more requests, mitigated by `CHUNK_CONCURRENCY` below plus the retry/multi-key infrastructure elsewhere in this file — but it's the only value with direct evidence of being reliably exact, and completeness/correctness has been the explicit priority over speed throughout this whole line of fixes.
+    - Bank statements are the risk case (dense multi-line MMT/IMPS/NEFT/UPI narrations pack far more content per page than most documents). This started at 5, was raised to 8 for speed (caused rows to silently go missing on dense statements), reverted to 5 (measurably reduced but on some statements didn't fully eliminate the loss — a density-dependent content-budget issue, not a hard page-count cliff), and is now **3** — a deliberate trade favoring completeness over speed, since no fixed page count is *provably* safe for unboundedly dense narrations. Paired with a prompt change (`bankStatementPrompt` in `schemas.ts`) explicitly instructing the model not to stop extracting upon hitting a summary/closing-balance line, especially on the final page, and a diagnostic-only cross-check (`warnIfRowCountLooksShort()`) that counts date-led lines in each chunk's raw OCR markdown (`ocrResponse.pages[].markdown`, returned alongside the structured JSON at no extra cost) and logs a warning if the actual row count looks suspiciously low against that estimate — heuristic, not always accurate, but real signal from the same API call.
+    - **Watch out:** the first version of that "don't stop early" prompt wording was too strong ("the transactions array MUST have N entries, do not omit any row for any reason") and caused a *different* regression — the model started treating "Page Total"/closing-balance summary lines as if they were transactions to avoid seeming to "omit" a row, inflating totals even though row *count* looked complete. `bankStatementPrompt` now explicitly separates two rules: (1) never stop extracting because of a summary line, but (2) never let a summary line itself become a transaction entry or contribute its amount to any Debit/Credit field. If total amounts stop matching again after a prompt change here, check for this exact failure mode first.
+    - Invoices are the opposite case — real invoices are essentially always 1-2 pages, so 20 means `splitPdf()`'s `totalPages <= pagesPerChunk` short-circuit almost always applies and they're never actually split, while still capping well under the ~30-page capacity threshold for the rare unusually-long itemized invoice.
+  - **Encrypted/permission-restricted PDFs:** loaded with `{ ignoreEncryption: true }` so pdf-lib doesn't refuse to open bank-issued PDFs that are flagged encrypted purely for owner-password restrictions (block printing/editing, no password needed to open). That flag only bypasses pdf-lib's load-time exception — it does **not** decrypt content streams (pdf-lib has no decryption support at all). So if such a PDF needs to be split (`pdfDoc.isEncrypted && totalPages > PAGES_PER_CHUNK`), `copyPages()`/`save()` would silently copy still-encrypted stream bytes into an unencrypted wrapper and corrupt every chunk. `splitPdf()` detects this and sends the original file to Mistral as a single unsplit request instead, letting Mistral's own backend handle standard PDF decryption directly (the same way any PDF reader would) — this only risks hitting Mistral's own capacity limit for unusually large (~30+ page) encrypted documents, which surfaces as a normal, already-handled retryable error rather than silent corruption.
+  - **Upload & Signed URLs:** Because of Next.js fetch polyfill bugs with `FormData`, files are uploaded using native `fetch` to Mistral's file API to get a signed URL.
+  - **No page-count limit:** a PDF splits into as many `PAGES_PER_CHUNK[docType]`-page chunks as it needs — for bank statements, that's one chunk per page, always. `CHUNK_CONCURRENCY` (default 3) bounds how many chunks of a *single* document are OCR'd in parallel via a local `p-queue`, so a large bank statement doesn't take as long as its page count times a single call would. Results are collected into an index-preserving array so merged rows stay in original page order regardless of which chunk's OCR call finishes first. This stacks with `ocrQueue`'s concurrency (`src/lib/queue.ts`), which caps how many *documents* run at once. If a bank-statement chunk's parsed annotation comes back with zero transactions, or with a row count well under what `warnIfRowCountLooksShort()`'s markdown-based estimate expects, a warning is logged (not necessarily a bug — could be a genuinely blank divider page — but useful to correlate against if row counts look short).
+  - **Multi-API-key load balancing (`MistralKeyPool`):** Mistral's capacity limits are per API key/account tier. If `MISTRAL_API_KEYS` (comma-separated) is set, every OCR call — per chunk, not per document — is routed through whichever configured key currently has the fewest requests in flight ("least connections"). With only `MISTRAL_API_KEY` (single key) set, this collapses to exactly the old single-client behavior; nothing changes for that setup. On a `429`, the failing key is excluded for that chunk's remaining retry attempts (so the retry goes to a different, non-constrained key) and the normal exponential backoff wait is skipped entirely via `err.fastRetryHintMs` — there's nothing to wait out on a key that wasn't the one that hit the limit. `hasMistralApiKey()` / `getMistralKeyCount()` are exported for route validation and diagnostics.
+  - **Retries:** Each chunk's upload + OCR call is wrapped in `withRetry()`, which retries transient failures — HTTP 429/500/502/503/504, network errors (connection reset/timeout), and Mistral's "File could not be fetched" / error code `3310` (an Azure Blob read-after-write propagation race right after upload) — with **exponential backoff + jitter** (up to 5 attempts, capped at 20s per wait, honoring a `Retry-After` header if sent, or the key-switch fast-retry hint above if that applies). Retry eligibility is based on the typed `statusCode` the Mistral SDK attaches to errors, not string-matching. Non-retryable errors (bad auth, bad schema) fail immediately. Every route sets `maxDuration = 800` to give large multi-chunk extractions room to finish (some hosts, e.g. Vercel Hobby, hard-cap duration regardless of this setting).
+  - **Amount normalization:** `normalizeAmount()` fixes the one decimal-separator failure mode that's recoverable from the string alone (model writes "25,05" instead of "25.05") without guessing on the unrecoverable case (a bare "2505" with no separator at all — indistinguishable from a genuine whole-rupee amount). Applied to `Debit`/`Credit` (bank statements) and `Quantity`/`Rate`/`TaxableValue`/`CGSTAmount`/`SGSTAmount`/`IGSTAmount` (invoices).
+  - **Ledger derivation (`src/lib/ledger.ts`):** the model's own `LEDGER` suggestion for bank statements is inconsistent across calls, so `suggestBankLedger()` deterministically parses IMPS/NEFT/RTGS narrations (delimited by `/` or `-`) and UPI narrations (via their `DR`/`CR` marker) to find the counterparty name, filtering out transaction-type codes, reference numbers, bank names, IFSC/UPI bank codes, remark phrases (`isRemarkPhrase()` — invoice-note text, GST-rate shorthand, pure numbers), and routing filler words. Bank/IFSC-code checks strip internal whitespace before matching, since OCR occasionally inserts a stray space inside a code (e.g. "SBIN0002296" read as "S BIN0002296") which would otherwise slip past the check and get mistaken for a party name. Checks `ledgerMemory` first (below) before re-deriving, and records every confidently-derived result into it. Falls back to the model's own suggestion for formats it can't parse confidently.
+    - **Known residual limitation:** a token that mixes a reference number with an embedded, OCR-garbled bank code (e.g. a "0" misread as letter "O", producing something like `"...IBKLONEFT01"` instead of `"...IBKL0NEFT01"`) can still slip through both the reference-number and bank-code checks. Rare in practice; if it recurs, check `data/ledger-memory.json` for outlier entries.
+  - **Merging:** the `transactions` arrays from all chunks are merged in original order.
+  - **Deduplication (`dedupeBankStatementRows()`, bank statements only):** removes exact-duplicate rows (same DATE, DESCRIPTION, CHEQUE_NO, Debit, Credit) — a guard against the same transaction being reported by two adjacent chunks when it visually sits near a chunk's page boundary. **Only compares each row against the last `DEDUP_WINDOW` (3) already-kept rows, not the whole document.** The first version compared globally, which was itself a bug: a large statement is far more likely to contain a genuinely recurring transaction (the same bank fee, the same recurring UPI payment) sharing an identical date/description/amount purely by coincidence, and a global check silently deleted that second legitimate occurrence — this was a real, confirmed contributor to "small statements reconcile exactly, large ones come up short." A true chunk-boundary duplicate always lands immediately adjacent to its twin in the merged sequence, so a small window catches the real failure mode without the false-positive risk.
+  - **Balance reconciliation (bank statements only):** the schema also asks for `openingBalance`/`closingBalance` on each chunk (empty string when a chunk's pages don't show them — most won't). Merged as: first non-empty `openingBalance` in page order, last non-empty `closingBalance` in page order (handles statements that print a running per-page balance in addition to the true statement-level opening/closing balance). `reconcileBankStatement()` sums the extracted Debit/Credit columns and compares `closingBalance - openingBalance` against `totalCredit - totalDebit` (0.5 rupee tolerance for rounding) — this is the actual "does the AI's output match the bank's own numbers" check, done automatically rather than left to the model's judgment. Returned as `bankSummary` on `RunOcrResult`, threaded through `extractHandler.ts` into the API response, and surfaced in `ResultsTable.tsx` as a totals bar + match/mismatch badge. `reconciled` is `null` (not `false`) when the statement didn't show both balances clearly enough to check — a missing check is reported differently from a failed one.
+- **`src/lib/ledgerMemory.ts`**: Persistent, rules-based "learning" for ledger names — **not** model fine-tuning (see the note below on why that's not possible here). Every party name `ledger.ts` confidently derives is recorded to `data/ledger-memory.json` (`party name → ledger name`). On the next transaction, `lookup()` checks whether any previously-learned party name appears anywhere in the new description *before* re-running the parsers — so a narration format the parsers can't handle can still resolve correctly if it mentions a party we've already seen, and repeats resolve without re-deriving them. This is what actually delivers "gets more accurate the more statements you process." Keys shorter than 4 characters are ignored to avoid false-positive substring matches.
+- **`src/lib/ocrCache.ts`**: Exact-duplicate-content result cache, at two granularities:
+  - **Whole-file** (`getCached`/`setCached`): hashes the uploaded file's bytes (SHA-256); if that exact file was already processed for the same `docType`, `extractHandler.ts` returns the stored result instantly before ever enqueueing.
+  - **Per-chunk** (`getCachedChunk`/`setCachedChunk`, under `data/ocr-cache/chunks/`): inside `runOcr()`'s chunk loop, each `PAGES_PER_CHUNK` slice is hashed and checked independently — a chunk byte-identical to one already processed (even from a *different* original file: a corrected re-export, overlapping date-range exports, a resubmission after a network failure) skips Mistral for that chunk while genuinely new chunks in the same document still go through normally.
+  - Both are safe because they're keyed by exact content hash: a hit only ever happens for bytes already read before, so there's no risk of returning stale data for content that's actually new. **This explicitly does NOT extend to "recognize this bank's layout and skip re-reading a new statement"** — a new statement's transactions have never been read before regardless of how many prior statements from that bank were processed, and skipping real OCR for them would mean either returning wrong/stale data or attempting to reimplement OCR via template-matching, neither of which is sound. See the note in `runOcr()`'s chunk loop for the exact reasoning.
+  - Complements `ledgerMemory` (which helps *new* documents that share a *counterparty*, not a whole chunk's content, with previously-seen ones).
+  - Both cache layers also store an optional `meta: Record<string, string>` alongside `rows` (`CachedResult`/`CacheEntry`) — used to persist bank-statement `openingBalance`/`closingBalance` per chunk and the full `bankSummary` (JSON-stringified) for whole-file hits, so a cache hit doesn't lose reconciliation data. `meta` is entirely optional and omitted for invoices — fully backward compatible with cache entries written before this existed.
+- **`src/lib/queue.ts`**: Implements `p-queue` with a concurrency limit of 4 to throttle active OCR tasks. `MAX_QUEUE_SIZE` (env `OCR_MAX_QUEUE_SIZE`, default 20) bounds how many tasks (running + waiting) are held at once — each holds an uploaded file in memory, so an unbounded queue under heavy concurrent load risks exhausting server memory. `enqueueOcr()` throws `QueueSaturatedError` immediately when saturated, which `extractHandler.ts` maps to an HTTP `503` with `Retry-After` rather than accepting and queueing the request anyway.
+- **`src/lib/schemas.ts`**: Defines the strict JSON schemas and custom system prompts for `BANK_STATEMENT`, `SALES_INVOICE`, and `PURCHASE_INVOICE`. This enforces the Mistral model to return data in the exact structured format expected by the frontend table.
+  - **Bank Statement Prompt** is extensively detailed with 7 explicit rules:
+    - **RULE 1:** Extract all real transactions (dated, narration, single Debit XOR Credit).
+    - **RULE 2:** Never include Opening Balance/B/F, Closing Balance/C/F, Page Total, or Sub Total rows.
+    - **RULE 3:** Completely ignore the running Balance column — its values must never enter Debit or Credit.
+    - **RULE 4:** Preserve decimal points exactly as printed; strip ₹/commas only.
+    - **RULE 5:** Only report openingBalance on the first page, closingBalance on the last; leave empty otherwise.
+    - **RULE 6:** Date must be DD/MM/YYYY.
+    - **RULE 7:** Suggest a Tally ledger name.
+- **`src/lib/extractHandler.ts`**: Shared request handler behind all three `/api/extract*` routes — see section 2 above. Also owns the `ocrCache` check/store around `enqueueOcr()`.
+
+**On "training"/fine-tuning for speed:** Mistral's OCR endpoint is a stateless hosted model called over HTTPS — it does not learn from prior requests, and there's no fine-tuning path exposed for the structured-annotation OCR endpoint this app uses. No code running in this app can change that, and — importantly — that's true regardless of how many statements from the same bank have been processed before: a new statement's actual transactions have never been read before and must go through real OCR every time, no matter how familiar the layout is. "Recognize this bank's format and skip re-reading a new document" is NOT something this app does or should do — it would mean returning stale/wrong data for content that was never actually read. What DOES genuinely improve with usage, safely: `ledgerMemory.ts` (rules-based memory of confirmed party→ledger mappings, growing with every statement processed) and `ocrCache.ts` (instant results for exact-duplicate files AND exact-duplicate page-chunks, even across different original files) — both are real "gets better/faster over time" mechanisms because they only ever reuse output for byte-identical input they've already read, never for genuinely new content. Everything else (`PAGES_PER_CHUNK`/`CHUNK_CONCURRENCY` tuning, multi-key load balancing, prompt/schema precision) is a one-time architectural choice, not something that improves further just from more usage.
+**Data persistence caveat:** `ledgerMemory.ts` and `ocrCache.ts` write to `data/` on disk (gitignored). This only accumulates meaningfully on a persistent server process — confirmed that's this app's deployment model. On a serverless platform where instances are short-lived/ephemeral, this would degrade to per-invocation memory only; an external store (Redis/Postgres) would be needed instead.
+
+---
+
+## 🌐 External API Usage
+
+These endpoints are usable directly by any external client (not just this repo's frontend) once deployed — send `multipart/form-data`, get JSON back.
+
+| Endpoint | `docType` field | Notes |
+|---|---|---|
+| `POST /api/extract` | required: `BANK_STATEMENT` \| `SALES_INVOICE` \| `PURCHASE_INVOICE` | generic — same one the web UI uses |
+| `POST /api/extract/bank-statement` | not sent (implied) | dedicated bank statement endpoint |
+| `POST /api/extract/invoice` | required: `SALES_INVOICE` \| `PURCHASE_INVOICE` | dedicated invoice endpoint, both directions |
+
+**Request:** `multipart/form-data` with a `file` field (PDF or image; PDF up to 200MB, images up to 25MB) and `docType` where applicable.
+
+**Success response** (`200`):
+```json
+{
+  "success": true,
+  "docType": "BANK_STATEMENT",
+  "rowCount": 42,
+  "columns": ["DATE", "DESCRIPTION", "CHEQUE_NO", "Debit", "Credit", "LEDGER"],
+  "data": [ { "DATE": "01/04/2024", "...": "..." } ],
+  "processingTimeMs": 18342,
+  "cached": false,
+  "bankSummary": {
+    "totalDebit": "12345.00",
+    "totalCredit": "9800.50",
+    "openingBalance": "21334.39",
+    "closingBalance": "18789.89",
+    "actualNetChange": "-2544.50",
+    "expectedNetChange": "-2544.50",
+    "reconciled": true
+  }
+}
+```
+`cached: true` means this exact file (by content hash) was already processed for this `docType` before, and the result was returned instantly from `ocrCache` without calling Mistral again.
+
+`bankSummary` is only present for `BANK_STATEMENT`. `totalDebit`/`totalCredit` are always computed from the extracted rows. `openingBalance`/`closingBalance` are the statement's own printed figures, when visible in the document. `reconciled` is `true`/`false` only when both balances were found and compared against the extracted totals (0.5 rupee tolerance); it's `null` when the statement didn't show both balances clearly enough to check — `null` means "not verified," not "verified and wrong." On a mismatch (`reconciled: false`), `discrepancy` gives the difference and `expectedNetChange`/`actualNetChange` show what the statement implies vs. what the extracted rows imply.
+
+**Error response** (`400` validation / `500` server / `503` overloaded):
+```json
+{ "success": false, "error": "human-readable message" }
+```
+A `503` includes a `Retry-After` header — back off and retry rather than hammering the endpoint.
+
+**Scaling for concurrent users:**
+- `OCR_MAX_QUEUE_SIZE` (env, default 20) — max requests held (running + waiting) before new ones get a `503`. Raise if you have the memory headroom for more concurrently-buffered files; lower if the process is memory-constrained.
+- `MISTRAL_API_KEYS` (env, comma-separated) — set this instead of a single `MISTRAL_API_KEY` to load-balance OCR calls across multiple Mistral keys, directly increasing effective throughput and reducing 429 "capacity exceeded" errors under concurrent load. Falls back to `MISTRAL_API_KEY` (single key) if unset — no behavior change for existing single-key deployments.
+- True horizontal scaling (running multiple instances of this app behind a load balancer/reverse proxy) is a deployment-platform concern, not application code — e.g. multiple container replicas behind an nginx/ALB/Vercel-style router. The in-process concurrency controls above (queue depth, chunk concurrency, key pool) apply independently within each instance.
+
+---
+
+## 🔄 Data Flow (End-to-End)
+
+1. **User Action:** User drags and drops a PDF into `UploadForm` and clicks "Extract Data".
+2. **Frontend State:** `page.tsx` sets `loading = true`, starts the live stopwatch timer, and sends a `FormData` POST request to `/api/extract` (the web UI always uses the generic route; external API consumers can use `/api/extract/bank-statement` or `/api/extract/invoice` instead).
+3. **Validation:** `extractHandler.ts` validates the request (file present, docType allowed, MIME type, size).
+4. **Cache check:** the file's content is hashed (SHA-256); if this exact file was already processed for this `docType` (`ocrCache`), the stored result is returned immediately — skipping everything below.
+5. **Queueing:** on a cache miss, the task is pushed into `p-queue` via `enqueueOcr()`. If the queue is already at `MAX_QUEUE_SIZE`, the request is rejected immediately with `503` instead of being queued.
+6. **PDF Chunking:** `mistral.ts` intercepts the PDF, reads it into memory, and splits it into `PAGES_PER_CHUNK[docType]`-page chunks using `pdf-lib` (1 page per chunk for bank statements — every page is its own OCR call — 20 for invoices — see the chunking-logic note above for why these differ).
+7. **OCR Extraction:** For each chunk, run with up to `CHUNK_CONCURRENCY` chunks in flight at once:
+   - Hash this chunk's bytes and check the per-chunk cache (`ocrCache.getCachedChunk`) — a chunk byte-identical to one already processed (from this document or a different one) skips straight to its cached rows, no Mistral call at all.
+   - On a chunk-cache miss: acquire the least-busy configured Mistral API key from the pool (see `MistralKeyPool` above — a no-op if only one key is configured).
+   - Upload chunk via native `fetch` -> get `signedUrl`.
+   - Call `ocr.process` with the `signedUrl` and the strict JSON schema/prompt.
+   - If either step fails with a transient error (429/500/502/503/504, a network error, or the file-propagation race), retry with exponential backoff + jitter (up to 5 attempts) — or, for a 429 with more than one key configured, immediately retry on a different key instead of waiting.
+   - On success, store the chunk's rows in the per-chunk cache for future reuse.
+8. **Post-processing:** Amounts are normalized (`normalizeAmount()`). For bank statements: exact-duplicate rows are removed (`dedupeBankStatementRows()`), `LEDGER` is re-derived deterministically from the narration (`suggestBankLedger()`, checking `ledgerMemory` first and recording new results into it), and the extracted totals are cross-checked against the statement's own opening/closing balance (`reconcileBankStatement()`) to produce `bankSummary`.
+9. **Merging:** All extracted arrays are concatenated into a single master array, in original page order.
+10. **Cache store:** the result is saved into `ocrCache` keyed by this file's content hash, so re-processing the identical file later is instant.
+11. **Response:** The API responds with `{ success, docType, rowCount, columns, data, processingTimeMs, cached }`, plus `bankSummary` for bank statements.
+12. **UI Shift:** `page.tsx` receives the data, stops the timer, and switches the UI to the side-by-side view. The native browser PDF preview loads on the left, and the `ResultsTable` renders the data (including total parse time, and — for bank statements — a totals bar with Total Debit/Total Credit and a match/mismatch badge against the statement's own balance) on the right.

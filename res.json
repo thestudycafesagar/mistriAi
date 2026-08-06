@@ -1,0 +1,4146 @@
+[
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/04/2024",
+    "Debit": "60000",
+    "DESCRIPTION": "BIL/BPAY/00081988 0458/ICICI BANK CRED/noRemark /4102021069",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/04/2024",
+    "Debit": "36000",
+    "DESCRIPTION": "MMT/IMPS/4092193 57898/UN98652404 01193/DeepakGup /HDFC0002535",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/04/2024",
+    "Debit": "5000",
+    "DESCRIPTION": "MMT/IMPS/4092193 61672/UN59452404 01193/Raja /KKBK0000201",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/04/2024",
+    "Debit": "35280",
+    "DESCRIPTION": "MMT/IMPS/4092193 69769/UN38892404 01194/VinayMura /HDFC0001451",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "50000",
+    "DATE": "04/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "NEFT- KKBKH2409591165 8-STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "04/04/2024",
+    "Debit": "1239",
+    "DESCRIPTION": "MMT/IMPS/4095162 42257/UN91212404 04165/RajEnterp /HDFC0001374",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "04/04/2024",
+    "Debit": "2522",
+    "DESCRIPTION": "MMT/IMPS/4095173 32276/UN48672404 04171/DelightWo /YESB0000235",
+    "LEDGER": "Yes Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "6244",
+    "DATE": "04/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "CMS/ CMS4067027190/SB GV TECHMAGNATE DIGITAL PRIVA",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "05/04/2024",
+    "Debit": "9",
+    "DESCRIPTION": "IPAY CHGS MAR2024",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "05/04/2024",
+    "Debit": "1",
+    "DESCRIPTION": "UGST202404055142 193692",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "05/04/2024",
+    "Debit": "1",
+    "DESCRIPTION": "CGST202404055142 193702",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "05/04/2024",
+    "Debit": "32361",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "LEDGER": "Loan A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "99000",
+    "DATE": "06/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "MMT/IMPS/4097178 43410/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "99000",
+    "DATE": "06/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "MMT/IMPS/4097178 43593/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "06/04/2024",
+    "Debit": "29106",
+    "DESCRIPTION": "MMT/IMPS/4097177 84222/UN49822404 06175/VipinSeth /PSIB0000893",
+    "LEDGER": "Punjab & Sind Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "06/04/2024",
+    "Debit": "81596",
+    "DESCRIPTION": "CMS/001421061011 /MARCH24",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "06/04/2024",
+    "Debit": "31231",
+    "DESCRIPTION": "CMS/001421061174 /SCPROMAR2421",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "08/04/2024",
+    "Debit": "4150",
+    "DESCRIPTION": "MMT/IMPS/4099195 27360/UN93552404 08192/98HEMKUNT /CNRB0000390",
+    "LEDGER": "Canara Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "08/04/2024",
+    "Debit": "1480",
+    "DESCRIPTION": "MMT/IMPS/4099195 33736/UN19232404 08192/ARoyalEn /CBIN0281410",
+    "LEDGER": "Central Bank of India"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "08/04/2024",
+    "Debit": "1980",
+    "DESCRIPTION": "MMT/IMPS/4099195 43063/Tea/TULSI /SVCB0000250",
+    "LEDGER": "State Bank of India"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "103694",
+    "DATE": "11/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "NEFT- CITIN24452481863- TABOOLA INDIA PRIVATE LIMITED- 14294976- 0712065001- CITI0000002",
+    "LEDGER": "Citibank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "12/04/2024",
+    "Debit": "3536",
+    "DESCRIPTION": "MMT/IMPS/4103169 51831/Spectra/SPEC TRA /UTIB0001527",
+    "LEDGER": "Axis Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "13/04/2024",
+    "Debit": "690",
+    "DESCRIPTION": "MMT/IMPS/4104143 18568/UN71472404 13145/SouthDelh /HDFC0001374",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "13/04/2024",
+    "Debit": "1770",
+    "DESCRIPTION": "BIL/ONL/000826186 722/Scholivers",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "15/04/2024",
+    "Debit": "113000",
+    "DESCRIPTION": "INF/INFT/035984561 961/UN3654240415 183309 by DEEPAKGU from Tally Bank Plu/ACMESPACE",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "15/04/2024",
+    "Debit": "5000",
+    "DESCRIPTION": "MMT/IMPS/4106185 12730/UN27602404 15183/NomanKuma /KKBK0004587",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "16886",
+    "DATE": "20/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "UP/447712841656/ Com mor/9954024432@p ayt/HDFC BANK LTD/PTMB52BB6F0 226946EFA78016A1 FCA7360C",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "20/04/2024",
+    "Debit": "48652",
+    "DESCRIPTION": "GIB/002019430457/ GST /24040700317249",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "699",
+    "DATE": "22/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "UP/411314537669/ no/kamal.8464- 3@wa/State Bank OR/ICWCE97B5E33 E243B6646E30398E 452697",
+    "LEDGER": "State Bank of India"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "22/04/2024",
+    "Debit": "34500",
+    "DESCRIPTION": "INF/INFT/036047061 281/UN6697240422 152943 by DEEPAKGU from Tally Bank Plu/VIRENDRAK",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "22/04/2024",
+    "Debit": "352",
+    "DESCRIPTION": "INF/INFT/036047171 621/UN5539240422 153552 by DEEPAKGU from Tally Bank Plu/ICIBankOD",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "699",
+    "DATE": "23/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "UP/411457592449/ UP/h.6033- 4@waaxis/Kotak Mahindra /AXISWC7473501B0 C61FD3566DB756C 1332C",
+    "LEDGER": "Axis Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "100000",
+    "DATE": "24/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "MMT/IMPS/4115153 01893/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "24/04/2024",
+    "Debit": "50000",
+    "DESCRIPTION": "BIL/BPAY/00083052 1262/ICICI BANK CRED/noRemark /4102021069",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "24/04/2024",
+    "Debit": "45000",
+    "DESCRIPTION": "MMT/IMPS/4115154 74421/UN76312404 24152/ProtibhaG /HDFC0000043",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "24/04/2024",
+    "Debit": "2280",
+    "DESCRIPTION": "MMT/IMPS/4115166 78694/UN76912404 24165/DelightWo /YESB0000235",
+    "LEDGER": "Yes Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "200000",
+    "DATE": "24/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "MMT/IMPS/4115173 78361/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "300000",
+    "DATE": "24/04/2024",
+    "Debit": "",
+    "DESCRIPTION": "MMT/IMPS/4115173 79005/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "24/04/2024",
+    "Debit": "150000",
+    "DESCRIPTION": "MMT/IMPS/4115173 80731/B TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "24/04/2024",
+    "Debit": "4945",
+    "DESCRIPTION": "BIL/BPAY/0000000R YJU/BBPS/AIRTEL PDS/886077",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "25/04/2024",
+    "Debit": "6000",
+    "DESCRIPTION": "NEFT- N1162430036155569 -SIMPLY VYAPAR APPS PRIVATE LIMITED-NEFT - APRIL BILL- 5020003136250 - 502000",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "30/04/2024",
+    "Debit": "89",
+    "DESCRIPTION": "IMPS Chg Jan- 24+GST",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "30/04/2024",
+    "Debit": "7234",
+    "DESCRIPTION": "GIB/002020109052/ DTAX /2404300100027CIC",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "30/04/2024",
+    "Debit": "140",
+    "DESCRIPTION": "GIB/002020110145/ DTAX /2404300100567CIC",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/05/2024",
+    "Debit": "100",
+    "DESCRIPTION": "Plugin Subs. Charge Mar-24",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/05/2024",
+    "Debit": "9",
+    "DESCRIPTION": "UGST2024050251951 176725",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/05/2024",
+    "Debit": "9",
+    "DESCRIPTION": "CGST2024050251951 176729",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/05/2024",
+    "Debit": "20000",
+    "DESCRIPTION": "MMT/IMPS/4123183 76686/UN33532405 02185/DeepakGup /HDFC0002535",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "02/05/2024",
+    "Debit": "36000",
+    "DESCRIPTION": "MMT/IMPS/4123183 81248/UN28872405 02185/DeepakGup /HDFC0002535",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "03/05/2024",
+    "Debit": "17174",
+    "DESCRIPTION": "MMT/IMPS/4124172 10828/UN28112405 03174/DesignCon /SBIN0001710",
+    "LEDGER": "State Bank of India"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "03/05/2024",
+    "Debit": "665",
+    "DESCRIPTION": "BIL/ONL/000835557 748/IRCTC IPAY",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "03/05/2024",
+    "Debit": "1713",
+    "DESCRIPTION": "BIL/ONL/000835563 160/IRCTC IPAY/IRCTC",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "03/05/2024",
+    "Debit": "1713",
+    "DESCRIPTION": "BIL/ONL/000835565 711/IRCTC IPAY",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "03/05/2024",
+    "Debit": "1713",
+    "DESCRIPTION": "BIL/ONL/000835567 401/IRCTC IPAY/IRCTC",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "06/05/2024",
+    "Debit": "32361",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "LEDGER": "Loan A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "06/05/2024",
+    "Debit": "7",
+    "DESCRIPTION": "IPAY CHGS APR2024",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "06/05/2024",
+    "Debit": "1",
+    "DESCRIPTION": "UGST2024050651993 333204",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "06/05/2024",
+    "Debit": "1",
+    "DESCRIPTION": "CGST2024050651993 333209",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "3290",
+    "DESCRIPTION": "INF/INFT/036209684 181/UN2219240507 153825 by DEEPAKGU from Tally Bank Plu/CostToCostCo",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "600",
+    "DESCRIPTION": "MMT/IMPS/4128160 37918/UN43092405 07162/SouthDelh /HDFC0001374",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "140400",
+    "DESCRIPTION": "INF/INFT/036214806 251/UN8828240507 184341 by DEEPAKGU from Tally Bank Plu/PDGupta",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "94769",
+    "DESCRIPTION": "CMS/001439743669 /SALAPR2024",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "78654",
+    "DESCRIPTION": "CMS/001439744388 /VENDOR456789",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "7234",
+    "DESCRIPTION": "GIB/002020577188/ DTAX /2405070104857CIC",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "22720",
+    "DESCRIPTION": "GIB/002020578958/ DTAX /2405070105771CIC",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "5000",
+    "DESCRIPTION": "GIB/002020579959/ DTAX /2405070106307CIC",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "29106",
+    "DESCRIPTION": "INF/NEFT/03621584 8231/PSIB0000893/ 37025689 / VipinSethi",
+    "LEDGER": "Punjab & Sind Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "12372",
+    "DESCRIPTION": "INF/NEFT/03621584 8611/HDFC0001451 /37025689 / /V2Technosys",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "16000",
+    "DESCRIPTION": "INF/NEFT/03621584 8731/HDFC0002535 /37025689 / DeepakGupta",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "36000",
+    "DESCRIPTION": "INF/NEFT/03621584 9141/HDFC0002535 /37025689 / DeepakGupta",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "850",
+    "DESCRIPTION": "INF/NEFT/03621584 9331/KKBK0000286/ 37025689 / Tanyarawat",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "27000",
+    "DESCRIPTION": "INF/NEFT/03621584 9561/HDFC0000043 /37025689 / /PratibhaGoyal",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "1000",
+    "DESCRIPTION": "INF/NEFT/03621585 0061/CNRB0018221 /37025689 / /RaviKumar",
+    "LEDGER": "Canara Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "5254",
+    "DESCRIPTION": "INF/NEFT/03621585 0261/CNRB0000390 /37025689 / /9BHEMKUNTOWE RU",
+    "LEDGER": "Canara Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "1036",
+    "DESCRIPTION": "INF/NEFT/03621585 0601/CBIN0281410/ 37025689 / /ARayalEnterpris",
+    "LEDGER": "Central Bank of India"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/05/2024",
+    "Debit": "5000",
+    "DESCRIPTION": "INF/NEFT/03621585 0801/KKBK0000201/ 37025689 / /Raja",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "6462",
+    "DATE": "07/05/2024",
+    "Debit": "",
+    "DESCRIPTION": "CMS/CMS41438891 36/CMS4143889136 /1/NEFT/FT/RTGS C",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "08/05/2024",
+    "Debit": "4959",
+    "DESCRIPTION": "BIL/ONL/000838246 786/AMAZON PAY ICICI BANK NODA",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "10/05/2024",
+    "Debit": "12147",
+    "DESCRIPTION": "MMT/MPS/4131131 38689/net EXP/SPECTRA /UTIB0001527",
+    "LEDGER": "Axis Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "13/05/2024",
+    "Debit": "6462",
+    "DESCRIPTION": "MMT/MPS/4134202 95064/UN39202405 13203/Deepali /HDFC0000319",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "110059",
+    "DATE": "14/05/2024",
+    "Debit": "",
+    "DESCRIPTION": "NEFT- CITIN24467877966- TABOOLA INDIA PRIVATE LIMITED- 14553595- 0712065001- CITI0000002",
+    "LEDGER": "Citibank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "14/05/2024",
+    "Debit": "11800",
+    "DESCRIPTION": "MMT/MPS/4135174 23182/UN21542405 14175/FacilityP /UTIB0000206",
+    "LEDGER": "Axis Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "14/05/2024",
+    "Debit": "20000",
+    "DESCRIPTION": "MMT/MPS/4135174 31142/UN53322405 14175/FacilityP /UTIB0000206",
+    "LEDGER": "Axis Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "14/05/2024",
+    "Debit": "10000",
+    "DESCRIPTION": "MMT/MPS/4135184 64897/UN71502405 14180/NamanKuma /KKBK0004587",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "15/05/2024",
+    "Debit": "16000",
+    "DESCRIPTION": "MMT/MPS/4136194 44933/UN43962405 15192/FacilityP /UTIB0000206",
+    "LEDGER": "Axis Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "428",
+    "DATE": "17/05/2024",
+    "Debit": "",
+    "DESCRIPTION": "NEFT- N138243044636837 MAKEMYDELIVERY- MMD- 50200038206248- HDFC0000001",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "17/05/2024",
+    "Debit": "32686",
+    "DESCRIPTION": "MMT/MPS/4138159 03066/UN82532405 17154/HINDPLAST/ KKBK0004335",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "19/05/2024",
+    "Debit": "4963",
+    "DESCRIPTION": "BIL/BPAY/0000000S N7JH/BBPS/AIRTEL POS/B86077",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "20/05/2024",
+    "Debit": "30000",
+    "DESCRIPTION": "BIL/BPAY/00084320 3442/ICICI BANK CRED/noRemark /4102021069",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "18560",
+    "DATE": "20/05/2024",
+    "Debit": "",
+    "DESCRIPTION": "UPI/450714490971/ Cci com/9954024432@p ayth/HDFC BANK LTD/PTM59AEA8D4 21C34F8391A14797 D19A90BB",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "20/05/2024",
+    "Debit": "6188",
+    "DESCRIPTION": "GIB/002021298597/ GST /24050700260447",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "8750",
+    "DATE": "21/05/2024",
+    "Debit": "",
+    "DESCRIPTION": "NEFT- N142243048993189 -SIMPLY VYAPAR APPS PRIVATE LIMITED-NEFT APRIL BILL 5020003136250- 50200031",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "22/05/2024",
+    "Debit": "40000",
+    "DESCRIPTION": "BIL/BPAY/00084418 9153/ICICI BANK CRED/noRemark /4102021069",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "23/05/2024",
+    "Debit": "760",
+    "DESCRIPTION": "MMT/IMPS/4144181 70075/Tea Exp/TULSI /SVCB0000250",
+    "LEDGER": "State Bank of India"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "23/05/2024",
+    "Debit": "5000",
+    "DESCRIPTION": "MMT/IMPS/4144181 78163/UN75182405 23184/Raja /KKBK0000201",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "25/05/2024",
+    "Debit": "14700",
+    "DESCRIPTION": "INF/INFT/036406386 651/Ekarnal /ekarnal",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "515",
+    "DATE": "27/05/2024",
+    "Debit": "",
+    "DESCRIPTION": "BIL/REV PMT ID 835557748",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "28/05/2024",
+    "Debit": "2000",
+    "DESCRIPTION": "MMT/IMPS/4149179 17307/UN84702405 28171/Sonia /BKID0006702",
+    "LEDGER": "Bank of India"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "29/05/2024",
+    "Debit": "2399",
+    "DESCRIPTION": "BIL/ONL/000846989 741/AMAZON PAY ICICI BANK NODA",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "99000",
+    "DATE": "29/05/2024",
+    "Debit": "",
+    "DESCRIPTION": "MMT/IMPS/4150195 04890/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "99000",
+    "DATE": "29/05/2024",
+    "Debit": "",
+    "DESCRIPTION": "MMT/IMPS/4150195 05272/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "29/05/2024",
+    "Debit": "49000",
+    "DESCRIPTION": "INF/INFT/036443697 431/ekarnal",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "30/05/2024",
+    "Debit": "50000",
+    "DESCRIPTION": "BIL/BPAY/00084754 8179/ICICI BANK CRED/noRemark /4102021069",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "50000",
+    "DATE": "04/06/2024",
+    "Debit": "",
+    "DESCRIPTION": "NEFT- KKBKH2415672341 9-STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "05/06/2024",
+    "Debit": "32361",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "LEDGER": "Loan A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "05/06/2024",
+    "Debit": "13",
+    "DESCRIPTION": "IPAY CHGS MAY2024",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "05/06/2024",
+    "Debit": "1",
+    "DESCRIPTION": "UGST202406055258 173293",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "05/06/2024",
+    "Debit": "1",
+    "DESCRIPTION": "CGST202406055258 173300",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "06/06/2024",
+    "Debit": "29106",
+    "DESCRIPTION": "MMT/IMPS/4158198 50334/UN37962406 06190/VipinSeth /PSIB0000893",
+    "LEDGER": "Punjab & Sind Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/06/2024",
+    "Debit": "8300",
+    "DESCRIPTION": "GIB/002022157982/ DTAX /24060701258800ICI C",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/06/2024",
+    "Debit": "7234",
+    "DESCRIPTION": "GIB/002022158797/ DTAX /24060701263778ICI C",
+    "LEDGER": "GST Payable"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "400000",
+    "DATE": "07/06/2024",
+    "Debit": "",
+    "DESCRIPTION": "MMT/IMPS/4159205 64826/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/06/2024",
+    "Debit": "86384",
+    "DESCRIPTION": "CMS/001460012818 /SALMAY24",
+    "LEDGER": "Suspense A/c"
+  },
+  {
+    "CHEQUE_NO": "",
+    "Credit": "",
+    "DATE": "07/06/2024",
+    "Debit": "156600",
+    "DESCRIPTION": "INF/INFT/036556738 301/UN6914240607 202847 by DEEPAKGU from Tally Bank Plu/PDGupta",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "07/06/2024",
+    "DESCRIPTION": "CMS/001460012971 /PROFENDOR",
+    "CHEQUE_NO": "",
+    "Debit": "80286",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/06/2024",
+    "DESCRIPTION": "INF/INFT/036556762 471/UN4596240607 202953 by DEEPAKGU from Tally Bank Plu/Ekarnal",
+    "CHEQUE_NO": "",
+    "Debit": "49000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/06/2024",
+    "DESCRIPTION": "INF/NEFT/03656393 2961/HDFC0002535 /38268249 / DeepakGupta",
+    "CHEQUE_NO": "",
+    "Debit": "36000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/06/2024",
+    "DESCRIPTION": "INF/NEFT/03656393 3451/HDFC0002535 /38268249 / DeepakGupta",
+    "CHEQUE_NO": "",
+    "Debit": "36000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/06/2024",
+    "DESCRIPTION": "INF/NEFT/03656393 3761/CNRB0000390 /38268249 / /9BHEMKUNTOWERU",
+    "CHEQUE_NO": "",
+    "Debit": "5254",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/06/2024",
+    "DESCRIPTION": "INF/NEFT/03656393 3941/CBIN0281410/ 38268249 / /ARayalEnterpris",
+    "CHEQUE_NO": "",
+    "Debit": "1036",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/06/2024",
+    "DESCRIPTION": "INF/NEFT/03656393 4431/KKBK0000201/ 38268249 / /Raja",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/06/2024",
+    "DESCRIPTION": "MMT/IMPS/4162185 28403/UN69292406 10182/TrulyPest /HDFC0000271",
+    "CHEQUE_NO": "",
+    "Debit": "3540",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/06/2024",
+    "DESCRIPTION": "MMT/IMPS/4162185 34747/UN89312406 10182/TrulyPest /HDFC0000271",
+    "CHEQUE_NO": "",
+    "Debit": "5310",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "11/06/2024",
+    "DESCRIPTION": "IMPS Chg Feb- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "6962",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/06/2024",
+    "DESCRIPTION": "MMT/IMPS/4165156 78889/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "99000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "13/06/2024",
+    "DESCRIPTION": "INF/INFT/036623440 181/UN1761240613 163227 by DEEPAKGU from Tally Bank Plu/ExcelNet",
+    "CHEQUE_NO": "",
+    "Debit": "64900",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "14/06/2024",
+    "DESCRIPTION": "NEFT- CITIN24482301321- TABOOLA INDIA PRIVATE LIMITED- 14765320- 0712065001- CITI0000002",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "11069349",
+    "LEDGER": "Citi Bank"
+  },
+  {
+    "DATE": "18/06/2024",
+    "DESCRIPTION": "BIL/ONL/000857210 554/AMAZON PAY ICICI BANK NODA",
+    "CHEQUE_NO": "",
+    "Debit": "5498",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/06/2024",
+    "DESCRIPTION": "BIL/BPAY/000000T HQSV/BBPS/AIRTEL POS/886077",
+    "CHEQUE_NO": "",
+    "Debit": "493948",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/06/2024",
+    "DESCRIPTION": "BIL/BPAY/00085766 7333/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "50000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/06/2024",
+    "DESCRIPTION": "Plugin Subs. Charge Apr-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/06/2024",
+    "DESCRIPTION": "UGST202406195290 754762",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/06/2024",
+    "DESCRIPTION": "CGST202406195290 754773",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/06/2024",
+    "DESCRIPTION": "UPI/453816205022/ Com may/9954024432@payt/HDFC BANK LTD/PTMF229D357B7F34934876A5E026744A114",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "17803",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/06/2024",
+    "DESCRIPTION": "UPI/417229297205/ UPI/tarikhussainnaw /Punjab National/SBI0g90a0d102964f60986ea2c11e6192a5",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "699",
+    "LEDGER": "Punjab National Bank"
+  },
+  {
+    "DATE": "20/06/2024",
+    "DESCRIPTION": "GIB/002023040609/ GST /24060700246960",
+    "CHEQUE_NO": "",
+    "Debit": "11001",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/06/2024",
+    "DESCRIPTION": "INF/INFT/036693100 331/UN3586240620 194144 by DEEPAKGU from Tally Bank Plu/ICICBankOD",
+    "CHEQUE_NO": "",
+    "Debit": "3",
+    "Credit": "",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "20/06/2024",
+    "DESCRIPTION": "MMT/IMPS/4172198 00851/UN19712406 20194/Roja/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "21/06/2024",
+    "DESCRIPTION": "Plugin Subs. Charge May-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "21/06/2024",
+    "DESCRIPTION": "UGST202406215294 209205",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "21/06/2024",
+    "DESCRIPTION": "CGST202406215294 209211",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "22/06/2024",
+    "DESCRIPTION": "MMT/IMPS/4174168 44764/UN61862406 22164/RojaEnterp/HDFC0001374",
+    "CHEQUE_NO": "",
+    "Debit": "1121",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "24/06/2024",
+    "DESCRIPTION": "BIL/BPAY/00085955 9622/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "40000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "24/06/2024",
+    "DESCRIPTION": "MMT/IMPS/4176202 24167/TeaTULSI /SVCB0000250",
+    "CHEQUE_NO": "",
+    "Debit": "260",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "25/06/2024",
+    "DESCRIPTION": "MMT/IMPS/4177194 61397/UN93562406 25193/Roja/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "26/06/2024",
+    "DESCRIPTION": "BIL/ONL/000860516 119/AMAZON PAY ICICI BANK NODA",
+    "CHEQUE_NO": "",
+    "Debit": "998",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/06/2024",
+    "DESCRIPTION": "NEFT- AXNFCN0663579027 7-RZPK PRIVATE LIMITED ESCROW ACCOUN- RAZORPAY SOFTWARE PRIVATE LIMI- 9210200106",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "430255",
+    "LEDGER": "Razorpay Software Private Limited"
+  },
+  {
+    "DATE": "03/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4185140 10605/UN15342407 03140/Roja/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "12000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "NEFT- KKBKH2418679218 1-STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4186194 84788/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4186194 85274/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "INF/NEFT/03683677 9621/KKBK0000201/ 39264508 / /Roja",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "INF/NEFT/03683677 9451/CBIN0281410/ 39264508 / /ARoyalEnterpris",
+    "CHEQUE_NO": "",
+    "Debit": "1110",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "INF/NEFT/03683677 9851/HDFC0001451 /39264508 / /VinoyMurarkaHUF",
+    "CHEQUE_NO": "",
+    "Debit": "35280",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "INF/INFT/03683679 971/39264508 /Ekarnal/",
+    "CHEQUE_NO": "",
+    "Debit": "19600",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "INF/NEFT/03683678 0281/HDFC0000043 /39264508 / /PratibhaGoyal",
+    "CHEQUE_NO": "",
+    "Debit": "18000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "INF/NEFT/03683679 0331/HDFC0002535 /39264508 / /DeepakGupta",
+    "CHEQUE_NO": "",
+    "Debit": "36000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "INF/NEFT/03683679 0371/HDFC0002535 /39264508 / /DeepakGupta",
+    "CHEQUE_NO": "",
+    "Debit": "18000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/07/2024",
+    "DESCRIPTION": "INF/NEFT/03683679 0791/CNRB0000390 /39264508 / /98HEMKUNTOWERU",
+    "CHEQUE_NO": "",
+    "Debit": "5254",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/07/2024",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "IPAY CHGS JUN2024",
+    "CHEQUE_NO": "",
+    "Debit": "13",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "UGST202407065325 921696",
+    "CHEQUE_NO": "",
+    "Debit": "117",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "CGST202407065325 921707",
+    "CHEQUE_NO": "",
+    "Debit": "117",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "BIL/REV PMT ID 860516119",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "998",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4188196 16726/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "332000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "INF/INFT/036867958 311/UN9162240706 193111 by DEEPAKGU from Tally Bank Plu/PDGupta",
+    "CHEQUE_NO": "",
+    "Debit": "232000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "CMS/001479927917 /JUNE24",
+    "CHEQUE_NO": "",
+    "Debit": "103960",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "GIB/002023926808/ DTAX /2407060139037BICI C",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "GIB/002023927279/ DTAX /2407060139035CICI C",
+    "CHEQUE_NO": "",
+    "Debit": "1100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4188206 66596/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "GIB/002023927558/ DTAX /2407060139445CICI C",
+    "CHEQUE_NO": "",
+    "Debit": "420",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "GIB/002023927830/ DTAX /2407060139594CICI C",
+    "CHEQUE_NO": "",
+    "Debit": "19500",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4188214 91822/Bizgyan/BIZZGYAN/DFB0021374",
+    "CHEQUE_NO": "",
+    "Debit": "1364",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4190151 23916/Internet 1002/SPECTRA/UTIB0001527",
+    "CHEQUE_NO": "",
+    "Debit": "365446",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "09/07/2024",
+    "DESCRIPTION": "BIL/ONL/000868060 780/AMAZON PAY ICICI BANK NODA",
+    "CHEQUE_NO": "",
+    "Debit": "998",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/07/2024",
+    "DESCRIPTION": "CMS/ CMS4311016093/SB GV TECHMAGNATE DIGITAL PRIVA",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "17928",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/07/2024",
+    "DESCRIPTION": "NEFT- CITIN24496547852- TABOOLA INDIA PRIVATE LIMITED- 15040103- 0712065001- CITI0000002",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "11872502",
+    "LEDGER": "Citi Bank"
+  },
+  {
+    "DATE": "15/07/2024",
+    "DESCRIPTION": "BIL/BPAY/00087083 2314/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "50000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "17/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4199168 77237/SHUBANHC MRMOTOR/UTIB0001609",
+    "CHEQUE_NO": "",
+    "Debit": "10610",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/07/2024",
+    "DESCRIPTION": "BIL/BPAY/000000U D97C/BBPS/AIRTEL POS/886077",
+    "CHEQUE_NO": "",
+    "Debit": "495128",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/07/2024",
+    "DESCRIPTION": "UP/420157169405/ NA/8140201212@ptax/ICICI Bank/PTM7eb080ef5fc7494798e6d1647ed350bd",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "999",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "19/07/2024",
+    "DESCRIPTION": "INF/INFT/037007702 191/Ekarnal /EKARNAL",
+    "CHEQUE_NO": "",
+    "Debit": "24500",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/07/2024",
+    "DESCRIPTION": "GIB/002025133609/ GST /240707003879",
+    "CHEQUE_NO": "",
+    "Debit": "28467",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "25/07/2024",
+    "DESCRIPTION": "IMPS Chg Apr- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "4896",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "25/07/2024",
+    "DESCRIPTION": "Plugin Subs. Charge Jun-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "25/07/2024",
+    "DESCRIPTION": "UGST202407255375 777842",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "25/07/2024",
+    "DESCRIPTION": "CGST202407255375 777847",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "29/07/2024",
+    "DESCRIPTION": "MMT/IMPS/4211208 68001/UN9452240 29202/Raja/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "31/07/2024",
+    "DESCRIPTION": "BIL/BPAY/00087741 8405/CICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "20000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "03/08/2024",
+    "DESCRIPTION": "ATD/Auto Debit CC1xx2466",
+    "CHEQUE_NO": "",
+    "Debit": "1701380",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/08/2024",
+    "DESCRIPTION": "NEFT- KKBKH2421763076 4-STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "MMT/IMPS/4218162 00398/IB IB TRF T/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "200000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "INF/NEFT/03717621 3541/SVCB0000250/ 40517777 / /TULSIHSAW",
+    "CHEQUE_NO": "",
+    "Debit": "1460",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "INF/NEFT/03717623 9901/HDFC0002535 /40517777 / /DeepakGupta",
+    "CHEQUE_NO": "",
+    "Debit": "36000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "INF/NEFT/03717624 0111/CNRB0000390 /40517777 / /9BHEMKUNTOWERU",
+    "CHEQUE_NO": "",
+    "Debit": "5254",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "INF/NEFT/03717624 0791/PSIB0000893/ 40517777 / /VipinSethi",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "INF/NEFT/03717624 1321/KKBK0000201/ 40517777 / /Raja",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "INF/NEFT/03717624 1871/HDFC0001466 /40517777 / /DigitizePortfol",
+    "CHEQUE_NO": "",
+    "Debit": "6000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "INF/NEFT/03717624 2621/KKBK0000286/ 40517777 / /TaniyaRawat",
+    "CHEQUE_NO": "",
+    "Debit": "1371",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/08/2024",
+    "DESCRIPTION": "INF/NEFT/03717624 3051/YESB0000232/ 40517777 / /Khushi",
+    "CHEQUE_NO": "",
+    "Debit": "17034",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/08/2024",
+    "DESCRIPTION": "IPAY CHGS JUL2024",
+    "CHEQUE_NO": "",
+    "Debit": "5",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/08/2024",
+    "DESCRIPTION": "UGST202408065407 642514",
+    "CHEQUE_NO": "",
+    "Debit": "45",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/08/2024",
+    "DESCRIPTION": "CGST202408065407 642518",
+    "CHEQUE_NO": "",
+    "Debit": "45",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/08/2024",
+    "DESCRIPTION": "MMT/IMPS/4220215 80021/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "240000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "07/08/2024",
+    "DESCRIPTION": "CMS/001501802133 /JUL24",
+    "CHEQUE_NO": "",
+    "Debit": "67703",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/08/2024",
+    "DESCRIPTION": "INF/INFT/037208681 681/UN4816240807 212910 by DEEPAKGU from Tally Bank Plu/PDGupta",
+    "CHEQUE_NO": "",
+    "Debit": "243600",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/08/2024",
+    "DESCRIPTION": "GIB/002026824590/ DTAX /2408070180409/ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "07/08/2024",
+    "DESCRIPTION": "GIB/002026825089/ DTAX /2408070180710/ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "9620",
+    "Credit": "",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "08/08/2024",
+    "DESCRIPTION": "BIL/BPAY/00088261 1176/CICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "10000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/08/2024",
+    "DESCRIPTION": "INF/NEFT/03722275 8521/KKBK0000201/ 40694271 / /Raja",
+    "CHEQUE_NO": "",
+    "Debit": "10000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/08/2024",
+    "DESCRIPTION": "INF/NEFT/03722275 8821/KKBK0004587/ 40694271 / /NamanKumarNayan",
+    "CHEQUE_NO": "",
+    "Debit": "9148",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/08/2024",
+    "DESCRIPTION": "INF/NEFT/03722275 8691/CBIN0281410/ 40694271 / /AROYALENTERPRIS",
+    "CHEQUE_NO": "",
+    "Debit": "1258",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/08/2024",
+    "DESCRIPTION": "INF/NEFT/03722275 8961/SBIN0003835/ 40694271 / AnshumaanDas",
+    "CHEQUE_NO": "",
+    "Debit": "888",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/08/2024",
+    "DESCRIPTION": "INF/NEFT/03722275 8761/BARBOPHUSR 0/40694271 / AnishaKumari",
+    "CHEQUE_NO": "",
+    "Debit": "4500",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/08/2024",
+    "DESCRIPTION": "IMPS Chg May- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "7670",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "16/08/2024",
+    "DESCRIPTION": "BIL/REV PMT ID 835567401",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "147536",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "16/08/2024",
+    "DESCRIPTION": "NEFT- CITIN24511517022- TABOOLA INDIA PRIVATE LIMITED- 15264714- 0712065001- CITI0000002",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "13024495",
+    "LEDGER": "Citi Bank"
+  },
+  {
+    "DATE": "17/08/2024",
+    "DESCRIPTION": "BIL/BPAY/00088636 3601/CICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "50000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/08/2024",
+    "DESCRIPTION": "BIL/BPAY/0000000V 90C2/BBPS/AIRTEL POS/886077",
+    "CHEQUE_NO": "",
+    "Debit": "497488",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/08/2024",
+    "DESCRIPTION": "GIB/002027505866/ GST /2408070248907",
+    "CHEQUE_NO": "",
+    "Debit": "6620",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "22/08/2024",
+    "DESCRIPTION": "MMT/IMPS/4235222 61696/UN86272408 22225/Raja/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "10000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/08/2024",
+    "DESCRIPTION": "Plugin Subs. Charge Jul-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/08/2024",
+    "DESCRIPTION": "UGST202408235459 026101",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/08/2024",
+    "DESCRIPTION": "CGST202408235459 026105",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "27/08/2024",
+    "DESCRIPTION": "BIL/REV PMT ID 835565711",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "147536",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "29/08/2024",
+    "DESCRIPTION": "UP/9954024432@pt ye/Cci com/HDFC BANK LTD/46086504518B/ PTM68D2411D50A14179B32C7FF1BAFE5E3C",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "14085",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/09/2024",
+    "DESCRIPTION": "BIL/BPAY/00089377 6592/CICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "50000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/09/2024",
+    "DESCRIPTION": "NEFT- KKBKH2424867966 6-STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "05/09/2024",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/09/2024",
+    "DESCRIPTION": "IPAY CHGS AUG2024",
+    "CHEQUE_NO": "",
+    "Debit": "4",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/09/2024",
+    "DESCRIPTION": "UGST202409065501 009391",
+    "CHEQUE_NO": "",
+    "Debit": "36",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/09/2024",
+    "DESCRIPTION": "CGST202409065501 009399",
+    "CHEQUE_NO": "",
+    "Debit": "36",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4251187 65379/B TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "420000",
+    "LEDGER": "Kotak Mahindra Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "INF/INFT/037540251 141/UN9130240907 185644 by DEEPAKGU from Tally Bank Plu/PDGupta",
+    "CHEQUE_NO": "",
+    "Debit": "157760",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "GIB/002028326909/ DTAX /2409070069337CIC",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "GIB/002028327408/ DTAX /2409070069611SIC",
+    "CHEQUE_NO": "",
+    "Debit": "437",
+    "Credit": "",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "INF/INFT/037540305 761/BULD41849232 /WIB Office acco",
+    "CHEQUE_NO": "",
+    "Debit": "96500",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4251198 89245/Rent/VIPINSETH/PSIB0000893",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "INF/NEFT/03754209 1001/CNRB0000390 /41854555 / /98HEMKUNTTOWER",
+    "CHEQUE_NO": "",
+    "Debit": "5844",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "INF/NEFT/03754209 0571/HDFC0002535 /41854555 / /DeepakGupta",
+    "CHEQUE_NO": "",
+    "Debit": "36000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "INF/NEFT/03754209 0861/CBIN0281410/ 41854555 / /AROYALENTERPRIS",
+    "CHEQUE_NO": "",
+    "Debit": "1147",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/09/2024",
+    "DESCRIPTION": "INF/NEFT/03754209 0871/KKBK0000201/ 41854555 / /RAJABABUMEHTA",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4254158 70496/Rent July 24/VIPINSTEIN/PSIB0 000893",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4256155 73436/Bizzgyan/BI ZZGYAAN/IDFB0021 374",
+    "CHEQUE_NO": "",
+    "Debit": "7627",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4256155 80140/UN89742409 12152/Roja/KKBK00 00201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/09/2024",
+    "DESCRIPTION": "INF/INFT/037597370 861/UN5792240912 153618 by DEEPAKGU from Tally Bank Plu/Finvestmen",
+    "CHEQUE_NO": "",
+    "Debit": "2000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/09/2024",
+    "DESCRIPTION": "INF/INFT/037597397 501/UN6776240912 153848 by DEEPAKGU from Tally Bank Plu/Finvestmen",
+    "CHEQUE_NO": "",
+    "Debit": "18000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4257157 47991/UN81782409 13153/SouthDelh/H DFC0001374",
+    "CHEQUE_NO": "",
+    "Debit": "610",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/09/2024",
+    "DESCRIPTION": "NEFT- CITIN24524958716- TABOOLA INDIA PRIVATE LIMITED- 15458922- 0712065001- CITI0000002",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "88615",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/09/2024",
+    "DESCRIPTION": "Plugin Subs. Charge Aug-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/09/2024",
+    "DESCRIPTION": "UGST202409135522 923755",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/09/2024",
+    "DESCRIPTION": "CGST202409135522 923759",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "14/09/2024",
+    "DESCRIPTION": "NEFT- N258243268659977 MAKEMYDELIVERY- MMD- 50200038206248- HDFC0000001",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "1914",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "16/09/2024",
+    "DESCRIPTION": "IMPS Chg Jun- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "38",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "18/09/2024",
+    "DESCRIPTION": "BIL/BPAY/00090098 2089/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "30000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/09/2024",
+    "DESCRIPTION": "BIL/BPAY/0000000 W7IF9/BBPS/AIRTEL POS/886077",
+    "CHEQUE_NO": "",
+    "Debit": "4945",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/09/2024",
+    "DESCRIPTION": "UP/9954024432@pt ye/Com jun aug/HDFC BANK LTD/463067885423/ PTM3155D73E8385 4BDC98CA7437632 B24FB",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "53455",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/09/2024",
+    "DESCRIPTION": "GIB/002029202471/ GST /24090700243512",
+    "CHEQUE_NO": "",
+    "Debit": "6193",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "21/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4265159 24776/UN27362409 21153/PERFECTIN/H DFC0009079",
+    "CHEQUE_NO": "",
+    "Debit": "11741",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "24/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4268193 72666/UN24892409 24190/Lokender/SB IN0016108",
+    "CHEQUE_NO": "",
+    "Debit": "2000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "26/09/2024",
+    "DESCRIPTION": "IMPS Chg Mar- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "73",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "26/09/2024",
+    "DESCRIPTION": "MMT/IMPS/4270151 57752/UN82042409 26151/TaxmannP/K KBK0000182",
+    "CHEQUE_NO": "",
+    "Debit": "4774",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "30/09/2024",
+    "DESCRIPTION": "Plugin Subs. Charge Aug-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "30/09/2024",
+    "DESCRIPTION": "UGST202409305562 959270",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "30/09/2024",
+    "DESCRIPTION": "CGST202409305562 959278",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "30/09/2024",
+    "DESCRIPTION": "BIL/BPAY/00090651 2357/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "40000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "03/10/2024",
+    "DESCRIPTION": "MMT/IMPS/4277143 65089/UN24202410 03142/VipinSeth/PSI B0000893",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "03/10/2024",
+    "DESCRIPTION": "BIL/BPAY/00090830 9472/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "35000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "03/10/2024",
+    "DESCRIPTION": "MMT/IMPS/4277143 96514/UN26272410 03143/Roja/KKBK00 00201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/10/2024",
+    "DESCRIPTION": "NEFT- KKBKH2427877671 8-STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/10/2024",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/10/2024",
+    "DESCRIPTION": "MMT/IMPS/4281209 69119/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "260000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/10/2024",
+    "DESCRIPTION": "INF/INFT/037863381 141/UN7386241007 204332 by DEEPAKGU from Tally Bank Plu/FinvestmentPro",
+    "CHEQUE_NO": "",
+    "Debit": "29862",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/10/2024",
+    "DESCRIPTION": "INF/INFT/037863405 811/UN6932241007 204639 by DEEPAKGU from Tally Bank Plu/PDGupta",
+    "CHEQUE_NO": "",
+    "Debit": "111360",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/10/2024",
+    "DESCRIPTION": "CMS/001545939111 /SEPSAL24",
+    "CHEQUE_NO": "",
+    "Debit": "103080",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/10/2024",
+    "DESCRIPTION": "GIB/002030045939/ DTAX /2410070130264213C",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/10/2024",
+    "DESCRIPTION": "GIB/002030048857/ DTAX /2410070131903013C",
+    "CHEQUE_NO": "",
+    "Debit": "6920",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/10/2024",
+    "DESCRIPTION": "GIB/002030050244/ DTAX /2410070132549013C",
+    "CHEQUE_NO": "",
+    "Debit": "847",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/10/2024",
+    "DESCRIPTION": "GIB/002030051095/ DTAX /2410070132953213C",
+    "CHEQUE_NO": "",
+    "Debit": "910",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "09/10/2024",
+    "DESCRIPTION": "MMT/IMPS/4283135 02072/UN52862410 09133/VinayMura/H DFC0001451",
+    "CHEQUE_NO": "",
+    "Debit": "35280",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/10/2024",
+    "DESCRIPTION": "NEFT- CITIN2453800939- TABOOLA INDIA PRIVATE LIMITED- 15673617- 0712065001- CIT0000002",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "35036",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/10/2024",
+    "DESCRIPTION": "INF/INFT/037955874 451/UN6463241015 192932 by DEEPAKGU from Tally Bank Plu/ICICBankOD",
+    "CHEQUE_NO": "",
+    "Debit": "35477",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/10/2024",
+    "DESCRIPTION": "MMT/IMPS/4289192 53004/Tea/TULSI/SV CB0000250",
+    "CHEQUE_NO": "",
+    "Debit": "730",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/10/2024",
+    "DESCRIPTION": "MMT/IMPS/4289192 54865/Water Exp/WATER/CBIN02 81410",
+    "CHEQUE_NO": "",
+    "Debit": "1480",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/10/2024",
+    "DESCRIPTION": "MMT/IMPS/428919261000/98HENKUNT SOCIET/CNRB0000390",
+    "CHEQUE_NO": "",
+    "Debit": "5254",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "16/10/2024",
+    "DESCRIPTION": "INF/INFT/037962123031/Study Cafe Pvt/TALENTICK EDUSO",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "460",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "17/10/2024",
+    "DESCRIPTION": "Drcord Reissue Chrgs+GST",
+    "CHEQUE_NO": "",
+    "Debit": "236",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "18/10/2024",
+    "DESCRIPTION": "Rev Plugin Subs. Charge Aug-24",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "118",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/10/2024",
+    "DESCRIPTION": "BIL/BPAY/0000000X3PPL/BBPS/AIRTEL POS/886077",
+    "CHEQUE_NO": "",
+    "Debit": "4953",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/10/2024",
+    "DESCRIPTION": "UP/9954024432@ptax/Com sep/HDFC BANK LTD/466091603876/PTM629338422BC04955944D5EE446A611BB",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "15419",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/10/2024",
+    "DESCRIPTION": "GIB/002030845687/GST/24100700294808",
+    "CHEQUE_NO": "",
+    "Debit": "6492",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/10/2024",
+    "DESCRIPTION": "INF/INFT/038003421911/UN9191241020182149 by DEEPAKGU from Tally Bank Plu/VandanaMi",
+    "CHEQUE_NO": "",
+    "Debit": "10000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/10/2024",
+    "DESCRIPTION": "MMT/IMPS/429418469085/UN779324102018/2/RaviKumar/CNRB0018221",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/10/2024",
+    "DESCRIPTION": "MMT/IMPS/429418471273/UN148824102018/2/Raja/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "21/10/2024",
+    "DESCRIPTION": "IMPS Chg Jul-24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "29",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "22/10/2024",
+    "DESCRIPTION": "INF/INFT/038017970981/UN1692241022112638 by DEEPAKGU from Tally Bank Plu/ICICBankOD",
+    "CHEQUE_NO": "",
+    "Debit": "140",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/10/2024",
+    "DESCRIPTION": "MMT/IMPS/429712330770/IB TRF TO ICI/STUDYCAFE/Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "100000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/10/2024",
+    "DESCRIPTION": "BIL/BPAY/000917551520/ICICI BANK CRED/noRemark/4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "40000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/10/2024",
+    "DESCRIPTION": "MMT/IMPS/429716770177/1002 Studycafe/SPECTRA/UTIB0001527",
+    "CHEQUE_NO": "",
+    "Debit": "3536",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/10/2024",
+    "DESCRIPTION": "Plugin Subs. Charge Sep-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/10/2024",
+    "DESCRIPTION": "UGST2024102856258/1271",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/10/2024",
+    "DESCRIPTION": "CGST2024102856258/1275",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/10/2024",
+    "DESCRIPTION": "MMT/IMPS/430219835764/UN638824102819/2/Raja/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "29/10/2024",
+    "DESCRIPTION": "MMT/IMPS/430313422283/UN423124102913/2/Raja/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "15000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "30/10/2024",
+    "DESCRIPTION": "BIL/ONL/000920924071/MCA 21 /AOC 4",
+    "CHEQUE_NO": "",
+    "Debit": "400",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "03/11/2024",
+    "DESCRIPTION": "ATD/Auto Debit CC1xx2466",
+    "CHEQUE_NO": "",
+    "Debit": "22064",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/11/2024",
+    "DESCRIPTION": "NEFT-KKBKH2430989566-STUDYCAFE PRIVATE LIMITED-PAYMENT-2813996082-KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/11/2024",
+    "DESCRIPTION": "MMT/IMPS/430922116041/UN826024110422/VipinSeth/PSIB0000893",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/11/2024",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/11/2024",
+    "DESCRIPTION": "IPAY CHGS OCT2024",
+    "CHEQUE_NO": "",
+    "Debit": "5",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/11/2024",
+    "DESCRIPTION": "UGST2024110556490467/01",
+    "CHEQUE_NO": "",
+    "Debit": "0",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/11/2024",
+    "DESCRIPTION": "CGST202411055649 046710",
+    "CHEQUE_NO": "",
+    "Debit": "0",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/11/2024",
+    "DESCRIPTION": "IMPS Chg Aug- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "5",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/11/2024",
+    "DESCRIPTION": "GIB/002031613310/ DTAX /241106008459101C",
+    "CHEQUE_NO": "",
+    "Debit": "5405",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/11/2024",
+    "DESCRIPTION": "INF/INFT/038201246 181/STUDYCAFE PRIVA",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "20000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/11/2024",
+    "DESCRIPTION": "GIB/002031613572/ DTAX /241106008468581C",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/11/2024",
+    "DESCRIPTION": "GIB/002031613661/ DTAX /241106008471591C",
+    "CHEQUE_NO": "",
+    "Debit": "195",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4312002 20414/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "250000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/11/2024",
+    "DESCRIPTION": "CMS/001566677956 /SCSAL2024",
+    "CHEQUE_NO": "",
+    "Debit": "92563",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/11/2024",
+    "DESCRIPTION": "INF/INFT/038202536 271/UN6694241107 092713 by DEEPAKGU from Tally Bank Plu/FinvestmentPro",
+    "CHEQUE_NO": "",
+    "Debit": "29160",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "11/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4316184 49589/UN52482411 11183/PratibhaG/HD FC0000043",
+    "CHEQUE_NO": "",
+    "Debit": "18000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4317105 48172/UN31132411 12104/Roja/KKBK00 00201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/11/2024",
+    "DESCRIPTION": "BIL/BPAY/00092784 6321/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "30000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4320168 37603/SHUBANHC MRMOTOR/UTIB000 1609",
+    "CHEQUE_NO": "",
+    "Debit": "6292",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "16/11/2024",
+    "DESCRIPTION": "BIL/BPAY/00092946 9950/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "30000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/11/2024",
+    "DESCRIPTION": "BIL/BPAY/0000000Y 1ATE/BBPS/AIRTEL POS/BB6077",
+    "CHEQUE_NO": "",
+    "Debit": "4939",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4324187 41931/Internet EXP/SPECTRA/UTIB 0001527",
+    "CHEQUE_NO": "",
+    "Debit": "12028",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4324188 41167/UN98532411 19185/ARoyalEn/CBI N0281410",
+    "CHEQUE_NO": "",
+    "Debit": "1443",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/11/2024",
+    "DESCRIPTION": "UP/9954024432@pt ax/Comoc/HDFC BANK LTD/432568651279/ PTM475728BD4381 43E2AC9E8CB45E9 EA431",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "22702",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/11/2024",
+    "DESCRIPTION": "GIB/002032629449/ GST /24110700262183",
+    "CHEQUE_NO": "",
+    "Debit": "2952",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "21/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4326153 41846/UN16442411 21155/MaxPower/K KBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "2006",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "22/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4327198 36408/UN27362411 22193/Roja/KKBK00 00201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4328161 72618/UN69982411 23160/98HEMKUNT/CNRB0000390",
+    "CHEQUE_NO": "",
+    "Debit": "5257",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4328161 77084/UN49152411 23161/DigitizeP/HDF C0001466",
+    "CHEQUE_NO": "",
+    "Debit": "3000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/11/2024",
+    "DESCRIPTION": "MMT/IMPS/4328173 29066/UN97022411 23172/SouthDelh/H DFC0001374",
+    "CHEQUE_NO": "",
+    "Debit": "545",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/11/2024",
+    "DESCRIPTION": "Plugin Subs. Charge Oct-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/11/2024",
+    "DESCRIPTION": "UGST202411285721 711259",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/11/2024",
+    "DESCRIPTION": "CGST202411285721 711263",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "30/11/2024",
+    "DESCRIPTION": "IMPS Chg Sep- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "44",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "01/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4336166 96105/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "350000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/12/2024",
+    "DESCRIPTION": "CMS/001582578317 /SCSALARYNOV24",
+    "CHEQUE_NO": "",
+    "Debit": "84040",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/12/2024",
+    "DESCRIPTION": "BIL/BPAY/00093671 5616/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "50000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/12/2024",
+    "DESCRIPTION": "NEFT- KKBK/42433972848 5-STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/12/2024",
+    "DESCRIPTION": "IPAY CHGS NOV2024",
+    "CHEQUE_NO": "",
+    "Debit": "5",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/12/2024",
+    "DESCRIPTION": "UGST202412045740 825123",
+    "CHEQUE_NO": "",
+    "Debit": "0",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/12/2024",
+    "DESCRIPTION": "CGST202412045740 825227",
+    "CHEQUE_NO": "",
+    "Debit": "0",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/12/2024",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/12/2024",
+    "DESCRIPTION": "INF/INFT/038518102 091/UN7483241206 152647 by DEEPAKGU from Tolly Bank Plu/JitenderSharma",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/12/2024",
+    "DESCRIPTION": "GIB/002033474296/ DTAX /2412070086730ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/12/2024",
+    "DESCRIPTION": "GIB/002033474937/ DTAX /2412070089456ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "4700",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/12/2024",
+    "DESCRIPTION": "GIB/002033476103/ DTAX /2412070089761ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "278",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4342184 48751/UN87202412 07185/VipinSeth/PSI B0000893",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/12/2024",
+    "DESCRIPTION": "INF/INFT/038539870 141/UN4567241207 185425 by DEEPAKGU from Tolly Bank Plu/FinvestmentPro",
+    "CHEQUE_NO": "",
+    "Debit": "28512",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4342184 62676/UN47422412 07185/Roja/KKBK00 00201",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/12/2024",
+    "DESCRIPTION": "INF/INFT/038542183 601/UN4161241207 230755 by DEEPAKGU from Tolly Bank Plu/JitenderSharma",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/12/2024",
+    "DESCRIPTION": "INF/INFT/038546177 191/UN3803241208 220744 by DEEPAKGU from Tolly Bank Plu/JitenderSharma",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "09/12/2024",
+    "DESCRIPTION": "BIL/ONL/000940663 263/APNATIME T/Apna Job",
+    "CHEQUE_NO": "",
+    "Debit": "1415",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/12/2024",
+    "DESCRIPTION": "UPI/vidhigupta45@ok/UPI/ICICI Bank/434537654453 /Cide43c211bca540 db94292da054ae1b 68",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "14160",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4345188 17434/UN62092412 10184/ProtibhaG/HD FC0000043",
+    "CHEQUE_NO": "",
+    "Debit": "18000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/12/2024",
+    "DESCRIPTION": "INF/INFT/038573995 311/UN4722241210 184439 by DEEPAKGU from Tolly Bank Plu/AGARWALAG",
+    "CHEQUE_NO": "",
+    "Debit": "15345",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4345188 33162/UN11662412 10184/ARoyalEn/CBI N0281410",
+    "CHEQUE_NO": "",
+    "Debit": "1406",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/12/2024",
+    "DESCRIPTION": "NEFT- AXOIC34536885785 -TIPPLE WORKS PRIVATE LIMITED- ////- 923020045173714- UTIB0001154",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "27000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/12/2024",
+    "DESCRIPTION": "NEFT- CITIN24568394469- TABDOLA INDIA PRIVATE LIMITED- 16129840- 0712065001- CITI0000002",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "93065",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4347182 33184/UN55582412 12183/SachinKum/K KBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/12/2024",
+    "DESCRIPTION": "BIL/BPAY/00094215 6538/CICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/12/2024",
+    "DESCRIPTION": "BIL/BPAY/00094234 6535/CICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "50000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "18/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4353160 46705/UN74042412 18160/DARSHNABA /UTIB0000131",
+    "CHEQUE_NO": "",
+    "Debit": "2500",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "18/12/2024",
+    "DESCRIPTION": "BIL/BPAY/00094433 6830/CICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "50000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/12/2024",
+    "DESCRIPTION": "BIL/BPAY/0000000Y Z3J0/BBPS/AIRTEL POS/886077",
+    "CHEQUE_NO": "",
+    "Debit": "4939",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/12/2024",
+    "DESCRIPTION": "MPS/SMART BAZAA/2024121914 57/937723/NEW DELHI",
+    "CHEQUE_NO": "",
+    "Debit": "859",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/12/2024",
+    "DESCRIPTION": "UP/9954024432@pt ax/Sent using Poyt/HDFC BANK LTD/435560606073/ PTM575B60A6048F 4F97A8D05EB075D 634D4",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "16755",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/12/2024",
+    "DESCRIPTION": "MPS/HALDI RAMS /20241220130/035 663/NEW DELHI",
+    "CHEQUE_NO": "",
+    "Debit": "254",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/12/2024",
+    "DESCRIPTION": "GIB/002034397636/ GST /24120700265751",
+    "CHEQUE_NO": "",
+    "Debit": "11550",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4358182 87288/RAVI/CNRB0 002375",
+    "CHEQUE_NO": "",
+    "Debit": "670",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4358182 97892/UN62712412 23184/98HEMKUNT/ CNRB0000390",
+    "CHEQUE_NO": "",
+    "Debit": "5254",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4358183 06682/TULSI/SVCB0 000250",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "690",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4358183 06682/TULSI/SVCB0 000250",
+    "CHEQUE_NO": "",
+    "Debit": "690",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4358193 43493/UN50672412 23190/NISHAPARA/ UBIN0818950",
+    "CHEQUE_NO": "",
+    "Debit": "5000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "23/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4358193 56723/UN33402412 23191/SachinKum/K KBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "24/12/2024",
+    "DESCRIPTION": "IMPS Chg Oct- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "59",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "24/12/2024",
+    "DESCRIPTION": "MPS/HALDI RAMS /20241224135/584 519/NEW DELHI",
+    "CHEQUE_NO": "",
+    "Debit": "191",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "24/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4359160 26684/UN56732412 24161/DARSHNABA /UTIB0000131",
+    "CHEQUE_NO": "",
+    "Debit": "2500",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "27/12/2024",
+    "DESCRIPTION": "Plugin Subs. Charge Nov-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "27/12/2024",
+    "DESCRIPTION": "UGST202412275803 943409",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "27/12/2024",
+    "DESCRIPTION": "CGST202412275803 943415",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/12/2024",
+    "DESCRIPTION": "MPS/HALDI RAMS /20241228162B/145 106/NEW DELHI",
+    "CHEQUE_NO": "",
+    "Debit": "550",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "30/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4365116 75561/UN59552412 30113/AnkulKuma/C BIN0280305",
+    "CHEQUE_NO": "",
+    "Debit": "2000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "31/12/2024",
+    "DESCRIPTION": "ACCT CLOS TRAN FROM 418005001315",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "15400",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "31/12/2024",
+    "DESCRIPTION": "MMT/IMPS/4366220 88080/VINAY HUF/VINAY/HDFC00 01451",
+    "CHEQUE_NO": "",
+    "Debit": "35280",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5002174 95484/UN79462501 02173/ProtibhaG/HD FC0000043",
+    "CHEQUE_NO": "",
+    "Debit": "18000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5002175 04934/UN58952501 02173/DeepakGup/H DFC0002535",
+    "CHEQUE_NO": "",
+    "Debit": "36000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5002175 10630/UN18802501 02173/DeepakGup/H DFC0002535",
+    "CHEQUE_NO": "",
+    "Debit": "40000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5002175 13977/UN49762501 02173/DeepakGup/H DFC0002535",
+    "CHEQUE_NO": "",
+    "Debit": "20000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5002175 30367/UN31502501 02174/GuddiDevi/FD RL0001302",
+    "CHEQUE_NO": "",
+    "Debit": "1100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "02/01/2025",
+    "DESCRIPTION": "NEFT- HDFCN5202501027 9526687- MAKEMYDELIVERY- MMD- 50200038206248- HDFC0000001",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "2002",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "03/01/2025",
+    "DESCRIPTION": "ATD/Auto Debit CC1xx2466",
+    "CHEQUE_NO": "",
+    "Debit": "1290",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "03/01/2025",
+    "DESCRIPTION": "NEFT- HDFCN5202501038 3566400-BUSINESS UPTURN-BILL 153- 50200061591321- HDFC0000001",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "8120",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/01/2025",
+    "DESCRIPTION": "NEFT- KKBKN6202501040 7681384- STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5004151 09367/UN28912501 04150/Roja/KKBK00 00201",
+    "CHEQUE_NO": "",
+    "Debit": "10000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5004151 43397/UN13892501 04151/Roja/KKBK00 00201",
+    "CHEQUE_NO": "",
+    "Debit": "10000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5004186 42935/UN93772501 04181/SachinKum/K KBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/01/2025",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5006173 26287/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "200000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5006178 39797/UN13752501 06174/VipinSeth/PSI B0000893",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "IPAY CHGS DEC2024",
+    "CHEQUE_NO": "",
+    "Debit": "5",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "UGST202501075817 824082",
+    "CHEQUE_NO": "",
+    "Debit": "0",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "CGST202501075817 824089",
+    "CHEQUE_NO": "",
+    "Debit": "0",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "INF/INFT/038863871 571/UN67372501071 180109 by DEEPAKGU from Tally Bank Plu/FinvestmentPro",
+    "CHEQUE_NO": "",
+    "Debit": "24507",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "INF/INFT/038863909641/UN70352501071803401 by DEEPAKGU from Tally Bank Plu/PDGupta",
+    "CHEQUE_NO": "",
+    "Debit": "125815",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50071894667/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "150000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "GIB/002035294681/DTAX /2501070134761/CI",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "GIB/002035295381/DTAX /2501070134767/CI",
+    "CHEQUE_NO": "",
+    "Debit": "5360",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "GIB/002035296448/DTAX /2501070135318/CI",
+    "CHEQUE_NO": "",
+    "Debit": "83",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/01/2025",
+    "DESCRIPTION": "INF/INFT/038866614471/BULD47002562/WIB Office acco",
+    "CHEQUE_NO": "",
+    "Debit": "97730",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50081164685/Internet/SPEC TRA/UTIB0001527",
+    "CHEQUE_NO": "",
+    "Debit": "4716",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50081901267/UN41182501081/ARoyalEn/CBI N0281410",
+    "CHEQUE_NO": "",
+    "Debit": "1480",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50081902420/UN62152501081/90/90/90/90/90/90/90/90/90/90",
+    "CHEQUE_NO": "",
+    "Debit": "2000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/01/2025",
+    "DESCRIPTION": "IMPS Chg Nov-24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "61",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "13/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50131963433/BIZGYAAN/DFB0021374",
+    "CHEQUE_NO": "",
+    "Debit": "14119",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "14/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50141732737/UN72452501141/72/TulsiTea/IOB A0000543",
+    "CHEQUE_NO": "",
+    "Debit": "1370",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "14/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50141733226/UN93332501141/72/98HEMKUNT/CNRB0000390",
+    "CHEQUE_NO": "",
+    "Debit": "4744",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "14/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50141735789/UN51072501141/73/SachinKum/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "14/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50142069562/UN49832501142/03/PratibhaG/HD FC0000043",
+    "CHEQUE_NO": "",
+    "Debit": "45000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/01/2025",
+    "DESCRIPTION": "NEFT-CITIN520250115056576/67-TABOOLA INDIA PRIVATELIMITED-16375275-0712065001-CIT0000002",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "41829",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "16/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50161367039/UN12712501161/32/90/90/90/90/90",
+    "CHEQUE_NO": "",
+    "Debit": "16000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "17/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50171946705/UN67792501171/94/PratibhaG/HD FC0000043",
+    "CHEQUE_NO": "",
+    "Debit": "4500",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "17/01/2025",
+    "DESCRIPTION": "MMT/IMPS/50171947374/UN79682501171/94/SachinKum/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/01/2025",
+    "DESCRIPTION": "BIL/BPAY/0000000ZYYKU/BBPS/AIRTEL POS/BB6077",
+    "CHEQUE_NO": "",
+    "Debit": "4939",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/01/2025",
+    "DESCRIPTION": "UP/9954024432@ptax/Com dec/HDFC BANK LTD/502023069839/PTM120C358ED592460868E0D760DD0E871",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "20392",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "22/01/2025",
+    "DESCRIPTION": "GIB/002036150543/GST /2501070034297",
+    "CHEQUE_NO": "",
+    "Debit": "23526",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "29/01/2025",
+    "DESCRIPTION": "BIL/BPAY/0009629875621/CI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "10000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "29/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5029120 14186/UN84642501 29122/SachinKum/K KBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "29/01/2025",
+    "DESCRIPTION": "Plugin Subs. Charge Dec-24",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "29/01/2025",
+    "DESCRIPTION": "UGST202501295873 152621",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "29/01/2025",
+    "DESCRIPTION": "CGST202501295873 152625",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "30/01/2025",
+    "DESCRIPTION": "MMT/IMPS/5030011 99544/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "31/01/2025",
+    "DESCRIPTION": "IMPS Chg Dec- 24+GST",
+    "CHEQUE_NO": "",
+    "Debit": "70",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "01/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5032152 88250/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "200000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "01/02/2025",
+    "DESCRIPTION": "BIL/BPAY/00096491 4390/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "70000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "01/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5032158 25450/UN99002502 01155/GuddiDevi/FD RL0001302",
+    "CHEQUE_NO": "",
+    "Debit": "1100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "01/02/2025",
+    "DESCRIPTION": "BIL/BPAY/00096491 9310/ICICI BANK CRED/noRemark /4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "4000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/02/2025",
+    "DESCRIPTION": "NEFT- KKBKN6202502043 3067226- STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5035196 54794/Vipin/VIPINSE TH/PSIB0000893",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "04/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5035196 68229/UN30692502 04195/DeepakGup/H DFC0002535",
+    "CHEQUE_NO": "",
+    "Debit": "36000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "05/02/2025",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycaf",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "06/02/2025",
+    "DESCRIPTION": "NEFT- HDFCN5202502064 4668520- TACTERIAL CONSULTING PRIVATE LIMITED- 0001- 50200032983241- HDFC0000240",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "15120",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "GIB/002036991128/ DTAX /25020701030102ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "GIB/002036992203/ DTAX /25020701035906ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "9669",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "GIB/002036992913/ DTAX /25020701039528ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "3990",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "GIB/002036993819/ DTAX /25020701043695ICI C",
+    "CHEQUE_NO": "",
+    "Debit": "51",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5038200 46949/IB TRF TO ICI/STUDYCAFE /Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "200000",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "INF/INFT/039203008 711/UN1315250207 203318 by DEEPAKGU from Tally Bank Plu/Finvestmen",
+    "CHEQUE_NO": "",
+    "Debit": "23760",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "INF/INFT/039203026 231/UN98202502207 203515 by DEEPAKGU from Tally Bank Plu/PDGupta",
+    "CHEQUE_NO": "",
+    "Debit": "133400",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5038200 43330/UN58542502 07205/DeepakGup/H DFC0002535",
+    "CHEQUE_NO": "",
+    "Debit": "64000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "07/02/2025",
+    "DESCRIPTION": "INF/INFT/039203258 501/BULD48387477 /WIB Office acco",
+    "CHEQUE_NO": "",
+    "Debit": "96615",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5039134 35421/IMPS transactio/UBER9 BUSI/HDFC Bank",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "17700",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5039165 08987/UN44292502 08160/ARoyalEn/CBI N0281410",
+    "CHEQUE_NO": "",
+    "Debit": "1517",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5039165 15039/UN53942502 08160/9BHEMKUNT/ CNRB0000390",
+    "CHEQUE_NO": "",
+    "Debit": "4154",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "08/02/2025",
+    "DESCRIPTION": "BIL/ONL/000968744 799/APNATIME T",
+    "CHEQUE_NO": "",
+    "Debit": "1533",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "10/02/2025",
+    "DESCRIPTION": "NEFT- HDFCN5202502105 3073875-BUSINESS UPTURN-0001- 50200061591321- HDFC0000001",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "73080",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "11/02/2025",
+    "DESCRIPTION": "Plugin Subs. Charge Jan-25",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "11/02/2025",
+    "DESCRIPTION": "UGST202502115929 864647",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "11/02/2025",
+    "DESCRIPTION": "CGST202502115929 864657",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "12/02/2025",
+    "DESCRIPTION": "MPS/SMART BAZAA/20250212114 57/833233/NEW DELHI",
+    "CHEQUE_NO": "",
+    "Debit": "1021",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "14/02/2025",
+    "DESCRIPTION": "NEFT- CITINS20250214204 78729-TABOOLA INDIA PRIVATELIMITED- 16605851- 0712065001- CITI0000002",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "59507",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5046121 04552/UN49282502 15124/MaxPower/K KBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "944",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "15/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5046143 44642/UN40672502 15143/SachinKum/K KBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "19/02/2025",
+    "DESCRIPTION": "BIL/BPAY/00000011 EMUX/BBPS/AIRTEL POS/BB6077",
+    "CHEQUE_NO": "",
+    "Debit": "4944",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/02/2025",
+    "DESCRIPTION": "UP/9954024432@pt ax/Sent using Payt/HDFC BANK LTD/505124740983/ PTM434EC08C03B5 4E4BA0BFB9D293A 0885E",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "17707",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "20/02/2025",
+    "DESCRIPTION": "GIB/0020377107007/ GST /25020700273563",
+    "CHEQUE_NO": "",
+    "Debit": "16123",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "22/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5053112 04608/UN16682502 22112/ProtibhaG/HD FC0000043",
+    "CHEQUE_NO": "",
+    "Debit": "18000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "22/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5053112 12841/UN10172502 22113/TulsiTea/IOB A0000543",
+    "CHEQUE_NO": "",
+    "Debit": "1370",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "22/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5053156 87462/UN61032502 22152/AbbasAli/SBI N0007413",
+    "CHEQUE_NO": "",
+    "Debit": "1850",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "27/02/2025",
+    "DESCRIPTION": "IMPS Chg Jan- 25+GST",
+    "CHEQUE_NO": "",
+    "Debit": "112",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "27/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5058196 01441/UN33412502 27192/YuyutsSis/CN RB0002375",
+    "CHEQUE_NO": "",
+    "Debit": "1076",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "27/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5058196 05819/UN29932502 27192/SachinKum/K KBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "27/02/2025",
+    "DESCRIPTION": "MMT/IMPS/5058196 09064/UN94912502 27192/Raja/KKBK00 00201",
+    "CHEQUE_NO": "",
+    "Debit": "2000",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "28/02/2025",
+    "DESCRIPTION": "NEFT- RATNNS2025022800 9374802-RZPX PRIVATE LIMITED ESCROW ACCOUNT-TDS REIM 28022025 TD- 409001383301-R",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "1466",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "03/03/2025",
+    "DESCRIPTION": "BIL/BPAY/000978796549/ICICI BANK CRED/noRemark/4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "37000",
+    "Credit": "",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "03/03/2025",
+    "DESCRIPTION": "MMT/IMPS/506216548620/UN8873250303160/Gudd/Dev/FD RL0001302",
+    "CHEQUE_NO": "",
+    "Debit": "1700",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "04/03/2025",
+    "DESCRIPTION": "NEFT- KKBKN62025030472347987- STUDYCAFE PRIVATE LIMITED- PAYMENT- 2813996082- KKBK0000958",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "STUDYCAFE PRIVATE LIMITED"
+  },
+  {
+    "DATE": "04/03/2025",
+    "DESCRIPTION": "INF/INFT/039466331731/UN3427250304190909 by DEEPAKGU from Tally Bank Plus/VIRENDRAK",
+    "CHEQUE_NO": "",
+    "Debit": "21300",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "05/03/2025",
+    "DESCRIPTION": "Auto Loan XX11783 EMI Studycafe",
+    "CHEQUE_NO": "",
+    "Debit": "32361",
+    "Credit": "",
+    "LEDGER": "Auto Loan"
+  },
+  {
+    "DATE": "06/03/2025",
+    "DESCRIPTION": "MMT/IMPS/506515061860/UN7197250306155/DeepakGup/H DFC0002535",
+    "CHEQUE_NO": "",
+    "Debit": "36000",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "06/03/2025",
+    "DESCRIPTION": "MMT/IMPS/506516076607/UN1276250306160/VipinSeth/PSI B0000893",
+    "CHEQUE_NO": "",
+    "Debit": "29106",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "GIB/002038492954/DTAX/25030701342284ICIC",
+    "CHEQUE_NO": "",
+    "Debit": "7234",
+    "Credit": "",
+    "LEDGER": "Direct Tax"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "GIB/002038493946/DTAX/25030701348909ICIC",
+    "CHEQUE_NO": "",
+    "Debit": "85",
+    "Credit": "",
+    "LEDGER": "Direct Tax"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "GIB/002038494622/DTAX/25030701353019ICIC",
+    "CHEQUE_NO": "",
+    "Debit": "3215",
+    "Credit": "",
+    "LEDGER": "Direct Tax"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "GIB/002038495337/DTAX/25030701357267ICIC",
+    "CHEQUE_NO": "",
+    "Debit": "248",
+    "Credit": "",
+    "LEDGER": "Direct Tax"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "MMT/IMPS/506621121481/IB TRF TO STU/STUDYCAFE/Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "260000",
+    "LEDGER": "STUDYCAFE PRIVATE LIMITED"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "INF/INFT/039516996761/UN6809250307210747 by DEEPAKGU from Tally Bank Plus/Finvestmen",
+    "CHEQUE_NO": "",
+    "Debit": "28910.77",
+    "Credit": "",
+    "LEDGER": "Investments"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "MMT/IMPS/506621126486/IB TRF TO IC/STUDYCAFE/Kotak Mahindra",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "30000",
+    "LEDGER": "STUDYCAFE PRIVATE LIMITED"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "INF/INFT/039517054841/UN2976250307211455 by DEEPAKGU from Tally Bank Plus/PDGupta",
+    "CHEQUE_NO": "",
+    "Debit": "139958.46",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "07/03/2025",
+    "DESCRIPTION": "INF/INFT/039517050751/BULD49685841/WIB Office acco",
+    "CHEQUE_NO": "",
+    "Debit": "102461.54",
+    "Credit": "",
+    "LEDGER": "Office Expenses"
+  },
+  {
+    "DATE": "08/03/2025",
+    "DESCRIPTION": "MMT/IMPS/506717896549/UN1179250308172/ARoyalEn/CBI N0281410",
+    "CHEQUE_NO": "",
+    "Debit": "666",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "10/03/2025",
+    "DESCRIPTION": "NEFT- HDFCN52025031009504794-BUSINESS UPTURN-0001-5020061591321-HDFC0000001",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "16240",
+    "LEDGER": "Business Income"
+  },
+  {
+    "DATE": "10/03/2025",
+    "DESCRIPTION": "MMT/IMPS/506917115990/TRF/STUDYCAFE/HDFC Bank",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "50000",
+    "LEDGER": "STUDYCAFE PRIVATE LIMITED"
+  },
+  {
+    "DATE": "12/03/2025",
+    "DESCRIPTION": "MMT/IMPS/507114548845/UN2522250312142/ShubanHCM/UTIB0001145",
+    "CHEQUE_NO": "",
+    "Debit": "30100",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "13/03/2025",
+    "DESCRIPTION": "NEFT- IOBAN2202503135165861-S K GULATI ASSOCIATES-REF//0000-01930200032084-IOBA0000193",
+    "CHEQUE_NO": "",
+    "Debit": "",
+    "Credit": "23600",
+    "LEDGER": "S K GULATI ASSOCIATES"
+  },
+  {
+    "DATE": "14/03/2025",
+    "DESCRIPTION": "NEFT- CITIN52025031434562849-TABOOLA INDIA PRIVATE LIMITED-16776463-0712065001-CITI000002",
+    "CHEQUE_NO": "",
+    "Debit": "53489.75",
+    "Credit": "138935.60",
+    "LEDGER": "TABOOLA INDIA PRIVATE LIMITED"
+  },
+  {
+    "DATE": "14/03/2025",
+    "DESCRIPTION": "MMT/IMPS/507326258582/INR/Razorpay X/Ratnakar Bank",
+    "CHEQUE_NO": "",
+    "Debit": "10296",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "17/03/2025",
+    "DESCRIPTION": "MMT/IMPS/507616990165/UN1450250317160/QuadplayD/UTIB0000348",
+    "CHEQUE_NO": "",
+    "Debit": "3894",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "17/03/2025",
+    "DESCRIPTION": "MMT/IMPS/507619549304/UN7446250317195/SachinKum/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "18/03/2025",
+    "DESCRIPTION": "MMT/IMPS/507715582888/ChayaEducationP/ChayaEduca/Axis Bank",
+    "CHEQUE_NO": "",
+    "Debit": "16520",
+    "Credit": "",
+    "LEDGER": "Education Expenses"
+  },
+  {
+    "DATE": "19/03/2025",
+    "DESCRIPTION": "BIL/BPAY/000000135K2T/BBPS/AIRTEL POS/886077",
+    "CHEQUE_NO": "",
+    "Debit": "4939.47",
+    "Credit": "",
+    "LEDGER": "Telephone Expenses"
+  },
+  {
+    "DATE": "20/03/2025",
+    "DESCRIPTION": "UP/9954024432@ptax/Sent using Payt/HDFC BANK LTD/507942618759/PTM5CD71B759C734AF483583375E433B24B",
+    "CHEQUE_NO": "",
+    "Debit": "11327",
+    "Credit": "",
+    "LEDGER": "Taxes"
+  },
+  {
+    "DATE": "20/03/2025",
+    "DESCRIPTION": "GIB/002039507328/GST/250307002792000",
+    "CHEQUE_NO": "",
+    "Debit": "17454",
+    "Credit": "",
+    "LEDGER": "GST"
+  },
+  {
+    "DATE": "21/03/2025",
+    "DESCRIPTION": "BIL/BPAY/000986621601/CICI BANK CRED/noRemark/4102021069",
+    "CHEQUE_NO": "",
+    "Debit": "50000",
+    "Credit": "",
+    "LEDGER": "ICICI Bank"
+  },
+  {
+    "DATE": "21/03/2025",
+    "DESCRIPTION": "CLG/PO/053963/HDF/13.03.2025",
+    "CHEQUE_NO": "",
+    "Debit": "1010",
+    "Credit": "",
+    "LEDGER": "HDFC Bank"
+  },
+  {
+    "DATE": "21/03/2025",
+    "DESCRIPTION": "MMT/IMPS/508017455791/UN8033250321171/DeepakGup/HDFC0002535",
+    "CHEQUE_NO": "",
+    "Debit": "71998",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "25/03/2025",
+    "DESCRIPTION": "MMT/IMPS/508415906606/UN6808250325154/98HEMKUNT/CNRB0000390",
+    "CHEQUE_NO": "",
+    "Debit": "4744",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "25/03/2025",
+    "DESCRIPTION": "Plugin Subs. Charge Feb-25",
+    "CHEQUE_NO": "",
+    "Debit": "100",
+    "Credit": "",
+    "LEDGER": "Software Subscriptions"
+  },
+  {
+    "DATE": "25/03/2025",
+    "DESCRIPTION": "UGST202503256016869295",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "GST"
+  },
+  {
+    "DATE": "25/03/2025",
+    "DESCRIPTION": "CGST202503256016869300",
+    "CHEQUE_NO": "",
+    "Debit": "9",
+    "Credit": "",
+    "LEDGER": "GST"
+  },
+  {
+    "DATE": "25/03/2025",
+    "DESCRIPTION": "MMT/IMPS/508418261710/UN9936250325180/SachinKum/KKBK0000201",
+    "CHEQUE_NO": "",
+    "Debit": "1000",
+    "Credit": "",
+    "LEDGER": "Cash"
+  },
+  {
+    "DATE": "26/03/2025",
+    "DESCRIPTION": "IMPS Chg Feb-25+GST",
+    "CHEQUE_NO": "",
+    "Debit": "73.74",
+    "Credit": "",
+    "LEDGER": "Bank Charges"
+  },
+  {
+    "DATE": "26/03/2025",
+    "DESCRIPTION": "BIL/ONL/000988628590/APNATIME T",
+    "CHEQUE_NO": "",
+    "Debit": "1533",
+    "Credit": "",
+    "LEDGER": "Miscellaneous Expenses"
+  }
+]
