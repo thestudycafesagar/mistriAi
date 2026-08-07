@@ -149,10 +149,14 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
         else if (buffer[bodyEnd - 1] === 10) bodyEnd -= 1;
 
         const bodyBuffer = buffer.subarray(start, bodyEnd);
-        const nameMatch = headers.match(/name="([^"]+)"/i);
+        // `;\s*name=` (anchored on the preceding `;`) rather than bare `name="..."`:
+        // the Content-Disposition value is legally allowed to leave name unquoted
+        // (`name=file` instead of `name="file"` — seen from a real caller), and an
+        // unanchored `name=` pattern would also false-match inside `filename=`.
+        const nameMatch = headers.match(/;\s*name=(?:"([^"]*)"|([^;\r\n]+))/i);
 
         if (nameMatch) {
-          const name = nameMatch[1];
+          const name = (nameMatch[1] ?? nameMatch[2]).trim();
           if (name === 'docType') {
             parsedDocType = bodyBuffer.toString('utf8').trim();
           } else if (name === 'transactionType') {
@@ -165,8 +169,8 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
             const mimeMatch = headers.match(/Content-Type:\s*([^\s\r\n]+)/i);
             const type = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
 
-            const filenameMatch = headers.match(/filename="([^"]+)"/i);
-            const filename = filenameMatch ? filenameMatch[1] : 'uploaded_file';
+            const filenameMatch = headers.match(/filename=(?:"([^"]*)"|([^;\r\n]+))/i);
+            const filename = filenameMatch ? (filenameMatch[1] ?? filenameMatch[2]).trim() : 'uploaded_file';
 
             file = new File([bodyBuffer], filename, { type });
           }
