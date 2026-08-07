@@ -172,6 +172,24 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
           }
         }
       }
+
+      // The loop above ran without throwing but extracted nothing at all —
+      // distinct from "caller forgot to attach a file" (which would still
+      // have found other fields). This means the boundary this parser
+      // computed from the Content-Type header never matched anything in the
+      // body, which happens when a caller's HTTP client formats the
+      // multipart body in a way this parser doesn't expect. Dump enough of
+      // the raw request to diagnose that mismatch without needing the
+      // caller to reproduce it with extra instrumentation on their side.
+      if (!file && !parsedDocType && !parsedTransactionType && !parsedCompanyName && !parsedCompanyGSTIN) {
+        const preview = buffer.subarray(0, 300).toString('utf8').replace(/[^\x20-\x7e\r\n]/g, '.');
+        console.warn(
+          `[extractHandler] Manual parser found zero multipart parts | ` +
+          `content-type="${contentType}" | content-length header="${req.headers.get('content-length')}" | ` +
+          `actual body bytes=${buffer.length} | boundary derived="${boundary}" | ` +
+          `first 300 bytes of body:\n${preview}`,
+        );
+      }
     } catch (e: unknown) {
       console.error('[extractHandler] Manual parse error:', e);
       return NextResponse.json(
