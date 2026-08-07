@@ -53,15 +53,14 @@ function humanJoin(labels: string[]): string {
  * fields you expected. This makes that visible in the server's own console
  * without needing the caller to also report their side.
  */
-function logValidationFailure(formData: FormData, reason: string): void {
-  const file = formData.get('file');
-  const fileDesc = file instanceof File
+function logValidationFailure(file: File | null, fields: Record<string, string>, reason: string): void {
+  const fileDesc = file
     ? `"${file.name}" (${file.type || 'no content-type'}, ${file.size} bytes)`
     : 'MISSING';
-  const otherKeys = Array.from(formData.keys()).filter(k => k !== 'file');
+  const otherKeys = Object.keys(fields).filter(k => fields[k]);
   console.warn(
     `[extractHandler] 400: ${reason} | file=${fileDesc} | other fields received: ` +
-    `${otherKeys.length ? otherKeys.map(k => `${k}="${formData.get(k)}"`).join(', ') : '(none)'}`,
+    `${otherKeys.length ? otherKeys.map(k => `${k}="${fields[k]}"`).join(', ') : '(none)'}`,
   );
 }
 
@@ -85,21 +84,112 @@ export interface ExtractRouteOptions {
 export async function handleExtractRequest(req: NextRequest, options: ExtractRouteOptions): Promise<NextResponse> {
   try {
     // ── Parse multipart form ──────────────────────────────────────────────────
-    let formData: FormData;
+    // Next.js 16's built-in req.formData() has been observed to fail to parse
+    // multipart bodies from some external HTTP clients (works for this app's
+    // own requests, fails for at least one real external caller) with no
+    // useful error surfaced — the request just comes back 400 with nothing to
+    // debug from. This hand-rolled parser reads the raw bytes and walks the
+    // multipart boundaries itself, which has proven reliable against callers
+    // where req.formData() was not.
+    let parsedDocType = '';
+    let parsedTransactionType = '';
+    let parsedCompanyName = '';
+    let parsedCompanyGSTIN = '';
+    let file: File | null = null;
     try {
-      formData = await req.formData();
-    } catch {
+      const arrayBuffer = await req.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
+
+      const contentType = req.headers.get('content-type') || '';
+      const boundaryMatch = contentType.match(/boundary=(?:"([^"]+)"|([^;]+))/i);
+      if (!boundaryMatch) {
+        return NextResponse.json(
+          { success: false, error: 'Invalid Content-Type header missing boundary.' },
+          { status: 400 }
+        );
+      }
+      const boundary = boundaryMatch[1] || boundaryMatch[2];
+      const boundaryBuffer = Buffer.from(`--${boundary}`);
+
+      let start = 0;
+
+      while (true) {
+        const idx = buffer.indexOf(boundaryBuffer, start);
+        if (idx === -1) break;
+
+        start = idx + boundaryBuffer.length;
+        if (buffer[start] === 45 && buffer[start + 1] === 45) break; // '--'
+
+        if (buffer[start] === 13 && buffer[start + 1] === 10) start += 2;
+        else if (buffer[start] === 10) start += 1;
+
+        const headerEnd1 = buffer.indexOf(Buffer.from('\r\n\r\n'), start);
+        const headerEnd2 = buffer.indexOf(Buffer.from('\n\n'), start);
+        let headerEnd = -1;
+        let headerLen = 4;
+
+        if (headerEnd1 !== -1 && (headerEnd2 === -1 || headerEnd1 < headerEnd2)) {
+          headerEnd = headerEnd1;
+          headerLen = 4;
+        } else if (headerEnd2 !== -1) {
+          headerEnd = headerEnd2;
+          headerLen = 2;
+        }
+
+        if (headerEnd === -1) break;
+
+        const headers = buffer.toString('utf8', start, headerEnd);
+        start = headerEnd + headerLen;
+
+        const nextIdx = buffer.indexOf(boundaryBuffer, start);
+        if (nextIdx === -1) break;
+
+        let bodyEnd = nextIdx;
+        if (buffer[bodyEnd - 2] === 13 && buffer[bodyEnd - 1] === 10) bodyEnd -= 2;
+        else if (buffer[bodyEnd - 1] === 10) bodyEnd -= 1;
+
+        const bodyBuffer = buffer.subarray(start, bodyEnd);
+        const nameMatch = headers.match(/name="([^"]+)"/i);
+
+        if (nameMatch) {
+          const name = nameMatch[1];
+          if (name === 'docType') {
+            parsedDocType = bodyBuffer.toString('utf8').trim();
+          } else if (name === 'transactionType') {
+            parsedTransactionType = bodyBuffer.toString('utf8').trim();
+          } else if (name === 'companyName') {
+            parsedCompanyName = bodyBuffer.toString('utf8').trim();
+          } else if (name === 'companyGSTIN') {
+            parsedCompanyGSTIN = bodyBuffer.toString('utf8').trim();
+          } else if (name === 'file') {
+            const mimeMatch = headers.match(/Content-Type:\s*([^\s\r\n]+)/i);
+            const type = mimeMatch ? mimeMatch[1] : 'application/octet-stream';
+
+            const filenameMatch = headers.match(/filename="([^"]+)"/i);
+            const filename = filenameMatch ? filenameMatch[1] : 'uploaded_file';
+
+            file = new File([bodyBuffer], filename, { type });
+          }
+        }
+      }
+    } catch (e: unknown) {
+      console.error('[extractHandler] Manual parse error:', e);
       return NextResponse.json(
         { success: false, error: 'Invalid form data. Please upload a PDF or image.' },
         { status: 400 },
       );
     }
 
-    const file = formData.get('file') as File | null;
-
     // ── Validation ─────────────────────────────────────────────────────────────
-    if (!file || !(file instanceof File)) {
-      logValidationFailure(formData, 'no file field present');
+    const receivedFields: Record<string, string> = {
+      docType: parsedDocType,
+      transactionType: parsedTransactionType,
+      companyName: parsedCompanyName,
+      companyGSTIN: parsedCompanyGSTIN,
+    };
+
+    if (!file) {
+      logValidationFailure(file, receivedFields, 'no file field present');
       return NextResponse.json(
         { success: false, error: 'No file uploaded. Please select a PDF or image.' },
         { status: 400 },
@@ -110,18 +200,17 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     if (options.fixedDocType) {
       docType = options.fixedDocType;
     } else {
-      let provided = formData.get('docType') as string | null;
+      let provided = parsedDocType || null;
 
       // Fallback for external apps that send transactionType instead of docType
       if (!provided) {
-        const transactionType = formData.get('transactionType') as string | null;
-        if (transactionType === 'sale') provided = 'SALES_INVOICE';
-        else if (transactionType === 'purchase') provided = 'PURCHASE_INVOICE';
+        if (parsedTransactionType === 'sale') provided = 'SALES_INVOICE';
+        else if (parsedTransactionType === 'purchase') provided = 'PURCHASE_INVOICE';
       }
 
       if (!provided || !options.allowedDocTypes.includes(provided as DocumentType)) {
         const choices = humanJoin(options.allowedDocTypes.map(dt => DOC_TYPE_LABELS[dt]));
-        logValidationFailure(formData, `docType/transactionType did not resolve to one of: ${choices}`);
+        logValidationFailure(file, receivedFields, `docType/transactionType did not resolve to one of: ${choices}`);
         return NextResponse.json(
           { success: false, error: `Invalid document type. Choose ${choices}.` },
           { status: 400 },
@@ -132,7 +221,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
 
     const mimeType = file.type || 'application/octet-stream';
     if (!ALLOWED_MIME.includes(mimeType)) {
-      logValidationFailure(formData, `unsupported MIME type "${mimeType}"`);
+      logValidationFailure(file, receivedFields, `unsupported MIME type "${mimeType}"`);
       return NextResponse.json(
         { success: false, error: `Unsupported file type: ${mimeType}. Please upload a PDF or image (JPEG, PNG, WEBP, TIFF).` },
         { status: 400 },
@@ -141,7 +230,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
 
     const maxSizeBytes = mimeType === 'application/pdf' ? MAX_PDF_SIZE_BYTES : MAX_IMAGE_SIZE_BYTES;
     if (file.size > maxSizeBytes) {
-      logValidationFailure(formData, `file too large (${file.size} bytes > ${maxSizeBytes} byte cap)`);
+      logValidationFailure(file, receivedFields, `file too large (${file.size} bytes > ${maxSizeBytes} byte cap)`);
       return NextResponse.json(
         {
           success: false,
@@ -198,8 +287,8 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     const processingTimeMs = Date.now() - startedAt;
 
     const columns = SCHEMAS[docType].columns;
-    const companyName = formData.get('companyName') as string;
-    const companyGSTIN = formData.get('companyGSTIN') as string;
+    const companyName = parsedCompanyName;
+    const companyGSTIN = parsedCompanyGSTIN;
 
     const responsePayload: any = {
       success: true,
@@ -211,8 +300,8 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
       cached: servedFromCache,
     };
 
-    if (companyName !== null) responsePayload.companyName = companyName;
-    if (companyGSTIN !== null) responsePayload.companyGSTIN = companyGSTIN;
+    if (companyName) responsePayload.companyName = companyName;
+    if (companyGSTIN) responsePayload.companyGSTIN = companyGSTIN;
     if (bankSummary) responsePayload.bankSummary = bankSummary;
 
     return NextResponse.json(responsePayload);
