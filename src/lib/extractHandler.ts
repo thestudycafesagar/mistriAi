@@ -46,6 +46,25 @@ function humanJoin(labels: string[]): string {
   return `${labels.slice(0, -1).join(', ')}, or ${labels[labels.length - 1]}`;
 }
 
+/**
+ * Logs exactly what a request contained right before it's rejected with
+ * 400 — the single biggest time-sink debugging an integration remotely is
+ * not knowing whether a caller's request even reached validation with the
+ * fields you expected. This makes that visible in the server's own console
+ * without needing the caller to also report their side.
+ */
+function logValidationFailure(formData: FormData, reason: string): void {
+  const file = formData.get('file');
+  const fileDesc = file instanceof File
+    ? `"${file.name}" (${file.type || 'no content-type'}, ${file.size} bytes)`
+    : 'MISSING';
+  const otherKeys = Array.from(formData.keys()).filter(k => k !== 'file');
+  console.warn(
+    `[extractHandler] 400: ${reason} | file=${fileDesc} | other fields received: ` +
+    `${otherKeys.length ? otherKeys.map(k => `${k}="${formData.get(k)}"`).join(', ') : '(none)'}`,
+  );
+}
+
 export interface ExtractRouteOptions {
   /** Document types this endpoint accepts via the `docType` form field. Ignored when `fixedDocType` is set. */
   allowedDocTypes: DocumentType[];
@@ -80,6 +99,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
 
     // ── Validation ─────────────────────────────────────────────────────────────
     if (!file || !(file instanceof File)) {
+      logValidationFailure(formData, 'no file field present');
       return NextResponse.json(
         { success: false, error: 'No file uploaded. Please select a PDF or image.' },
         { status: 400 },
@@ -101,6 +121,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
 
       if (!provided || !options.allowedDocTypes.includes(provided as DocumentType)) {
         const choices = humanJoin(options.allowedDocTypes.map(dt => DOC_TYPE_LABELS[dt]));
+        logValidationFailure(formData, `docType/transactionType did not resolve to one of: ${choices}`);
         return NextResponse.json(
           { success: false, error: `Invalid document type. Choose ${choices}.` },
           { status: 400 },
@@ -111,6 +132,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
 
     const mimeType = file.type || 'application/octet-stream';
     if (!ALLOWED_MIME.includes(mimeType)) {
+      logValidationFailure(formData, `unsupported MIME type "${mimeType}"`);
       return NextResponse.json(
         { success: false, error: `Unsupported file type: ${mimeType}. Please upload a PDF or image (JPEG, PNG, WEBP, TIFF).` },
         { status: 400 },
@@ -119,6 +141,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
 
     const maxSizeBytes = mimeType === 'application/pdf' ? MAX_PDF_SIZE_BYTES : MAX_IMAGE_SIZE_BYTES;
     if (file.size > maxSizeBytes) {
+      logValidationFailure(formData, `file too large (${file.size} bytes > ${maxSizeBytes} byte cap)`);
       return NextResponse.json(
         {
           success: false,
