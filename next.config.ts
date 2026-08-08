@@ -11,6 +11,17 @@ const nextConfig: NextConfig = {
   // production traffic — `next start` has no such restriction because it
   // doesn't serve those dev-only resources at all.
   allowedDevOrigins: ['72.61.250.183'],
+  experimental: {
+    // src/proxy.ts (CORS headers) matches every /api/:path* route, and
+    // Next.js 16 automatically clones + buffers the body of any request a
+    // proxy matches, capped at 10MB by default — silently truncating
+    // anything larger with no error to the caller (see
+    // node_modules/next/dist/docs/.../proxyClientMaxBodySize.md). This app
+    // accepts PDFs up to MAX_PDF_SIZE_BYTES (200MB, extractHandler.ts), so
+    // the proxy's own cap has to match or every extraction above 10MB gets
+    // silently truncated before extractHandler.ts ever sees it.
+    proxyClientMaxBodySize: '200mb',
+  },
 };
 
 export default nextConfig;
