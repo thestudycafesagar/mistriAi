@@ -79,9 +79,9 @@ if (result.success) {
   "success": true,
   "docType": "BANK_STATEMENT",
   "rowCount": 42,
-  "columns": ["DATE", "DESCRIPTION", "CHEQUE_NO", "Debit", "Credit", "LEDGER"],
+  "columns": ["DATE", "DESCRIPTION", "CHEQUE_NO", "Debit", "Credit", "Balance", "LEDGER"],
   "data": [
-    { "DATE": "01/04/2024", "DESCRIPTION": "...", "CHEQUE_NO": "", "Debit": "500.00", "Credit": "", "LEDGER": "..." }
+    { "DATE": "01/04/2024", "DESCRIPTION": "...", "CHEQUE_NO": "", "Debit": "500.00", "Credit": "", "Balance": "21334.39", "LEDGER": "..." }
   ],
   "processingTimeMs": 18342,
   "cached": false,
@@ -120,10 +120,11 @@ if (result.success) {
 
 ### Row shape by document type
 
-**`BANK_STATEMENT`** — `columns`: `DATE`, `DESCRIPTION`, `CHEQUE_NO`, `Debit`, `Credit`, `LEDGER`
+**`BANK_STATEMENT`** — `columns`: `DATE`, `DESCRIPTION`, `CHEQUE_NO`, `Debit`, `Credit`, `Balance`, `LEDGER`
 
 - `DATE` — `DD/MM/YYYY`
 - `Debit` / `Credit` — plain decimal string (e.g. `"1234.50"`); empty if not applicable to that row
+- `Balance` — the running account balance printed on that specific transaction row (not the statement-level `openingBalance`/`closingBalance` in `bankSummary`); plain decimal string, may be negative for an overdrawn account, empty if not visible for that row
 - `LEDGER` — suggested accounting ledger name for the transaction counterparty
 
 **`SALES_INVOICE`** / **`PURCHASE_INVOICE`** — `columns`: `Date`, `VoucherNo`, `PartyLedger`, `PartyGSTIN`, `Item_Name`, `HSNCode`, `Quantity`, `Unit`, `Rate`, `TaxableValue`, `CGSTRate`, `CGSTAmount`, `SGSTRate`, `SGSTAmount`, `IGSTRate`, `IGSTAmount`, and `SalesLedger` (sales) or `PurchaseLedger` (purchase)

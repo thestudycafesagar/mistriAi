@@ -1,0 +1,17 @@
+# Python dependencies for parse_bank_statement.py — the local bank-statement
+# parser that src/lib/pythonBankParser.ts invokes as a subprocess before
+# falling back to Mistral OCR. Tested against the versions below; >= is used
+# instead of exact pins so this installs cleanly across Python versions.
+#
+# Tesseract-OCR and Poppler are separate system packages (not pip-installable)
+# needed only for the scanned/image-PDF OCR fallback inside the script itself
+# — native (text) PDFs work without either. If they're not installed, the
+# script's OCR branch fails gracefully and src/lib/pythonBankParser.ts falls
+# back to Mistral, same as any other local-parse failure.
+opencv-python>=4.9
+numpy>=1.26
+pdfplumber>=0.11
+pandas>=2.2
+pytesseract>=0.3.10
+pdf2image>=1.17
+openpyxl>=3.1

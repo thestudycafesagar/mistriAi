@@ -6,7 +6,7 @@ import styles from './ResultsTable.module.css';
 
 // Columns that should be right-aligned (number-like)
 const NUMBER_COLS = new Set([
-  'Debit', 'Credit', 'Quantity', 'Rate', 'TaxableValue',
+  'Debit', 'Credit', 'Balance', 'Quantity', 'Rate', 'TaxableValue',
   'CGSTRate', 'CGSTAmount', 'SGSTRate', 'SGSTAmount',
   'IGSTRate', 'IGSTAmount',
 ]);

@@ -67,12 +67,18 @@ const bankStatementSchema = {
             description:
               'Credit amount as a plain decimal number. Remove thousands-separator commas but ALWAYS keep the decimal point exactly as printed — e.g. "25.05" must stay "25.05", never become "2505" or "25.5". Empty string if not a credit.',
           },
+          Balance: {
+            type: 'string',
+            pattern: '^$|^-?\\d+(\\.\\d{1,2})?$',
+            description:
+              'The running account Balance shown on THIS transaction row — the SAME Balance column RULE 3 says must never be copied into Debit or Credit. Capture its value here instead: strip ₹/commas, keep the decimal point exactly as printed, optional leading "-" for an overdrawn/negative balance. Empty string if no balance is visible for this row.',
+          },
           LEDGER: {
             type: 'string',
             description: 'Suggested Tally ledger name e.g. "HDFC Bank", "Cash", "Suspense A/c"',
           },
         },
-        required: ['DATE', 'DESCRIPTION', 'CHEQUE_NO', 'Debit', 'Credit', 'LEDGER'],
+        required: ['DATE', 'DESCRIPTION', 'CHEQUE_NO', 'Debit', 'Credit', 'Balance', 'LEDGER'],
         additionalProperties: false,
       },
     },
@@ -94,14 +100,14 @@ const bankStatementPrompt =
   '"Page Total" / "Sub Total" / "Total" rows (subtotals, not transactions). ' +
   'Column header rows, blank rows. ' +
 
-  'RULE 3 — DEBIT vs CREDIT — THIS IS CRITICAL: ' +
+  'RULE 3 — DEBIT vs CREDIT vs BALANCE — THIS IS CRITICAL: ' +
   'Bank statements typically have these columns: Date | Description | Cheque No | [Withdrawl/Withdrawal/Dr] | [Deposit/Cr] | [Balance]. ' +
   'The Debit field in your output = the value from the WITHDRAWL / WITHDRAWAL / DR / DEBIT column only. ' +
   'The Credit field in your output = the value from the DEPOSIT / CR / CREDIT column only. ' +
-  'The BALANCE column shows the running account balance after each transaction — this is a COMPLETELY SEPARATE column. ' +
-  'NEVER put a Balance column value into Debit or Credit. ' +
-  'If you see three numeric columns (Withdrawl, Deposit, Balance) — only two of them map to your output fields. ' +
-  'Withdrawl → Debit. Deposit → Credit. Balance → IGNORE. ' +
+  'The BALANCE column shows the running account balance after each transaction — this is a COMPLETELY SEPARATE column from Debit/Credit. ' +
+  'NEVER put a Balance column value into Debit or Credit — it goes into its own separate Balance output field instead. ' +
+  'If you see three numeric columns (Withdrawl, Deposit, Balance) — all three map to output fields, never merged together: ' +
+  'Withdrawl → Debit. Deposit → Credit. Balance → Balance (never Debit or Credit). ' +
 
   'RULE 4 — AMOUNTS: Strip ₹, Rs., INR symbols and thousands-separator commas. ' +
   'Keep decimal point exactly as printed: "1,50,32,233.10" → "15032233.10". ' +
@@ -234,7 +240,7 @@ export const SCHEMAS: Record<DocumentType, SchemaConfig> = {
   BANK_STATEMENT: {
     schema: bankStatementSchema,
     prompt: bankStatementPrompt,
-    columns: ['DATE', 'DESCRIPTION', 'CHEQUE_NO', 'Debit', 'Credit', 'LEDGER'],
+    columns: ['DATE', 'DESCRIPTION', 'CHEQUE_NO', 'Debit', 'Credit', 'Balance', 'LEDGER'],
   },
   SALES_INVOICE: {
     schema: salesInvoiceSchema,

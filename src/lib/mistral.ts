@@ -13,6 +13,7 @@ import PQueue from 'p-queue';
 import { SCHEMAS, type DocumentType } from './schemas';
 import { suggestBankLedger } from './ledger';
 import { hashFile, getCachedChunk, setCachedChunk } from './ocrCache';
+import { tryPythonBankStatementParse } from './pythonBankParser';
 
 // ── Multi-key load balancing ────────────────────────────────────────────────
 // Mistral enforces capacity/throughput limits per API key/account tier (the
@@ -555,7 +556,7 @@ function extractRowsFromOcrResponse(ocrResponse: any): ExtractedAnnotation {
 // Which columns per document type hold decimal amounts, and therefore need
 // normalizeAmount() applied after extraction.
 const NUMERIC_FIELDS: Record<DocumentType, string[]> = {
-  BANK_STATEMENT: ['Debit', 'Credit'],
+  BANK_STATEMENT: ['Debit', 'Credit', 'Balance'],
   SALES_INVOICE: ['Quantity', 'Rate', 'TaxableValue', 'CGSTAmount', 'SGSTAmount', 'IGSTAmount'],
   PURCHASE_INVOICE: ['Quantity', 'Rate', 'TaxableValue', 'CGSTAmount', 'SGSTAmount', 'IGSTAmount'],
 };
@@ -722,6 +723,38 @@ export async function runOcr(
   file: File,
   docType: DocumentType,
 ): Promise<RunOcrResult> {
+  // Bank statements only: try the local (non-AI) parser first — it's free,
+  // deterministic, and already handles both native and scanned PDFs. Only
+  // falls through to Mistral below when it fails or finds nothing (missing
+  // interpreter/dependencies, an unhandled layout, a genuinely blank
+  // document) — see pythonBankParser.ts for the full set of fallback
+  // conditions. Scoped to PDFs only and to BANK_STATEMENT only: invoice
+  // extraction is untouched, and bank-statement images still go straight to
+  // Mistral exactly as before.
+  if (docType === 'BANK_STATEMENT' && isPdf(file.type)) {
+    const pythonRows = await tryPythonBankStatementParse(file);
+    if (pythonRows) {
+      // NOT run through dedupeBankStatementRows() here: that dedup exists
+      // specifically to catch MISTRAL's chunk-boundary artifacts (the same
+      // transaction reported twice by two adjacent 1-page chunks). The
+      // Python parser does a single whole-document pass with no chunks, so
+      // there's no boundary-duplication mechanism for it to guard against —
+      // applying it anyway only risks wrongly deleting a genuine recurring
+      // transaction (same date/narration/amount within 3 rows of another,
+      // which real statements do contain) as if it were a duplicate.
+      const finalRows = pythonRows;
+      for (const row of finalRows) {
+        row.LEDGER = suggestBankLedger(row.DESCRIPTION, row.LEDGER);
+      }
+      // The local parser doesn't extract a statement-level opening/closing
+      // balance the way the Mistral schema does, so reconciliation can't be
+      // checked here — reconciled stays null ("not verified"), same as a
+      // Mistral chunk that never showed both balances clearly enough.
+      const bankSummary = reconcileBankStatement(finalRows, '', '');
+      return { rows: finalRows, bankSummary };
+    }
+  }
+
   const { schema, prompt } = SCHEMAS[docType];
   const annotationFormat = buildAnnotationFormat(schema, docType.toLowerCase());
   const allRows: Record<string, string>[] = [];
