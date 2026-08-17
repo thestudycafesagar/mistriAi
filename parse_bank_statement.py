@@ -11,6 +11,49 @@ from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
 # =================================================================
+# Keyword matching helper (regex, word-boundary-anchored)
+# =================================================================
+
+def keyword_matches(text, keyword):
+    """
+    True if `keyword` appears in `text` (already lowercased) with a
+    non-alphanumeric boundary (string start/end, space, "/", "(", "-", etc.)
+    on AT LEAST ONE side — i.e. not fully embedded inside a longer, unrelated
+    word on BOTH sides. Plain substring checks (`keyword in text`) miss this:
+    "date" is a genuine substring of "Updated" (embedded on both sides — a
+    false positive) but ALSO of "TransactionDate" (a legitimate suffix, with
+    a real column-header meaning — a boundary at the string's end). Likewise
+    "ref" is a substring of "Preferred" (embedded both sides — false
+    positive) and of "Cheque/Reference No" (right after "/" — legitimate).
+    Requiring a boundary on only one side (not `\\bkeyword\\b` on both)
+    rejects the "Updated"/"Preferred" cases while still matching "date" as a
+    suffix (TransactionDate/ValueDate/PostingDate — all real header
+    patterns) and "withdraw" as a PREFIX of "withdrawals"/"withdraws" (a
+    real column-header variant this parser already relies on recognizing,
+    confirmed on a real Canara statement).
+    """
+    esc = re.escape(keyword)
+    return re.search(r'(?<![a-z0-9])' + esc + r'|' + esc + r'(?![a-z0-9])', text) is not None
+
+
+def any_keyword_matches(text, keywords):
+    return any(keyword_matches(text, kw) for kw in keywords)
+
+# Date separators are usually the ASCII "/" or "-", but some statement
+# generators (confirmed on a real Cosmos Co-operative Bank statement) render
+# dates using the Unicode MINUS SIGN (U+2212, "−") instead of the ASCII
+# hyphen (U+002D, "-") — visually near-identical, but a distinct codepoint
+# that a plain "-" in a character class does NOT match. Every date-pattern
+# regex in this file used to require plain "/"/"-", so on that statement
+# every date silently failed to match at all — the anchor-row detection in
+# extract_transactions_by_word_coords() found zero anchors and bailed
+# entirely (mirrors the earlier UCO month-name DATE_PAT fix: a narrower
+# pattern than the real document uses causes a silent, total failure, not a
+# partial one). Also includes the common hyphen/dash lookalikes (U+2010–
+# U+2015) defensively, on the same reasoning as the Unicode minus sign.
+DATE_SEP = r'[/\-‐-―−]'
+
+# =================================================================
 # NEW: Universal OCR Engine
 # =================================================================
 
@@ -173,7 +216,47 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
       2. Pass 1: collect anchor rows = rows with a date at the leftmost column x-zone
       3. Pass 2: assign continuation rows to nearest anchor by y-distance
     """
-    DATE_PAT = re.compile(r'^\d{1,2}[/-]\d{1,2}[/-]\d{2,4}(?:\s|$)')
+    # The month group accepts either 1-2 digits (01-04-2026) OR a 3+ letter
+    # month name/abbreviation (01-Apr-2026, 01/April/2026) — a purely numeric
+    # pattern matches zero rows on statements that print the month as text
+    # (confirmed on a real UCO Bank statement), which silently zeroes out
+    # anchor_indices entirely, makes this whole extractor bail with (None,
+    # None), and falls back to the far cruder "standard style" table loop —
+    # producing exactly the kind of narration-shifted, rows-glued-to-the-
+    # wrong-transaction corruption this extractor exists to avoid.
+    DATE_PAT = re.compile(r'^\d{1,2}' + DATE_SEP + r'(?:\d{1,2}|[A-Za-z]{3,9})' + DATE_SEP + r'\d{2,4}(?:\s|$)', re.IGNORECASE)
+
+    def band_words_excluding_date_rows(words, center_y, start_offset=-5, end_offset=25):
+        """
+        Collects every word within [center_y+start_offset, center_y+end_offset],
+        grouped into visual rows, excluding any row whose own leftmost word
+        looks like a real transaction date. A genuine multi-line header
+        continuation (e.g. "Transaction" wrapping to "Date" on the next line)
+        never starts with a date value — only a real transaction row does.
+        Without this guard, a transaction row that sits close below the
+        header (confirmed on a real MZRB/SBI statement: only ~20px below,
+        well inside the generous +25px multi-line-header allowance) gets
+        swept into the header band, and any keyword its own narration
+        coincidentally contains (e.g. "Deposit" inside "By Cash Deposit by
+        self") gets mistaken for a header label — merging it into an
+        adjacent column's name and corrupting it.
+        """
+        band = [w for w in words if center_y + start_offset <= w['top'] <= center_y + end_offset]
+        y_rows = {}
+        for w in band:
+            wy = round(w['top'])
+            matched = next((ky for ky in y_rows if abs(ky - wy) <= 5), None)
+            if matched is None:
+                matched = wy
+                y_rows[matched] = []
+            y_rows[matched].append(w)
+        result = []
+        for wy, row_words in y_rows.items():
+            row_words_sorted = sorted(row_words, key=lambda rw: rw['x0'])
+            if DATE_PAT.match(row_words_sorted[0]['text'].strip()):
+                continue
+            result.extend(row_words)
+        return result
 
     with pdfplumber.open(pdf_path) as pdf:
         all_page_words = []
@@ -188,9 +271,26 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
     # ── Step 1: Detect header rows ────────────────────────────────────────
     # Find the first y-row with 'date'/'txn' + ≥2 target-header keyword matches.
     # Then collect all rows within 25px below it (multi-line header support).
+    #
+    # Bank-statement exports commonly repeat the SAME title/letterhead/column
+    # header block at the top of EVERY page (confirmed on a real Cosmos
+    # Co-operative Bank statement, whose page 2 repeats the bank's name/
+    # address, account number, statement period, and the column header row
+    # itself). The column-position derivation below only needs to run once
+    # (columns don't move page to page), but the SKIP must happen on every
+    # page — otherwise a later page's repeated header/title text is treated
+    # as ordinary "continuation" text and gets merged straight into that
+    # page's first real transaction (its nearest anchor by y-distance),
+    # corrupting the narration and gluing header words like "Particulars"/
+    # "Withdrawals" into the wrong columns. Confirmed: this silently dropped
+    # a real ₹2,000 withdrawal's amount into a garbled merged row, making the
+    # extracted total ₹2,000 short of the statement's own printed Grand
+    # Total. Detect every page's own header row independently (not just the
+    # first), so Step 2 can skip each page's header band on that page too.
     header_y_range = None  # (y_start, y_end)
     data_start_page = 0
     first_header_y = None
+    page_header_end_y = {}  # pg_idx -> y below which real transaction rows start
 
     for pg_idx, words in enumerate(all_page_words):
         y_rows = {}
@@ -202,35 +302,51 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
                 y_rows[matched] = []
             y_rows[matched].append(w)
 
-        all_words_text = ' '.join(w['text'].lower() for w in words)
         for y in sorted(y_rows):
             rw = sorted(y_rows[y], key=lambda w: w['x0'])
             rt = ' '.join(w['text'].lower() for w in rw)
             matches = sum(1 for t in target_headers if t in rt)
             if ('date' in rt or 'txn' in rt) and matches >= 2:
-                first_header_y = y
-                data_start_page = pg_idx
+                if first_header_y is None:
+                    first_header_y = y
+                    data_start_page = pg_idx
+                # Precise end-of-header-band for THIS page: collect words in
+                # a generous band below this row (handles a multi-line
+                # header), then take the max y among only the words that
+                # actually match a target keyword. A flat "+25" offset here
+                # is too coarse — some statements pack transaction rows only
+                # ~8px apart (confirmed on a real Cosmos statement's page 2),
+                # so a flat +25 swallowed the first TWO real transactions
+                # along with the header, dropping a real ₹2,000 withdrawal
+                # and a real ₹4,900 deposit. This mirrors the precise
+                # calculation already used for data_start_page below, so
+                # every page's skip is equally tight, not a blunt guess.
+                band_words = band_words_excluding_date_rows(words, y)
+                matched_ys = [
+                    w['top'] for w in band_words
+                    if any(t in w['text'].lower().strip('():') or w['text'].lower().strip('():') in t for t in target_headers)
+                ]
+                page_header_end_y[pg_idx] = (max(matched_ys) + 5) if matched_ys else (y + 10)
                 break
-        if first_header_y is not None:
-            break
 
     if first_header_y is None:
         return None, None
 
-    # Collect all words in the header y-band (first_header_y ± 25px)
-    header_band_words = []
+    # Collect all words in the header y-band (first_header_y ± 25px),
+    # excluding any row that's actually a nearby real transaction (see
+    # band_words_excluding_date_rows for why — confirmed on a real MZRB/SBI
+    # statement, where the first transaction's own narration "By Cash
+    # Deposit by self" sat only ~20px below the header and had its "Deposit"
+    # word swept in, merging "Particulars" + "Deposit" into one bogus
+    # column name).
     words_pg0 = all_page_words[data_start_page]
-    for w in words_pg0:
-        if first_header_y - 5 <= w['top'] <= first_header_y + 25:
-            header_band_words.append(w)
+    header_band_words = band_words_excluding_date_rows(words_pg0, first_header_y)
 
     # Derive column x-starts from header band words that match target keywords
     col_entries = []   # list of (x0, name, x1)
-    actual_header_ys = []
     for w in sorted(header_band_words, key=lambda w: w['x0']):
         wt = w['text'].lower().strip('():')
         if any(t in wt or wt in t for t in target_headers):
-            actual_header_ys.append(w['top'])
             # Merge with previous col if gap between words is small
             if col_entries and (w['x0'] - col_entries[-1][2]) < 10:
                 col_entries[-1] = (col_entries[-1][0], col_entries[-1][1] + ' ' + w['text'], w['x1'])
@@ -242,12 +358,8 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
 
     col_names = [c[1] for c in col_entries]
     col_starts = sorted([c[0] for c in col_entries])
-
-    # The end of the header band is the last matched header word's y
-    if actual_header_ys:
-        header_end_y = max(actual_header_ys) + 5
-    else:
-        header_end_y = first_header_y + 10
+    # page_header_end_y[data_start_page] was already computed precisely by
+    # the per-page loop above (same "max matched-keyword-word y + 5" logic).
 
     def get_col_idx(x):
         """Assign x to nearest column by x0 boundaries."""
@@ -309,10 +421,17 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
         'page ', 'generated', 'authorised', 'statement summary',
         'opening balance', 'closing balance', 'total debit', 'total credit',
         'eff avail', 'count of lien', ':12 pm', ':12 am', ' pm )', ' am )',
-        'transaction list', 'cumulative total', 'grand total', 'brought forward'
+        'transaction list', 'cumulative total', 'grand total', 'brought forward',
+        'end of statement', 'computer-generated', 'computer generated',
     ]
     BF_PAT = re.compile(r'\bb\s*/\s*f\b', re.IGNORECASE)  # "B/F" brought-forward marker
-    DIVIDER_RE = re.compile(r'^[-=_*.\s]+$')
+    # Divider lines between the transaction table and totals footer are
+    # usually drawn with plain ASCII "-", but a statement generator that
+    # renders dates using the Unicode minus sign (see DATE_SEP above) draws
+    # its dividers with the same character — an ASCII-only class would leave
+    # them unrecognized as dividers, so they'd fall through to being treated
+    # as ordinary continuation rows instead of being dropped.
+    DIVIDER_RE = re.compile(r'^[-=_*.\s‐-―−]+$')
 
     def is_divider_or_amount_only_row(row_words):
         """
@@ -347,9 +466,11 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
             y_rows[matched].append(w)
 
         sorted_ys = sorted(y_rows.keys())
-        # On the data start page, skip everything up to and including the header band
-        if pg_idx == data_start_page:
-            sorted_ys = [y for y in sorted_ys if y > header_end_y]
+        # Skip everything up to and including this page's own header band, if
+        # it has one (every page whose header row was detected in Step 1, not
+        # just data_start_page — see the comment there for why).
+        if pg_idx in page_header_end_y:
+            sorted_ys = [y for y in sorted_ys if y > page_header_end_y[pg_idx]]
 
         for y in sorted_ys:
             row_words = sorted(y_rows[y], key=lambda w: w['x0'])
@@ -468,7 +589,7 @@ def clean_numeric(value):
 SUMMARY_TABLE_PHRASES = [
     'statement summary', 'account summary', 'summary as on',
     'opening balance', 'closing balance', 'total debit', 'total credit',
-    'dr count', 'cr count',
+    'transaction total', 'grand total', 'sub total', 'dr count', 'cr count',
 ]
 
 
@@ -479,18 +600,72 @@ def is_summary_table(table):
     return any(p in table_text for p in SUMMARY_TABLE_PHRASES)
 
 
+# Some banks' PDFs draw the table border around the trailing "TRANSACTION
+# TOTAL"/"CLOSING BALANCE" summary rows too, so pdfplumber's gridline
+# extraction returns them as the LAST 1-2 rows of the SAME table object as
+# every real transaction above them — not as a separate standalone summary
+# box. is_summary_table() (designed for a genuinely standalone box) can't
+# tell these two cases apart on its own, since both contain the same marker
+# phrases; skipping the whole table wholesale in the mixed case throws away
+# every real transaction in it as collateral damage. Confirmed on a real
+# Axis Bank statement: an entire page's worth of 23 real transactions was
+# silently dropped this way, leaving only the first page's data — which
+# looked like "the scanner only reads one page" but was actually this.
+# DATE_SEP (not plain "[/-]") so this also recognizes dates rendered with the
+# Unicode minus sign (confirmed on a real Cosmos Co-operative Bank statement
+# — see DATE_SEP's own comment).
+_TABLE_DATE_RE = re.compile(r'^\d{1,2}' + DATE_SEP + r'(?:\d{1,2}|[A-Za-z]{3,9})' + DATE_SEP + r'\d{2,4}$', re.IGNORECASE)
+
+
+def table_has_dated_row(table):
+    """True if any row's first cell looks like a real transaction date —
+    meaning this table has genuine transactional content and must not be
+    discarded wholesale just because a trailing summary row also matches
+    is_summary_table()'s phrase check. A genuinely standalone summary box
+    has no dated rows at all, so this leaves that case unaffected."""
+    for row in table:
+        if row and row[0] and _TABLE_DATE_RE.match(str(row[0]).strip()):
+            return True
+    return False
+
+
+# A real header row is made of several short label cells ("Date", "Debit",
+# "Particulars"). A non-tabular info box (e.g. a "Customer Details" box with
+# one cell holding a whole paragraph of free text) is not, but the old
+# matching below joined a row's/block's cells into one blob and substring-
+# searched that blob — so a single long paragraph cell that happens to
+# mention "Date of Birth" and "Total Balance" in prose satisfied the same
+# "has 'date' + >=2 keyword" check as a genuine header row. Confirmed on a
+# real Bank of Maharashtra statement: its "Customer Details / Branch &
+# Account Details" info box (2 columns, each a multi-line paragraph) was
+# misidentified as the transaction header before the real 8-column
+# "Date | Type | Particulars | Cheque/Reference No | Debit | Credit |
+# Balance | Channel" header ever got the chance (headers is only ever set
+# once, from the FIRST row that matches) — truncating every real
+# transaction row down to 2 columns, and the bogus header's second column
+# ("...Total Balance...") coincidentally matching the 'balance' amount-
+# keyword caused every row's Type value ("Cheque"/"Charges"/etc, non-
+# numeric) to be coerced to NaN and then dropped entirely by the final
+# all-NaN safety-net filter — a completely empty result with no error.
+HEADER_CELL_MAX_LEN = 60
+
+
 def detect_header(table, target_headers):
+    def short_cells(row):
+        return [str(c).strip().lower() for c in row if c and len(str(c).strip()) <= HEADER_CELL_MAX_LEN]
+
     for i, row in enumerate(table):
-        row_text = ' '.join([str(c).lower() for c in row if c])
+        row_cells = short_cells(row)
         block = table[i:min(i+3, len(table))]
-        joined_text = ' '.join([str(c).lower() for r in block for c in r if c])
-        matches = sum(1 for t in target_headers if t in joined_text)
-        has_date = 'date' in joined_text
-        
+        block_cells = [c for r in block for c in short_cells(r)]
+
+        matches = sum(1 for t in target_headers if any(keyword_matches(c, t) for c in block_cells))
+        has_date = any(keyword_matches(c, 'date') for c in block_cells)
+
         # Ensure the current row actually contains some of the header keywords
         # otherwise we might just be looking at the row BEFORE the header
-        row_matches = sum(1 for t in target_headers if t in row_text)
-        
+        row_matches = sum(1 for t in target_headers if any(keyword_matches(c, t) for c in row_cells))
+
         if has_date and matches >= 2 and row_matches >= 1:
             col_names = [str(c).replace('\n', ' ').strip() if c else f'Column_{j}' for j, c in enumerate(row)]
             return i, col_names
@@ -524,9 +699,31 @@ def split_crdr_column(df):
         elif 'amount' in col_lower and 'balance' not in col_lower and 'available' not in col_lower:
             amount_col = col
 
+    # Some statements name this column something generic like "Type" instead
+    # of "Cr/Dr" (confirmed on a real PNB statement — header literally
+    # "Date Amount Type Balance Remarks") — the header text alone can't
+    # reliably identify it in that case. Fall back to checking the column's
+    # VALUES instead: a genuine Cr/Dr indicator column only ever contains
+    # "CR"/"DR" (or "C"/"D"), so a column where the overwhelming majority of
+    # non-blank values match that narrow set is safe to treat as one
+    # regardless of its header name — a real "Transaction Type" column
+    # (NEFT/UPI/IMPS/Cash) would never pass this check, so this can't
+    # misfire and mistake an unrelated column for the direction indicator.
+    if not crdr_col and amount_col:
+        for col in df.columns:
+            if col == amount_col:
+                continue
+            values = df[col].astype(str).str.strip().str.upper()
+            non_blank = values[values != '']
+            if non_blank.empty:
+                continue
+            if non_blank.isin(['CR', 'DR', 'C', 'D']).mean() >= 0.9:
+                crdr_col = col
+                break
+
     if crdr_col and amount_col:
-        df['Credit'] = df.apply(lambda r: r[amount_col] if str(r[crdr_col]).upper().strip() == 'CR' else None, axis=1)
-        df['Debit'] = df.apply(lambda r: r[amount_col] if str(r[crdr_col]).upper().strip() == 'DR' else None, axis=1)
+        df['Credit'] = df.apply(lambda r: r[amount_col] if str(r[crdr_col]).upper().strip() in ('CR', 'C') else None, axis=1)
+        df['Debit'] = df.apply(lambda r: r[amount_col] if str(r[crdr_col]).upper().strip() in ('DR', 'D') else None, axis=1)
         df.drop(columns=[crdr_col, amount_col], inplace=True)
     return df
 
@@ -595,7 +792,8 @@ def parse_bank_statement(file_path, output_excel_path):
     pages_tables = []
     is_native_pdf = False
     ext = file_path.lower().rsplit('.', 1)[-1]
-    
+    early_coord_headers, early_coord_rows = None, None
+
     # ── Auto-Detect Document Engine ──────────────────────────────────────
     if ext == 'pdf':
         with pdfplumber.open(file_path) as pdf:
@@ -607,29 +805,57 @@ def parse_bank_statement(file_path, output_excel_path):
                     print("[+] Native PDF detected. Using fast data extraction.")
                     ts_lines = {"vertical_strategy": "lines", "horizontal_strategy": "lines"}
                     ts_text = {"horizontal_strategy": "text", "snap_x_tolerance": 10}
-                    
+
                     p0_lines = pdf.pages[0].extract_tables(table_settings=ts_lines)
-                    
+
                     if p0_lines and (len(p0_lines) > 5 or any(len(t) >= 3 and len(t[0]) >= 4 for t in p0_lines)):
                         print("    -> Detected explicit gridlines.")
                         ts = ts_lines
                     else:
-                        explicit_cols = get_explicit_columns(pdf.pages[0], target_headers)
-                        if explicit_cols and len(explicit_cols) > 3:
-                            print("    -> No gridlines. Using smart header-aligned column boundaries.")
-                            ts = {
-                                "vertical_strategy": "explicit",
-                                "explicit_vertical_lines": explicit_cols,
-                                "horizontal_strategy": "text",
-                                "snap_x_tolerance": 5,
-                                "intersection_x_tolerance": 1500
-                            }
+                        # A short header LABEL (e.g. "Date") can start further
+                        # RIGHT than the actual DATA values in that column do
+                        # (confirmed on a real Cosmos Co-operative Bank
+                        # statement: header "Date" starts at x=42, but real
+                        # date values like "14-02-2023" start at x=27, left of
+                        # the header-derived column boundary at x=40).
+                        # get_explicit_columns() below derives column
+                        # boundaries purely from header-word x-positions, so in
+                        # that case pdfplumber's "explicit vertical lines"
+                        # table strategy splits a value's own text mid-word
+                        # across two columns (e.g. "14-02-2023" comes apart
+                        # into "14-" in a phantom leading column and "02-2023"
+                        # in the real Date column) — corrupting the date on
+                        # EVERY row. This isn't cosmos.pdf-specific: any
+                        # statement whose header label is narrower than its
+                        # data column is at risk. The word-coordinate
+                        # extractor doesn't have this failure mode (it anchors
+                        # rows by an actual date PATTERN match, not a fixed
+                        # x-boundary, and already clusters right-aligned wide
+                        # amounts correctly) — try it FIRST whenever there are
+                        # no gridlines, before falling back to the more
+                        # fragile header-position boundary approach.
+                        early_coord_headers, early_coord_rows = extract_transactions_by_word_coords(file_path, target_headers)
+                        if early_coord_headers and early_coord_rows:
+                            print(f"    -> No gridlines. Word-coordinate extractor found {len(early_coord_rows)} transactions.")
+                            ts = None
                         else:
-                            print("    -> No gridlines or clear headers. Using text strategy.")
-                            ts = ts_text
-                        
-                    for page in pdf.pages:
-                        pages_tables.append(page.extract_tables(table_settings=ts))
+                            explicit_cols = get_explicit_columns(pdf.pages[0], target_headers)
+                            if explicit_cols and len(explicit_cols) > 3:
+                                print("    -> No gridlines. Using smart header-aligned column boundaries.")
+                                ts = {
+                                    "vertical_strategy": "explicit",
+                                    "explicit_vertical_lines": explicit_cols,
+                                    "horizontal_strategy": "text",
+                                    "snap_x_tolerance": 5,
+                                    "intersection_x_tolerance": 1500
+                                }
+                            else:
+                                print("    -> No gridlines or clear headers. Using text strategy.")
+                                ts = ts_text
+
+                    if ts is not None:
+                        for page in pdf.pages:
+                            pages_tables.append(page.extract_tables(table_settings=ts))
 
     if not is_native_pdf:
         print("[!] Image or Scanned PDF detected. Engaging Universal OCR Engine...")
@@ -653,12 +879,19 @@ def parse_bank_statement(file_path, output_excel_path):
     all_data = []
     headers = None
 
+    # The word-coordinate extractor already ran up front for a no-gridline
+    # PDF (see the "Auto-Detect Document Engine" block above) and succeeded —
+    # use its result directly rather than re-deriving anything below.
+    if early_coord_headers and early_coord_rows:
+        headers = early_coord_headers
+        all_data = early_coord_rows
+
     p0_tables = pages_tables[0] if pages_tables else []
     one_table_per_txn = (len(p0_tables) > 5 and len(p0_tables) > 1 and all(len(t) <= 8 for t in p0_tables[1:min(6, len(p0_tables))]))
 
     # Check if data appears fragmented (too many single/double-cell rows)
     # If so, use the word-coordinate extractor for accurate results
-    if is_native_pdf and not one_table_per_txn:
+    if not (early_coord_headers and early_coord_rows) and is_native_pdf and not one_table_per_txn:
         all_flat = [row for tables in pages_tables for table in tables for row in table]
         if all_flat:
             empty_ratio = sum(1 for row in all_flat if sum(1 for c in row if c and str(c).strip()) <= 2) / len(all_flat)
@@ -718,11 +951,20 @@ def parse_bank_statement(file_path, output_excel_path):
                             break
                 else:
                     # This table has no recognized transaction header of its own.
-                    # If it also looks like a standalone summary box (Opening/
-                    # Closing Balance, Dr/Cr Count, etc.) it isn't a continuation
-                    # of the real transaction table — skip it entirely rather
-                    # than risk splicing its cells in as a bogus transaction.
-                    if is_summary_table(table): continue
+                    # If it ALSO looks like a standalone summary box (Opening/
+                    # Closing Balance, Dr/Cr Count, etc.) AND has no dated rows
+                    # of its own, it isn't a continuation of the real
+                    # transaction table — skip it entirely rather than risk
+                    # splicing its cells in as a bogus transaction. But a table
+                    # with real dated rows is a genuine continuation (e.g. a
+                    # later page's table, no header repeated) even if a
+                    # trailing "TRANSACTION TOTAL"/"CLOSING BALANCE" row got
+                    # captured inside the SAME bordered grid — discarding the
+                    # whole table in that case would silently drop every real
+                    # transaction in it. The blank-date marker-row filter
+                    # further down strips just the trailing summary row(s)
+                    # once real per-row processing runs.
+                    if is_summary_table(table) and not table_has_dated_row(table): continue
                     col_diff = len(headers) - len(table[0])
                     if col_diff < -1 or col_diff > 3: continue
                     if col_diff > 0:
@@ -736,11 +978,41 @@ def parse_bank_statement(file_path, output_excel_path):
                     clean_row = [str(c).replace('\n', ' ').strip() if c else '' for c in row]
                     if not any(clean_row): continue
                     if col_offset > 0: clean_row = [''] * col_offset + clean_row
-                    
+
                     if len(clean_row) < len(headers):
                         clean_row.extend([''] * (len(headers) - len(clean_row)))
                     elif len(clean_row) > len(headers):
                         clean_row = clean_row[:len(headers)]
+
+                    # A row whose date cell is either blank OR isn't a real
+                    # date at all (e.g. the literal word "Total" landing in
+                    # the date column — confirmed on a real Allahabad Bank
+                    # statement, whose trailing "Total 51,220.76 50,411.00"
+                    # summary line extracted as ['Total', '', '', '51,220.76',
+                    # '50,411.00', ''], with "Total" sitting exactly where the
+                    # date normally goes) is a standalone statement-summary
+                    # line if its content also matches a known marker phrase,
+                    # not a wrapped continuation of the row above it. Left
+                    # alone, the merge logic below folds it straight into that
+                    # transaction's narration — which the is_balance_marker_row
+                    # filter further down then matches and deletes WHOLE,
+                    # taking the genuine transaction down with it as
+                    # collateral damage; or, as with the Allahabad case, the
+                    # summary row survives untouched as its own bogus
+                    # "transaction" with a fake ~2x-inflated Debit/Credit
+                    # value. Confirmed on a real SBI statement: this exact
+                    # merge mechanism silently dropped the statement's very
+                    # last transaction, a real ₹95 INTEREST CREDIT. Drop the
+                    # marker row outright here, before it ever reaches the
+                    # merge step.
+                    row_date_is_real = bool(clean_row[0]) and bool(_TABLE_DATE_RE.match(clean_row[0]))
+                    if not row_date_is_real and re.search(
+                        r'\bb\s*/\s*f\b|brought forward|carried forward|\bc\s*/\s*f\b|'
+                        r'closing balance|opening balance|\btotal\b|'
+                        r'grand total|sub\s*total',
+                        ' '.join(clean_row), re.IGNORECASE,
+                    ):
+                        continue
 
                     non_empty_count = sum(1 for c in clean_row if c)
                     is_new_txn = bool(clean_row[0]) or non_empty_count >= 3
@@ -769,10 +1041,24 @@ def parse_bank_statement(file_path, output_excel_path):
 
     df = pd.DataFrame(all_data, columns=headers)
     df = split_embedded_crdr_amount(df)  # must run before numeric cleanup strips the Dr/Cr direction
-    amount_keywords = ['amt', 'amount', 'balance', 'debit', 'credit', 'withdrawal', 'deposit']
+    # 'withdraw' (not 'withdrawal') so this also matches header variants like
+    # "WITHDRAWS" that don't end in "-al" — confirmed on a real Canara
+    # statement where "WITHDRAWS" fell through this check entirely, leaving
+    # its values as raw comma-formatted strings (e.g. "16,000.00") instead of
+    # being cleaned into a proper number. 'withdraw' is a strict prefix of
+    # 'withdrawal', so this matches every case the old keyword did plus more.
+    amount_keywords = ['amt', 'amount', 'balance', 'debit', 'credit', 'withdraw', 'deposit']
     for col in df.columns:
         col_lower_no_spaces = str(col).lower().replace(' ', '').replace('\n', '')
-        if any(kw in col_lower_no_spaces for kw in amount_keywords) and 'cr/dr' not in col_lower_no_spaces:
+        # Bare "DR"/"CR" columns (confirmed on a real Allahabad Bank statement:
+        # header literally "Post Date | Value Date | Description | DR | CR |
+        # Balance", each row having exactly one of the two populated — the same
+        # shape as a Withdrawal/Deposit pair, just abbreviated to 2 letters) need
+        # an EXACT match, not a substring one — "dr"/"cr" as a substring check
+        # would false-positive on unrelated column names like "Address" or
+        # "Order No" that happen to contain those two letters.
+        is_bare_dr_cr = col_lower_no_spaces in ('dr', 'cr')
+        if (any_keyword_matches(col_lower_no_spaces, amount_keywords) or is_bare_dr_cr) and 'cr/dr' not in col_lower_no_spaces:
             df[col] = df[col].apply(clean_numeric)
             df[col] = pd.to_numeric(df[col], errors='coerce')
 
@@ -780,10 +1066,13 @@ def parse_bank_statement(file_path, output_excel_path):
 
     # ── Clean Date column: extract only the date, prepend overflow to narration ──
     date_col = next((c for c in df.columns if str(c).lower().strip() in ('date', 'transaction date', 'txn date', 'value date') and 'value' not in str(c).lower()), None)
-    narr_col = next((c for c in df.columns if any(kw in str(c).lower() for kw in ('detail', 'narration', 'particulars', 'description', 'transaction'))), None)
+    narr_col = next((c for c in df.columns if any_keyword_matches(str(c).lower(), ('detail', 'narration', 'particulars', 'description', 'transaction'))), None)
 
     if date_col and narr_col:
-        DATE_RE = re.compile(r'\d{1,2}[/-]\d{1,2}[/-]\d{2,4}')
+        # Same numeric-or-month-name widening as DATE_PAT above, for consistency
+        # on statements that reach this "standard style" path with a month-name date,
+        # plus the same DATE_SEP (Unicode-minus-aware) separator class.
+        DATE_RE = re.compile(r'\d{1,2}' + DATE_SEP + r'(?:\d{1,2}|[A-Za-z]{3,9})' + DATE_SEP + r'\d{2,4}', re.IGNORECASE)
         def split_date_narr(row):
             raw = str(row[date_col]).strip() if pd.notna(row[date_col]) else ''
             m = DATE_RE.search(raw)
@@ -829,8 +1118,9 @@ def parse_bank_statement(file_path, output_excel_path):
 
     # Filter out non-transactional junk (rows where ALL amount columns are NaN/empty)
     final_amount_cols = [
-        col for col in df.columns 
-        if any(kw in str(col).lower().replace(' ', '').replace('\n', '') for kw in amount_keywords)
+        col for col in df.columns
+        if (any_keyword_matches(str(col).lower().replace(' ', '').replace('\n', ''), amount_keywords)
+            or str(col).lower().replace(' ', '').replace('\n', '') in ('dr', 'cr'))
         and 'cr/dr' not in str(col).lower().replace(' ', '').replace('\n', '')
     ]
     if final_amount_cols:
@@ -876,7 +1166,7 @@ if __name__ == "__main__":
     if len(sys.argv) >= 2:
         FILE_PATH = sys.argv[1]
     else:
-        FILE_PATH = "uco.pdf"  # Put ANY file type here: Native PDF, Scanned PDF, .jpg, .png
+        FILE_PATH = "bom.pdf"  # Put ANY file type here: Native PDF, Scanned PDF, .jpg, .png
 
     if not os.path.exists(FILE_PATH):
         print(f"File not found: {FILE_PATH}. Please provide a valid file path.")

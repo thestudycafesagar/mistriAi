@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import cv2, numpy, pdfplumber, pandas, pytesseract, pdf2image, openpyxl; print\\('all imports OK'\\)\")",
+      "Bash(where python *)",
+      "Bash(^Version:\")",
+      "Bash(python -m pip show opencv-python numpy pdfplumber pandas pytesseract pdf2image openpyxl)",
+      "Bash(python parse_bank_statement.py \"/c/Users/user/Desktop/bankstatement/uno.pdf\" \"/c/Users/user/AppData/Local/Temp/claude/c--Users-user-Desktop-pdf-web/6a4b2bff-7f9c-47b2-b1f7-7525754f167b/scratchpad/test_uno.xlsx\")",
+      "Bash(echo \"EXIT CODE: $?\")",
+      "Bash(rm -f \"c:\\\\Users\\\\user\\\\Desktop\\\\pdf-web\\\\.tmp-test-python-parser.mjs\" \"c:\\\\Users\\\\user\\\\Desktop\\\\pdf-web\\\\.tmp-test-python-parser.log\")",
+      "Bash(npx tsx *)",
+      "Bash(rm -f \"c:\\\\Users\\\\user\\\\Desktop\\\\pdf-web\\\\.tmp-test-python-parser.mts\" && ls \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\mistri-ai-bank-parse\\\\\" 2>&1)",
+      "Read(//c/Users/user/AppData/Local/Temp/**)"
+    ]
+  }
+}

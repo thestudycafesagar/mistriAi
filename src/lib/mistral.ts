@@ -643,6 +643,91 @@ function dedupeBankStatementRows(rows: Record<string, string>[]): Record<string,
   return deduped;
 }
 
+// RULE 2 in schemas.ts already instructs the model to exclude "Balance B/F"/
+// "Brought Forward" and "Balance C/F"/opening/closing-balance rows from the
+// transactions array — but that's a prompt instruction, not a guarantee.
+// This is a deterministic safety net for when the model doesn't comply,
+// mirroring the same regex-based filtering parse_bank_statement.py already
+// applies to its own output (is_bf_row / is_balance_marker_row there).
+// Confirmed necessary against a real extraction: a "BROUGHT FORWARD" opening
+// line came back as its own transaction row (with the WRONG balance value
+// attached — the following real transaction's balance, not its own).
+const BF_MARKER_RE = /\bb\s*\/\s*f\b|brought forward/i;
+const BALANCE_MARKER_RE = /closing balance|opening balance/i;
+
+function isBroughtForwardOrBalanceMarkerRow(row: Record<string, string>): boolean {
+  const desc = row.DESCRIPTION || '';
+  return BF_MARKER_RE.test(desc) || BALANCE_MARKER_RE.test(desc);
+}
+
+function filterBroughtForwardRows(rows: Record<string, string>[]): Record<string, string>[] {
+  const filtered = rows.filter(row => !isBroughtForwardOrBalanceMarkerRow(row));
+  const removed = rows.length - filtered.length;
+  if (removed > 0) {
+    console.warn(`[Mistral OCR] Removed ${removed} Brought-Forward/Balance-marker row(s) the model included despite RULE 2.`);
+  }
+  return filtered;
+}
+
+// A real transaction has EXACTLY ONE of Debit/Credit non-empty (RULE 1 in
+// schemas.ts tells Mistral this explicitly; the Python script's own
+// column-splitting logic assumes it too) — but a malformed row with BOTH
+// populated does slip through occasionally (a table/OCR column
+// misalignment on the Python side, or the model getting confused despite
+// the rule). Rather than guess which one is real, use the row's own
+// Balance field (present on both engines' output) as a tiebreaker: the
+// running balance can only have moved by adding Credit OR subtracting
+// Debit from the PREVIOUS row's balance — whichever operation actually
+// reproduces THIS row's stated balance is the real value; the other is
+// spurious and gets discarded. Only ever acts when it can prove which
+// value is right (both the previous and current row have a usable
+// Balance, and exactly one of the two operations matches) — if it can't
+// prove it, the row is left untouched rather than guessed at.
+const BALANCE_MATCH_TOLERANCE = 0.01; // rupees — this checks one row's own arithmetic, not an accumulated multi-row sum, so a tight tolerance is appropriate (unlike RECONCILIATION_TOLERANCE below).
+
+function resolveAmbiguousDebitCreditRows(rows: Record<string, string>[]): Record<string, string>[] {
+  let previousBalance: number | null = null;
+  let resolved = 0;
+  let unresolved = 0;
+
+  for (const row of rows) {
+    const currentBalance = parseFloat(row.Balance);
+    const hasBalance = Number.isFinite(currentBalance);
+
+    if (row.Debit && row.Credit) {
+      if (previousBalance !== null && hasBalance) {
+        const debitAmt = parseFloat(row.Debit);
+        const creditAmt = parseFloat(row.Credit);
+        const debitMatches = Math.abs((previousBalance - debitAmt) - currentBalance) <= BALANCE_MATCH_TOLERANCE;
+        const creditMatches = Math.abs((previousBalance + creditAmt) - currentBalance) <= BALANCE_MATCH_TOLERANCE;
+
+        if (debitMatches && !creditMatches) {
+          row.Credit = '';
+          resolved++;
+        } else if (creditMatches && !debitMatches) {
+          row.Debit = '';
+          resolved++;
+        } else {
+          unresolved++;
+        }
+      } else {
+        unresolved++;
+      }
+    }
+
+    if (hasBalance) previousBalance = currentBalance;
+  }
+
+  if (resolved > 0) {
+    console.warn(`[Bank Statement] Resolved ${resolved} row(s) that had both Debit and Credit populated, using the running balance to determine which value was real.`);
+  }
+  if (unresolved > 0) {
+    console.warn(`[Bank Statement] ${unresolved} row(s) had both Debit and Credit populated but couldn't be resolved against the running balance (missing/ambiguous Balance data) — left as extracted.`);
+  }
+
+  return rows;
+}
+
 export interface BankStatementSummary {
   /** Sum of every extracted Debit value. Always computable from the extracted rows. */
   totalDebit: string;
@@ -742,7 +827,10 @@ export async function runOcr(
       // applying it anyway only risks wrongly deleting a genuine recurring
       // transaction (same date/narration/amount within 3 rows of another,
       // which real statements do contain) as if it were a duplicate.
-      const finalRows = pythonRows;
+      // parse_bank_statement.py already strips BF/balance-marker rows itself
+      // (is_bf_row / is_balance_marker_row there) — this is a redundant but
+      // harmless safety net for consistency with the Mistral path below.
+      const finalRows = resolveAmbiguousDebitCreditRows(filterBroughtForwardRows(pythonRows));
       for (const row of finalRows) {
         row.LEDGER = suggestBankLedger(row.DESCRIPTION, row.LEDGER);
       }
@@ -821,7 +909,7 @@ export async function runOcr(
             // since a different key isn't affected by the first one's limit.
             const excludeKeys = new Set<string>();
 
-            const ocrResponse = await withRetry(
+            const runChunkOcr = () => withRetry(
               async () => {
                 const { key, client, release } = keyPool.acquire(excludeKeys);
                 try {
@@ -850,16 +938,41 @@ export async function runOcr(
               { label: `Chunk ${index + 1}/${chunks.length}` },
             );
 
-            const { rows, openingBalance: chunkOpening, closingBalance: chunkClosing, TotalCGSTAmount, TotalSGSTAmount, TotalIGSTAmount } = extractRowsFromOcrResponse(ocrResponse);
+            let ocrResponse = await runChunkOcr();
+            let { rows, openingBalance: chunkOpening, closingBalance: chunkClosing, TotalCGSTAmount, TotalSGSTAmount, TotalIGSTAmount } = extractRowsFromOcrResponse(ocrResponse);
             if (docType === 'BANK_STATEMENT') {
               const chunkLabel = `Chunk ${index + 1}/${chunks.length} (${pagesPerChunk} pages or fewer)`;
               if (rows.length === 0) {
                 // Not necessarily a bug (a chunk could genuinely be a blank
                 // divider or an opening/closing-only page), but the Mistral
                 // SDK gives no way to distinguish that from a chunk whose
-                // annotation silently came back incomplete — worth a log
-                // trail to correlate against if row counts look short later.
-                console.warn(`[Mistral OCR] ${chunkLabel} returned zero transactions.`);
+                // annotation silently came back incomplete. The raw OCR
+                // markdown (returned alongside the structured JSON at no
+                // extra cost) gives independent evidence either way: if it
+                // shows date-led lines, this page almost certainly has real
+                // transactions the annotation just failed to capture — worth
+                // one retry (a fresh call, not just re-reading the same
+                // response) before accepting an empty result and silently
+                // losing every transaction on this page. Confirmed necessary
+                // against a real statement where a page with 3 real
+                // transactions came back with zero, silently dropping them.
+                const markdown = (ocrResponse?.pages ?? []).map((p: any) => p?.markdown ?? '').join('\n');
+                const estimated = (markdown.match(DATE_LINE_PATTERN) ?? []).length;
+                if (estimated > 0) {
+                  console.warn(
+                    `[Mistral OCR] ${chunkLabel} returned zero transactions, but its raw page text has ` +
+                    `~${estimated} date-led line(s) — retrying this chunk once before accepting an empty result.`,
+                  );
+                  ocrResponse = await runChunkOcr();
+                  ({ rows, openingBalance: chunkOpening, closingBalance: chunkClosing, TotalCGSTAmount, TotalSGSTAmount, TotalIGSTAmount } = extractRowsFromOcrResponse(ocrResponse));
+                  if (rows.length === 0) {
+                    console.warn(`[Mistral OCR] ${chunkLabel} still returned zero transactions after retry — accepting as genuinely empty (e.g. a blank divider page).`);
+                  } else {
+                    console.log(`[Mistral OCR] ${chunkLabel} retry recovered ${rows.length} transaction row(s) that the first attempt missed entirely.`);
+                  }
+                } else {
+                  console.warn(`[Mistral OCR] ${chunkLabel} returned zero transactions.`);
+                }
               } else {
                 warnIfRowCountLooksShort(ocrResponse, rows.length, chunkLabel);
               }
@@ -953,6 +1066,8 @@ export async function runOcr(
   let bankSummary: BankStatementSummary | undefined;
 
   if (docType === 'BANK_STATEMENT') {
+    finalRows = filterBroughtForwardRows(finalRows);
+    finalRows = resolveAmbiguousDebitCreditRows(finalRows);
     finalRows = dedupeBankStatementRows(finalRows);
 
     // The model's own LEDGER guess is inconsistent across calls (see

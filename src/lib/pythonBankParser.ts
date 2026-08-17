@@ -92,14 +92,36 @@ function toStr(value: unknown): string {
   return String(value).trim();
 }
 
-// Debit/Credit come through as a JSON number (or null) — pandas already
-// coerced them via pd.to_numeric. A 0 is treated the same as absent: every
-// real transaction has a non-zero amount in exactly one of Debit/Credit
-// (mirrors RULE 1 in schemas.ts for the Mistral path), so a 0 here is a
-// parsing artifact, not a genuine zero-rupee transaction.
+// Debit/Credit/Balance usually come through as a JSON number (or null) —
+// pandas already coerced them via pd.to_numeric INSIDE the script. But that
+// coercion only runs for a column whose header matches the script's own
+// amount_keywords list — a real header the list doesn't recognize (e.g.
+// "WITHDRAWS" without the "-al" the list requires, confirmed on a real
+// Canara statement) skips it entirely, leaving a raw comma-formatted string
+// like "16,000.00" straight from the PDF table. Plain parseFloat() silently
+// truncates at the first comma — parseFloat("16,000.00") is 16, not 16000,
+// and parseFloat("1,60,000.00") (Indian lakh-style grouping) is 1, not
+// 160000 — wrong by 100-1000x with no error, the worst kind of bug. This
+// strips currency symbols, a trailing Dr/Cr suffix, and every comma before
+// parsing (mirrors clean_numeric() in parse_bank_statement.py), so the
+// result is correct regardless of whether the script's own cleanup ran.
+function parseNumericValue(value: unknown): number {
+  if (typeof value === 'number') return value;
+  let s = String(value).trim();
+  s = s.replace(/^[₹$€£]|^Rs\.?\s*/i, '');
+  s = s.replace(/\s*\(?\s*(dr|cr)\s*\)?\.?$/i, '');
+  s = s.replace(/,/g, '');
+  s = s.replace(/\s+/g, '');
+  return parseFloat(s);
+}
+
+// A 0 is treated the same as absent: every real transaction has a non-zero
+// amount in exactly one of Debit/Credit (mirrors RULE 1 in schemas.ts for
+// the Mistral path), so a 0 here is a parsing artifact, not a genuine
+// zero-rupee transaction.
 function toAmountStr(value: unknown): string {
   if (value === null || value === undefined || value === '') return '';
-  const n = typeof value === 'number' ? value : parseFloat(String(value));
+  const n = parseNumericValue(value);
   if (!Number.isFinite(n) || n === 0) return '';
   return n.toFixed(2);
 }
@@ -110,7 +132,7 @@ function toAmountStr(value: unknown): string {
 // a negative value (overdrawn) is valid too.
 function toBalanceStr(value: unknown): string {
   if (value === null || value === undefined || value === '') return '';
-  const n = typeof value === 'number' ? value : parseFloat(String(value));
+  const n = parseNumericValue(value);
   if (!Number.isFinite(n)) return '';
   return n.toFixed(2);
 }
@@ -135,6 +157,27 @@ function findKey(keys: string[], predicate: (normalized: string) => boolean): st
   return keys.find(k => predicate(normalizeKey(k)));
 }
 
+// Matches `keyword` in `normalized` when there's a non-alphanumeric boundary
+// (string start/end, "/", "(", etc.) on AT LEAST ONE side — i.e. not fully
+// embedded inside a longer, unrelated word on BOTH sides. A plain
+// `.includes()` check misses this: "date" is a genuine substring of
+// "Updated" (embedded both sides — a false positive) but ALSO of
+// "TransactionDate" (a legitimate suffix — real, common header text,
+// bounded only at the string's end). Likewise "ref" is a substring of
+// "Preferred" (false positive) and of "Cheque/ReferenceNo" (right after
+// "/" — legitimate). Requiring a boundary on only one side rejects the
+// "Updated"/"Preferred" cases while still matching "date" as a suffix
+// (TransactionDate/ValueDate/PostingDate) and "withdraw" as a PREFIX of
+// "withdrawals"/"withdraws" (a real header variant this parser already
+// relies on recognizing).
+function hasKeyword(normalized: string, keyword: string): boolean {
+  return new RegExp(`(?<![a-z0-9])${keyword}|${keyword}(?![a-z0-9])`).test(normalized);
+}
+
+function hasAnyKeyword(normalized: string, keywords: string[]): boolean {
+  return keywords.some(kw => hasKeyword(normalized, kw));
+}
+
 /**
  * Maps one of the script's dynamically-headered JSON records onto this app's
  * fixed BANK_STATEMENT columns. Returns null for a row with nothing usable
@@ -149,8 +192,8 @@ function normalizePythonRow(record: Record<string, unknown>): Record<string, str
   // (mirrors the script's own date_col preference) — but fall back to
   // whatever date-ish column is available rather than leaving DATE blank.
   const dateKey =
-    findKey(keys, l => l.includes('date') && !l.includes('value')) ??
-    findKey(keys, l => l.includes('date'));
+    findKey(keys, l => hasKeyword(l, 'date') && !l.includes('value')) ??
+    findKey(keys, l => hasKeyword(l, 'date'));
 
   // "transaction" is a weaker signal than the primary keywords above — some
   // statements name their narration column literally "Transaction" (e.g.
@@ -158,9 +201,9 @@ function normalizePythonRow(record: Record<string, unknown>): Record<string, str
   // Date"/"Transaction Id" that must NOT be read as narration. Only fall
   // back to it, and only for a key that isn't itself a date/id column.
   const narrationKey =
-    findKey(keys, l => NARRATION_KEYWORDS.some(w => l.includes(w))) ??
+    findKey(keys, l => hasAnyKeyword(l, NARRATION_KEYWORDS)) ??
     findKey(keys, l => l.includes('transaction') && !l.includes('date') && !l.includes('id'));
-  const chequeKey = findKey(keys, l => CHEQUE_KEYWORDS.some(w => l.includes(w)));
+  const chequeKey = findKey(keys, l => hasAnyKeyword(l, CHEQUE_KEYWORDS));
 
   // Exact "Debit"/"Credit" keys (the script produces these directly once it
   // splits an inline Cr/Dr marker or a separate Cr/Dr column) take priority
@@ -177,14 +220,20 @@ function normalizePythonRow(record: Record<string, unknown>): Record<string, str
   // credit/debit keyword itself, so it's still never eligible under the
   // fallback tier — only a column that names its amount AND happens to also
   // say "balance" can match there.
+  // Bare "DR"/"CR" columns (confirmed on a real Allahabad Bank statement:
+  // header literally "Post Date | Value Date | Description | DR | CR |
+  // Balance") need an EXACT match here too, at the same priority as
+  // "debit"/"credit" — never folded into DEBIT_KEYWORDS/CREDIT_KEYWORDS'
+  // substring matching, since "dr"/"cr" as a substring would false-positive
+  // on unrelated column names.
   const debitKey =
-    keys.find(k => normalizeKey(k) === 'debit') ??
-    findKey(keys, l => DEBIT_KEYWORDS.some(w => l.includes(w)) && !l.includes('balance')) ??
-    findKey(keys, l => DEBIT_KEYWORDS.some(w => l.includes(w)));
+    keys.find(k => { const nk = normalizeKey(k); return nk === 'debit' || nk === 'dr'; }) ??
+    findKey(keys, l => hasAnyKeyword(l, DEBIT_KEYWORDS) && !l.includes('balance')) ??
+    findKey(keys, l => hasAnyKeyword(l, DEBIT_KEYWORDS));
   const creditKey =
-    keys.find(k => normalizeKey(k) === 'credit') ??
-    findKey(keys, l => CREDIT_KEYWORDS.some(w => l.includes(w)) && !l.includes('balance')) ??
-    findKey(keys, l => CREDIT_KEYWORDS.some(w => l.includes(w)));
+    keys.find(k => { const nk = normalizeKey(k); return nk === 'credit' || nk === 'cr'; }) ??
+    findKey(keys, l => hasAnyKeyword(l, CREDIT_KEYWORDS) && !l.includes('balance')) ??
+    findKey(keys, l => hasAnyKeyword(l, CREDIT_KEYWORDS));
 
   // The running-balance column, e.g. "Balance", "Balance( )", "BALANCE(INR)",
   // "Balance Amount" — for testing/verification, so each row can be eyeballed
@@ -267,6 +316,30 @@ export async function tryPythonBankStatementParse(file: File): Promise<Record<st
 
     if (rows.length === 0) {
       console.warn('[pythonBankParser] Parser returned rows but none mapped to a usable transaction — falling back to Mistral OCR.');
+      return null;
+    }
+
+    // Every real transaction should have exactly one of Debit/Credit
+    // populated (RULE 1 in schemas.ts, mirrored by the script's own
+    // column-splitting logic). A row with a date/narration but BOTH blank
+    // means normalizePythonRow() found a real transaction row but couldn't
+    // identify its amount column at all — e.g. a bank-specific header
+    // naming variant neither the script's own keyword lists nor this
+    // mapping's heuristics recognize (confirmed on a real PNB statement
+    // whose Cr/Dr indicator column was named "Type" instead of "Cr/Dr" —
+    // fixed at the source, but there will be other variants no one has
+    // hit yet). Rather than silently return a statement where every
+    // amount is missing, treat a high fraction of blank-both rows as a
+    // signal this extraction is unreliable for THIS statement's layout
+    // and fall back to Mistral OCR instead — real OCR that reads the page
+    // directly rather than depending on column-name pattern matching.
+    const blankBothCount = rows.filter(r => !r.Debit && !r.Credit).length;
+    const blankBothRatio = blankBothCount / rows.length;
+    if (rows.length >= 5 && blankBothRatio > 0.3) {
+      console.warn(
+        `[pythonBankParser] ${blankBothCount}/${rows.length} row(s) (${(blankBothRatio * 100).toFixed(0)}%) have neither Debit nor Credit — ` +
+        `the local parser likely didn't recognize this statement's amount-column layout. Falling back to Mistral OCR instead of returning incomplete data.`,
+      );
       return null;
     }
 
