@@ -23,6 +23,7 @@ import { randomUUID } from 'node:crypto';
 import { promises as fs } from 'node:fs';
 import path from 'node:path';
 import os from 'node:os';
+import { normalizeBankStatementDate } from './dateNormalize';
 
 const PYTHON_BIN = process.env.PYTHON_BIN || (process.platform === 'win32' ? 'python' : 'python3');
 const PYTHON_SCRIPT_PATH = path.join(process.cwd(), 'parse_bank_statement.py');
@@ -246,7 +247,12 @@ function normalizePythonRow(record: Record<string, unknown>): Record<string, str
     keys.find(k => !claimedKeys.has(k) && normalizeKey(k) === 'balance') ??
     keys.find(k => !claimedKeys.has(k) && normalizeKey(k).includes('balance'));
 
-  const DATE = dateKey ? toStr(record[dateKey]).replace(/-/g, '/') : '';
+  // normalizeBankStatementDate() converts whatever format the source PDF
+  // literally printed (numeric, month-abbreviation, any separator) into the
+  // single DD/MM/YYYY shape documented in API-DOCS.md — a plain "-" -> "/"
+  // swap (the old behavior) fixes the separator but not a month NAME like
+  // "10-OCT-2019", which would otherwise reach callers as "10/OCT/2019".
+  const DATE = dateKey ? normalizeBankStatementDate(toStr(record[dateKey])) : '';
   const DESCRIPTION = narrationKey ? toStr(record[narrationKey]) : '';
   const CHEQUE_NO = chequeKey ? toStr(record[chequeKey]) : '';
   const Debit = debitKey ? toAmountStr(record[debitKey]) : '';

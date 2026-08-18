@@ -8,7 +8,19 @@
 # — native (text) PDFs work without either. If they're not installed, the
 # script's OCR branch fails gracefully and src/lib/pythonBankParser.ts falls
 # back to Mistral, same as any other local-parse failure.
-opencv-python>=4.9
+#
+# opencv-python-headless (NOT plain opencv-python): this script only ever
+# calls cv2.cvtColor()/cv2.threshold() — no GUI/display functions — but plain
+# opencv-python still links against GUI/OpenGL libraries (libGL.so.1) that a
+# headless server has no reason to have installed, causing `import cv2` to
+# fail with "ImportError: libGL.so.1: cannot open shared object file" even
+# though the package itself installed successfully. Confirmed on a real VPS
+# deployment (Debian, no X11/desktop packages). -headless is a drop-in
+# replacement — same `cv2` module/API, built without the GUI dependency — so
+# this is a pure packaging fix with no code change needed. Don't install both
+# opencv-python and opencv-python-headless in the same environment; they
+# conflict (both provide the `cv2` import).
+opencv-python-headless>=4.9
 numpy>=1.26
 pdfplumber>=0.11
 pandas>=2.2

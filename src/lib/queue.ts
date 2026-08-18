@@ -1,11 +1,23 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// p-queue singleton for throttling concurrent Mistral OCR requests.
-// A single shared queue instance is used across ALL API route invocations so
-// that simultaneous user uploads are serialised to at most `concurrency`
-// parallel Mistral calls, preventing rate-limit errors.
+// p-queue singleton for throttling concurrent document-extraction requests
+// (each task is one whole document — the local Python parse attempt for a
+// bank statement, or the full Mistral chunked-OCR pipeline for everything
+// else). A single shared queue instance is used across ALL API route
+// invocations so that simultaneous user uploads are load-balanced across at
+// most `concurrency` documents processing in true parallel at once, instead
+// of piling up behind a hardcoded, unconfigurable limit.
 //
-// concurrency: 4  → up to 4 parallel OCR calls at once
-// intervalCap / interval: optional token-bucket style rate limiting
+// concurrency: how many documents run at once. Configurable via
+// OCR_QUEUE_CONCURRENCY (env, default 4) — this was previously a hardcoded
+// constant, meaning changing it required a code edit + rebuild. Made
+// configurable specifically so it can be tuned to a given server's actual
+// CPU/memory headroom (e.g. a VPS also running several other unrelated
+// services, vs. a dedicated box) without touching code. Each concurrent task
+// can spawn a Python subprocess (pandas/pdfplumber, occasionally
+// cv2/pytesseract for the scanned-PDF OCR fallback) and/or hold an uploaded
+// file in memory, so this is a real resource dial, not just a queue-depth
+// setting — raise it gradually and watch server memory/CPU, don't jump
+// straight to a very high number on a shared/constrained host.
 //
 // Backpressure: this process serves potentially many concurrent users, each
 // task holding an uploaded file (up to MAX_PDF_SIZE_BYTES, see
@@ -18,9 +30,11 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import PQueue from 'p-queue';
 
+const QUEUE_CONCURRENCY = Number(process.env.OCR_QUEUE_CONCURRENCY) || 4;
+
 // Module-level singleton — created once per Next.js server process.
 const ocrQueue = new PQueue({
-  concurrency: 4,       // max simultaneous Mistral calls
+  concurrency: QUEUE_CONCURRENCY,   // max documents processing in parallel
 });
 
 const MAX_QUEUE_SIZE = Number(process.env.OCR_MAX_QUEUE_SIZE) || 20;

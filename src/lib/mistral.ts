@@ -14,6 +14,7 @@ import { SCHEMAS, type DocumentType } from './schemas';
 import { suggestBankLedger } from './ledger';
 import { hashFile, getCachedChunk, setCachedChunk } from './ocrCache';
 import { tryPythonBankStatementParse } from './pythonBankParser';
+import { normalizeBankStatementDate } from './dateNormalize';
 
 // ── Multi-key load balancing ────────────────────────────────────────────────
 // Mistral enforces capacity/throughput limits per API key/account tier (the
@@ -1060,6 +1061,16 @@ export async function runOcr(
   if (docType === 'BANK_STATEMENT') {
     openingBalance = normalizeAmount(openingBalance);
     closingBalance = normalizeAmount(closingBalance);
+    // Defense-in-depth: bankStatementPrompt's RULE 6 already instructs the
+    // model to output DD/MM/YYYY, but a prompt is not a guarantee — this
+    // deterministically enforces the same DD/MM/YYYY contract API-DOCS.md
+    // documents, regardless of what the model actually returned. Mirrors
+    // the same normalizeBankStatementDate() used for the Python-sourced
+    // path (pythonBankParser.ts), so the DATE field has identical shape no
+    // matter which engine produced a given row.
+    for (const row of allRows) {
+      if (row.DATE) row.DATE = normalizeBankStatementDate(row.DATE);
+    }
   }
 
   let finalRows = allRows;
