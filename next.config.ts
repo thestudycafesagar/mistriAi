@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
   // allowedDevOrigins (only exact hostnames or wildcard subdomains), so each
   // new device that accesses the dev server has to be added here by hand —
   // '72.61.250.183' is the VPS, '192.168.23.226' is a LAN device.
-  allowedDevOrigins: ['72.61.250.183', '192.168.23.226'],
+  allowedDevOrigins: ['72.61.250.183', '192.168.23.226', '192.168.88.9'],
   experimental: {
     // src/proxy.ts (CORS headers) matches every /api/:path* route, and
     // Next.js 16 automatically clones + buffers the body of any request a

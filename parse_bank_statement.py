@@ -1,12 +1,8 @@
 import time
 import re
 import os
-import cv2
-import numpy as np
 import pdfplumber
 import pandas as pd
-import pytesseract
-from pdf2image import convert_from_path
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 
@@ -52,92 +48,6 @@ def any_keyword_matches(text, keywords):
 # partial one). Also includes the common hyphen/dash lookalikes (U+2010–
 # U+2015) defensively, on the same reasoning as the Unicode minus sign.
 DATE_SEP = r'[/\-‐-―−]'
-
-# =================================================================
-# NEW: Universal OCR Engine
-# =================================================================
-
-def extract_tables_with_ocr(img):
-    """
-    Uses Tesseract OCR to scan images/scanned PDFs.
-    It groups text bounding boxes into rows (by Y-coordinate) 
-    and columns (by X-coordinate), outputting a strict 2D table grid
-    that perfectly mimics pdfplumber's output.
-    """
-    # Convert PIL Image to OpenCV format if needed
-    if not isinstance(img, np.ndarray):
-        img = np.array(img)
-        
-    if len(img.shape) == 3 and img.shape[2] == 3:
-        img_gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    else:
-        img_gray = img
-        
-    # Binarize image for better OCR readability
-    _, thresh = cv2.threshold(img_gray, 150, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)
-    
-    # Run Tesseract
-    data = pytesseract.image_to_data(thresh, output_type=pytesseract.Output.DICT)
-    
-    boxes = []
-    for i in range(len(data['text'])):
-        text = data['text'][i].strip()
-        if text: # Ignore empty/noise detections
-            boxes.append({
-                'x': data['left'][i],
-                'y': data['top'][i],
-                'text': text
-            })
-            
-    if not boxes:
-        return []
-        
-    # 1. Group into ROWS by Y-coordinate
-    boxes.sort(key=lambda b: b['y'])
-    rows = []
-    current_row = [boxes[0]]
-    y_tolerance = 12  # Pixels tolerance for items on the same horizontal line
-    
-    for box in boxes[1:]:
-        if abs(box['y'] - current_row[0]['y']) <= y_tolerance:
-            current_row.append(box)
-        else:
-            rows.append(current_row)
-            current_row = [box]
-    rows.append(current_row)
-    
-    # 2. Cluster into COLUMNS by X-coordinate
-    all_x = [b['x'] for r in rows for b in r]
-    all_x.sort()
-    
-    columns = []
-    x_tolerance = 40  # Pixels tolerance for items in the same vertical column
-    curr_col = [all_x[0]]
-    for x in all_x[1:]:
-        if x - curr_col[-1] <= x_tolerance:
-            curr_col.append(x)
-        else:
-            columns.append(sum(curr_col) / len(curr_col))
-            curr_col = [x]
-    columns.append(sum(curr_col) / len(curr_col))
-    
-    # 3. Map bounding boxes to the structured grid
-    table = []
-    for r in rows:
-        row_data = [''] * len(columns)
-        r.sort(key=lambda b: b['x']) # Sort horizontally
-        
-        for b in r:
-            # Snap to the closest column
-            col_idx = min(range(len(columns)), key=lambda i: abs(columns[i] - b['x']))
-            if row_data[col_idx]:
-                row_data[col_idx] += ' ' + b['text']
-            else:
-                row_data[col_idx] = b['text']
-        table.append(row_data)
-        
-    # Return as a list containing one large table, mirroring pdfplumber output
-    return [table]
 
 # =================================================================
 # EXISTING: Robust Helper functions (Untouched)
@@ -858,22 +768,25 @@ def parse_bank_statement(file_path, output_excel_path):
                             pages_tables.append(page.extract_tables(table_settings=ts))
 
     if not is_native_pdf:
-        print("[!] Image or Scanned PDF detected. Engaging Universal OCR Engine...")
-        try:
-            if ext == 'pdf':
-                images = convert_from_path(file_path)
-            else:
-                img = cv2.imread(file_path)
-                images = [img] if img is not None else []
-                
-            for idx, img in enumerate(images):
-                print(f"   -> Running OCR on Page {idx+1}/{len(images)}...")
-                tables = extract_tables_with_ocr(img)
-                pages_tables.append(tables)
-        except Exception as e:
-            print(f"[ERROR] OCR Engine Failed: {e}")
-            print("Ensure Tesseract-OCR and Poppler are installed on your computer.")
-            return False
+        # This script has no local OCR engine of its own — a scanned/image
+        # PDF (or a native PDF pdfplumber couldn't pull real text from) is
+        # handed straight to Mistral OCR instead, which already does real
+        # OCR as part of its normal extraction and does it reliably. An
+        # earlier version of this script ran its own Tesseract-based OCR
+        # pass here first, but that added a hard system dependency
+        # (Tesseract-OCR + Poppler, neither pip-installable) that caused
+        # real deployment failures across environments (missing on a fresh
+        # VPS, missing libGL.so.1 for the GUI-linked opencv-python build,
+        # missing on a local Windows dev box), and even when installed
+        # correctly, running full OCR across every page of a large scanned
+        # statement before ever trying Mistral could take several minutes
+        # — all wasted whenever that OCR pass wasn't going to produce
+        # usable output anyway, which was common. Failing fast here lets
+        # pythonBankParser.ts fall through to Mistral immediately instead,
+        # exactly as if this script had crashed trying to OCR it — same
+        # fallback path, none of the wasted time or deployment fragility.
+        print("[!] Image or Scanned PDF detected - no local OCR engine in this script. Falling back to Mistral OCR.")
+        return False
 
     # ── Map Tables to Transactions ────────────────────────────────────────
     all_data = []

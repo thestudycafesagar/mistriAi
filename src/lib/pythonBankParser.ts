@@ -3,12 +3,14 @@
 // subprocess before falling back to Mistral OCR for BANK_STATEMENT PDFs.
 //
 // Why: parse_bank_statement.py already does this deterministically and for
-// free (pdfplumber for native/text PDFs, Tesseract OCR for scanned ones) — no
-// point spending a Mistral call when a local parse already gets the exact
-// answer. It doesn't always succeed (Tesseract/Poppler might not be
-// installed, or a layout it can't handle), so every failure mode here is
-// designed to return null and let the caller fall through to Mistral exactly
-// as if this module didn't exist — this must never be the reason a bank
+// free, using pdfplumber to read a NATIVE (text-based) PDF's real embedded
+// text/table structure — no point spending a Mistral call when a local
+// parse already gets the exact answer. It only handles native PDFs; a
+// scanned/image PDF (or a layout it can't handle) makes the script fail
+// fast on purpose rather than attempt any local OCR (removed — see
+// requirements.txt for why), so every failure mode here is designed to
+// return null and let the caller fall through to Mistral exactly as if
+// this module didn't exist — this must never be the reason a bank
 // statement extraction fails outright.
 //
 // The script's output columns are whatever text the source statement itself
@@ -28,10 +30,12 @@ import { normalizeBankStatementDate } from './dateNormalize';
 const PYTHON_BIN = process.env.PYTHON_BIN || (process.platform === 'win32' ? 'python' : 'python3');
 const PYTHON_SCRIPT_PATH = path.join(process.cwd(), 'parse_bank_statement.py');
 // Generous: a dense multi-year statement processed through the word-coordinate
-// extractor (no gridlines) or the Tesseract OCR path can legitimately take
-// tens of seconds to a few minutes. This only bounds the local-parse attempt —
-// Mistral is still available as a fallback afterward within the route's own
-// maxDuration budget.
+// extractor (no gridlines) can legitimately take tens of seconds. This only
+// bounds the local-parse attempt — Mistral is still available as a fallback
+// afterward within the route's own maxDuration budget. A scanned/image PDF
+// fails this attempt almost instantly (the script has no OCR engine of its
+// own — see requirements.txt), so this timeout mostly matters for large,
+// dense native-PDF statements, not scanned ones.
 const PYTHON_TIMEOUT_MS = Number(process.env.PYTHON_BANK_PARSER_TIMEOUT_MS) || 5 * 60 * 1000;
 
 const TEMP_DIR = path.join(os.tmpdir(), 'mistri-ai-bank-parse');
