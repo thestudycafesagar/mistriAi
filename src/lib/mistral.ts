@@ -793,10 +793,26 @@ function reconcileBankStatement(
   return summary;
 }
 
+export interface IncompleteChunk {
+  chunk: number;
+  totalChunks: number;
+  error: string;
+}
+
 export interface RunOcrResult {
   rows: Record<string, string>[];
   /** Only present for BANK_STATEMENT. */
   bankSummary?: BankStatementSummary;
+  /**
+   * Present only when one or more chunks (pages) permanently failed after
+   * exhausting every retry — e.g. a sustained burst of Mistral-side 502s.
+   * `rows` still contains everything successfully extracted from every
+   * OTHER chunk (a failed chunk no longer fails the whole document), but
+   * the caller MUST treat this result as incomplete, not a full success:
+   * whatever pages are listed here contributed zero rows. Absent entirely
+   * (not an empty array) when every chunk succeeded — the common case.
+   */
+  incompleteChunks?: IncompleteChunk[];
 }
 
 /**
@@ -854,6 +870,10 @@ export async function runOcr(
   let openingBalance = '';
   let closingBalance = '';
   let invoiceTotals: { cgst?: string, sgst?: string, igst?: string } = {};
+  // Chunks (pages) that permanently exhausted every retry attempt — see the
+  // per-chunk catch block below for why a chunk failure no longer fails the
+  // whole document. Empty for the common case (every chunk succeeded).
+  const incompleteChunks: IncompleteChunk[] = [];
 
   if (isPdf(file.type)) {
     // ── PDF path: split → upload chunks (bounded parallel) → ocr.process → merge ──
@@ -880,6 +900,7 @@ export async function runOcr(
       await Promise.all(
         chunks.map((chunk, index) =>
           chunkQueue.add(async () => {
+          try {
             // Exact-content chunk cache: this specific PAGES_PER_CHUNK slice
             // may already have been processed before — from this same
             // document (a retry/resubmission) or a different one that
@@ -988,6 +1009,26 @@ export async function runOcr(
             if (TotalSGSTAmount) metaToCache.TotalSGSTAmount = TotalSGSTAmount;
             if (TotalIGSTAmount) metaToCache.TotalIGSTAmount = TotalIGSTAmount;
             setCachedChunk(docType, chunkHash, rows, metaToCache);
+          } catch (err: any) {
+            // A single chunk permanently exhausting withRetry's attempts
+            // (e.g. a sustained burst of Mistral-side 502s — infrastructure
+            // trouble on THEIR end, not a bug here) used to reject this
+            // whole Promise.all, discarding every OTHER chunk that had
+            // already succeeded and forcing a full re-extraction from
+            // scratch — expensive and wasteful for a large multi-page
+            // statement where only one page hit bad luck. Catching it here
+            // instead keeps every successfully-extracted chunk's rows
+            // (chunkResults[index] stays unset -> treated as empty in the
+            // merge below) and records exactly which page failed and why,
+            // so the caller gets a real partial result instead of nothing —
+            // but ALWAYS with an explicit incompleteChunks flag in the
+            // response (see runOcr's return and extractHandler.ts, which
+            // also skips whole-file caching when this is non-empty) rather
+            // than silently passing off incomplete data as a full success.
+            const message = err instanceof Error ? err.message : String(err);
+            console.error(`[Mistral OCR] Chunk ${index + 1}/${chunks.length} permanently failed — keeping the other chunks' results instead of failing the whole document. Error: ${message}`);
+            incompleteChunks.push({ chunk: index + 1, totalChunks: chunks.length, error: message });
+          }
           }),
         ),
       );
@@ -1007,7 +1048,11 @@ export async function runOcr(
     }
 
     for (const rows of chunkResults) {
-      allRows.push(...rows);
+      // A permanently-failed chunk (see the catch above) never assigns its
+      // slot, leaving it `undefined` in this array — `...undefined` would
+      // throw, so treat an unset slot as "no rows from this page" rather
+      // than crashing the whole merge over one already-reported failure.
+      allRows.push(...(rows ?? []));
     }
   } else {
     // ── Image path: base64 data URL → ocr.process ─────────────────────────────
@@ -1106,7 +1151,7 @@ export async function runOcr(
     finalRows = consolidateInvoiceRows(finalRows, docType, invoiceTotals);
   }
 
-  return { rows: finalRows, bankSummary };
+  return { rows: finalRows, bankSummary, incompleteChunks: incompleteChunks.length ? incompleteChunks : undefined };
 }
 
 // ── Invoice consolidation ─────────────────────────────────────────────────────

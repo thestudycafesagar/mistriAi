@@ -106,6 +106,24 @@ if (result.success) {
 | `processingTimeMs` | Server-side time taken for this extraction, in milliseconds. |
 | `cached` | `true` if this exact file (by content) was already extracted before and this result was returned instantly without reprocessing. |
 | `bankSummary` | Only present when `docType` is `BANK_STATEMENT`. See below. |
+| `warning` / `incompleteChunks` | Only present if one or more pages could not be extracted after repeated retries (typically a transient OCR-provider outage) — see below. **Always check for this field even when `success` is `true`** — a `200`/`success:true` response with `incompleteChunks` present means the extraction is genuinely incomplete, not a full success. |
+
+### Partial results (`incompleteChunks`)
+
+If a page permanently fails after 5 retry attempts (e.g. a burst of `502` errors from the OCR provider), the response still returns everything that WAS successfully extracted — a `200` with `success: true` — rather than discarding good data over one bad page. Check for `incompleteChunks` to know whether that happened:
+
+```json
+{
+  "success": true,
+  "rowCount": 118,
+  "data": [ ... ],
+  "warning": "1 of 20 page(s) could not be extracted after repeated retries (likely a temporary issue with the OCR provider) — the data below is INCOMPLETE. Re-uploading the same file will retry the missing page(s).",
+  "incompleteChunks": [
+    { "chunk": 5, "totalChunks": 20, "error": "..." }
+  ]
+}
+```
+`data`/`rowCount` reflect only the pages that succeeded — whichever page number(s) appear in `incompleteChunks` contributed zero rows. Re-uploading the identical file retries the extraction fresh (a result with `incompleteChunks` is never cached), so simply trying again shortly after is usually enough once the underlying OCR-provider issue clears.
 
 ### `bankSummary` (bank statements only)
 

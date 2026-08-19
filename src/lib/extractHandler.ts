@@ -13,7 +13,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 import { NextRequest, NextResponse } from 'next/server';
 import { enqueueOcr, QueueSaturatedError } from './queue';
-import { runOcr, hasMistralApiKey, type BankStatementSummary } from './mistral';
+import { runOcr, hasMistralApiKey, type BankStatementSummary, type IncompleteChunk } from './mistral';
 import { SCHEMAS, type DocumentType } from './schemas';
 import { hashFile, getCached, setCached } from './ocrCache';
 
@@ -280,6 +280,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     let rows: Record<string, string>[];
     let bankSummary: BankStatementSummary | undefined;
     let servedFromCache = false;
+    let incompleteChunks: IncompleteChunk[] | undefined;
 
     if (cached) {
       rows = cached.rows;
@@ -304,7 +305,16 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
       }
       rows = result.rows;
       bankSummary = result.bankSummary;
-      setCached(docType, fileHash, rows, bankSummary ? { bankSummary: JSON.stringify(bankSummary) } : undefined);
+      incompleteChunks = result.incompleteChunks;
+      // Never cache a result where one or more pages permanently failed
+      // (e.g. a burst of Mistral-side 502s) — the whole-file cache exists to
+      // instantly replay content we've already read CORRECTLY. Caching an
+      // incomplete result would mean a caller's retry (specifically trying
+      // to get the missing page this time) just gets served the same
+      // incomplete data back again instead of a fresh attempt.
+      if (!incompleteChunks) {
+        setCached(docType, fileHash, rows, bankSummary ? { bankSummary: JSON.stringify(bankSummary) } : undefined);
+      }
     }
     const processingTimeMs = Date.now() - startedAt;
 
@@ -325,6 +335,17 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     if (companyName) responsePayload.companyName = companyName;
     if (companyGSTIN) responsePayload.companyGSTIN = companyGSTIN;
     if (bankSummary) responsePayload.bankSummary = bankSummary;
+    if (incompleteChunks) {
+      // Deliberately still a 200 with success:true — most of the document
+      // WAS extracted successfully and that data is real and usable — but
+      // this field must never be silently dropped by a caller that only
+      // checks `success`. rowCount/data reflect only the pages that
+      // succeeded; whichever chunk(s) are listed here contributed nothing.
+      responsePayload.incompleteChunks = incompleteChunks;
+      responsePayload.warning =
+        `${incompleteChunks.length} of ${incompleteChunks[0].totalChunks} page(s) could not be extracted after repeated retries ` +
+        `(likely a temporary issue with the OCR provider) — the data below is INCOMPLETE. Re-uploading the same file will retry the missing page(s).`;
+    }
 
     return NextResponse.json(responsePayload);
 
