@@ -847,7 +847,23 @@ export async function runOcr(
       // parse_bank_statement.py already strips BF/balance-marker rows itself
       // (is_bf_row / is_balance_marker_row there) — this is a redundant but
       // harmless safety net for consistency with the Mistral path below.
-      const finalRows = resolveAmbiguousDebitCreditRows(filterBroughtForwardRows(pythonRows));
+      //
+      // resolveAmbiguousDebitCreditRows() BEFORE filterBroughtForwardRows()
+      // — not the other way round. resolveAmbiguousDebitCreditRows() seeds
+      // its "previous balance" tiebreaker by walking rows in order and
+      // remembering each one's Balance; the B/F/opening-balance row is
+      // normally the ONLY thing carrying the statement's true starting
+      // balance. Filtering it out first leaves the very FIRST real
+      // transaction with no previous balance to check against — confirmed
+      // on a real KBK statement, where the first transaction after B/F had
+      // both Debit and Credit populated (a separate, now-fixed column-
+      // detection bug in parse_bank_statement.py) and came out completely
+      // unresolved purely because of this ordering, while every later row
+      // with the identical ambiguity resolved correctly. The B/F row itself
+      // is never mistakenly "resolved" here — it has neither Debit nor
+      // Credit populated, so the ambiguity check never touches it, it only
+      // contributes its Balance as the seed for the row after it.
+      const finalRows = filterBroughtForwardRows(resolveAmbiguousDebitCreditRows(pythonRows));
       for (const row of finalRows) {
         row.LEDGER = suggestBankLedger(row.DESCRIPTION, row.LEDGER);
       }
@@ -1122,8 +1138,15 @@ export async function runOcr(
   let bankSummary: BankStatementSummary | undefined;
 
   if (docType === 'BANK_STATEMENT') {
-    finalRows = filterBroughtForwardRows(finalRows);
+    // resolveAmbiguousDebitCreditRows() BEFORE filterBroughtForwardRows() —
+    // see the identical reordering (and full explanation) in the
+    // Python-sourced branch above. The B/F/opening-balance row is normally
+    // the only thing carrying the statement's true starting balance;
+    // filtering it out first would leave the very FIRST real transaction
+    // with no previous balance to resolve an ambiguous Debit+Credit row
+    // against.
     finalRows = resolveAmbiguousDebitCreditRows(finalRows);
+    finalRows = filterBroughtForwardRows(finalRows);
     finalRows = dedupeBankStatementRows(finalRows);
 
     // The model's own LEDGER guess is inconsistent across calls (see

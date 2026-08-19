@@ -643,19 +643,37 @@ CRDR_INLINE_RE = re.compile(r'\(?\s*(?:dr|cr)\s*\)?\.?\s*$', re.IGNORECASE)
 
 def split_embedded_crdr_amount(df):
     """
-    Some statements (e.g. passbook-style exports) have a single Amount column
+    Some statements (e.g. passbook-style exports) have a single amount column
     with the direction embedded in each cell instead of a separate Cr/Dr
     column — e.g. "17.00(Cr)" / "236.00(Dr)". Left alone, that direction is
     lost the moment the amount is converted to a plain float. Detect that
     pattern and split it into proper Debit/Credit columns before any numeric
     cleanup runs, so the sign survives.
+
+    Triggered by the column's VALUES (>=60% ending in an inline Dr/Cr
+    marker) — NOT by requiring the literal word "amount" in the header, which
+    a real combined column doesn't always contain. Confirmed on a real KBK
+    statement whose header was "Withdrawal (Dr)/ Deposit (Cr)" — contains
+    neither "amount" nor "cr/dr" as a substring, so this function used to
+    skip it entirely. Left unsplit, the generic numeric-cleanup step further
+    down stripped the "(Dr)"/"(Cr)" suffix off the raw value with no
+    direction ever recorded, collapsing everything to one plain numeric
+    column — and because that column's header contains BOTH "withdraw" and
+    "deposit", pythonBankParser.ts's normalizePythonRow() then matched it as
+    BOTH the Debit and Credit source column, silently duplicating every
+    single transaction's amount into both fields. Same "trust the values,
+    not just the header wording" principle already used by
+    split_crdr_column()'s PNB "Type"-column fix above. The 'balance'/
+    'available' header exclusions stay — a running-balance column must never
+    be treated as this, even though it also carries a per-row (Cr)/(Dr)
+    marker.
     """
     if any('cr/dr' in str(c).lower() for c in df.columns):
         return df  # already has an explicit Cr/Dr column — split_crdr_column handles it
 
     for col in list(df.columns):
         col_lower = str(col).lower()
-        if 'amount' not in col_lower or 'balance' in col_lower or 'available' in col_lower:
+        if 'balance' in col_lower or 'available' in col_lower:
             continue
 
         values = df[col].astype(str)
