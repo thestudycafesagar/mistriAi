@@ -559,14 +559,61 @@ def table_has_dated_row(table):
 # all-NaN safety-net filter — a completely empty result with no error.
 HEADER_CELL_MAX_LEN = 60
 
+# A genuine header row is made of several per-column labels — at least a
+# handful of non-empty cells of its own (Date, Description, Debit, Credit,
+# Balance, ...). A row with only ONE non-empty cell (the rest None/blank) is
+# typically a full-width section TITLE that pdfplumber's gridline extraction
+# captured as its own single spanning cell (e.g. a real Kotak statement's
+# "Savings Account Transactions" line right above the actual header), not a
+# real header row.
+MIN_HEADER_ROW_CELLS = 3
+
+
+# How many of a table's leading rows to compare against each other when
+# picking the header, instead of accepting the first row that merely clears
+# the minimum bar (see detect_header() below for why "first that qualifies"
+# isn't always "the real header" — a section-title row and a sub-header/
+# filter-criteria row can both clear that bar). A real header is always
+# near the top of a table, never deep within it, so this stays a small,
+# bounded window rather than comparing candidates across the whole table —
+# comparing arbitrarily deep would risk a genuine DATA row with an unusually
+# keyword-rich narration outscoring the true header, which it can never
+# actually be competing against in a real statement.
+HEADER_SEARCH_WINDOW = 5
+
 
 def detect_header(table, target_headers):
     def short_cells(row):
         return [str(c).strip().lower() for c in row if c and len(str(c).strip()) <= HEADER_CELL_MAX_LEN]
 
-    for i, row in enumerate(table):
+    def evaluate(i, row):
+        """
+        Returns ((row_matches, non_empty_in_row), col_names) if `row` clears
+        the minimum bar to be a header candidate, else None. The score
+        tuple ranks candidates by how many DISTINCT header keywords the
+        row's own cells match, then by how many of its own cells are
+        populated at all — both measure how convincingly this looks like a
+        genuine per-column header row, not a passing mention.
+        """
+        # Reject a title/section-heading row before it ever reaches the
+        # keyword check below. detect_header() deliberately looks up to 3
+        # rows AHEAD for keyword matches (block_cells) to support a genuinely
+        # wrapped multi-line header — but that lookahead lets a title row
+        # sitting right before a real header "borrow" that header's keyword
+        # matches. Confirmed on a real Kotak statement: a lone section-title
+        # row ("Savings Account Transactions", one non-empty cell) sat
+        # directly above the real 7-column header and had just enough of its
+        # own text ("transactions" containing "transaction") to pass a
+        # single-keyword bar — collapsing every real column name to generic
+        # "Column_N", which then couldn't be mapped to Debit/Credit by
+        # keyword downstream at all. The raw gridline extraction itself was
+        # always correct — this was purely a header-row-SELECTION bug.
+        non_empty_in_row = sum(1 for c in row if c and str(c).strip())
+        if non_empty_in_row < MIN_HEADER_ROW_CELLS:
+            return None
+
         row_cells = short_cells(row)
-        block = table[i:min(i+3, len(table))]
+        block = table[i:min(i + 3, len(table))]
         block_cells = [c for r in block for c in short_cells(r)]
 
         matches = sum(1 for t in target_headers if any(keyword_matches(c, t) for c in block_cells))
@@ -576,9 +623,37 @@ def detect_header(table, target_headers):
         # otherwise we might just be looking at the row BEFORE the header
         row_matches = sum(1 for t in target_headers if any(keyword_matches(c, t) for c in row_cells))
 
-        if has_date and matches >= 2 and row_matches >= 1:
-            col_names = [str(c).replace('\n', ' ').strip() if c else f'Column_{j}' for j, c in enumerate(row)]
+        if not (has_date and matches >= 2 and row_matches >= 1):
+            return None
+
+        col_names = [str(c).replace('\n', ' ').strip() if c else f'Column_{j}' for j, c in enumerate(row)]
+        return (row_matches, non_empty_in_row), col_names
+
+    # Compare every candidate within the first HEADER_SEARCH_WINDOW rows and
+    # keep the highest-scoring one, rather than accepting whichever clears
+    # the bar first — directly fixes a weaker candidate (e.g. a title row
+    # that only barely qualifies) narrowly beating a stronger real header
+    # sitting right below it, purely by appearing first.
+    best = None
+    for i, row in enumerate(table[:HEADER_SEARCH_WINDOW]):
+        result = evaluate(i, row)
+        if result is None:
+            continue
+        score, col_names = result
+        if best is None or score > best[0]:
+            best = (score, i, col_names)
+    if best is not None:
+        return best[1], best[2]
+
+    # Beyond the window: fall back to the original "first match wins"
+    # behavior — a header that only shows up this deep is unusual enough
+    # that comparing candidates further offers no real benefit.
+    for i in range(HEADER_SEARCH_WINDOW, len(table)):
+        result = evaluate(i, table[i])
+        if result is not None:
+            _, col_names = result
             return i, col_names
+
     return -1, None
 
 def find_col_offset(first_row, main_headers):

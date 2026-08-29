@@ -24,10 +24,19 @@ const MONTH_ABBR: Record<string, string> = {
   jul: '07', aug: '08', sep: '09', oct: '10', nov: '11', dec: '12',
 };
 
-// Same separator set as parse_bank_statement.py's DATE_SEP: ASCII "/" and
-// "-", plus the Unicode hyphen/dash lookalikes (U+2010–U+2015) and the
-// Unicode MINUS SIGN (U+2212) some statement generators render dates with.
-const SEP = '[\\/\\-‐-―−]';
+// Same separator set as parse_bank_statement.py's DATE_SEP (ASCII "/" and
+// "-", plus the Unicode hyphen/dash lookalikes U+2010–U+2015 and the Unicode
+// MINUS SIGN U+2212), PLUS one-or-more whitespace — confirmed on a real
+// Kotak Mahindra Bank statement, whose gridline-extracted Date column comes
+// through as "01 Apr 2025" (space-separated, day/month-name/year). Safe to
+// be this permissive here specifically because this function only ever runs
+// on a value already identified as the date column (by both callers), and
+// the result is still validated below (day 1-31, month 1-12, and an
+// unrecognized month NAME is rejected outright) before being trusted — an
+// unrelated space-containing string reaching here either fails to match
+// this fully-anchored pattern at all, or gets caught by that validation and
+// returned unchanged.
+const SEP = '(?:[\\/\\-‐-―−]|\\s+)';
 const DATE_RE = new RegExp(`^(\\d{1,2})${SEP}(\\d{1,2}|[A-Za-z]{3,9})${SEP}(\\d{2,4})$`);
 
 /**
