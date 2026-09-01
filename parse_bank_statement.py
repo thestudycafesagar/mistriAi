@@ -46,8 +46,17 @@ def any_keyword_matches(text, keywords):
 # entirely (mirrors the earlier UCO month-name DATE_PAT fix: a narrower
 # pattern than the real document uses causes a silent, total failure, not a
 # partial one). Also includes the common hyphen/dash lookalikes (U+2010–
-# U+2015) defensively, on the same reasoning as the Unicode minus sign.
-DATE_SEP = r'[/\-‐-―−]'
+# U+2015) defensively, on the same reasoning as the Unicode minus sign, and
+# a literal "." (confirmed on a real ICICI Bank statement, whose dates print
+# as "06.04.2026"). "." is safe to add here despite being a common character
+# elsewhere (decimal amounts, abbreviations) because every regex built from
+# DATE_SEP requires TWO separators bracketing day/month/year digit groups of
+# specific lengths (1-2 / 1-2-or-3-9-letters / 2-4), and is only ever applied
+# to text already scoped to the date column or date x-zone — never to raw
+# narration or amount text — so a decimal like "500.00" can't accidentally
+# satisfy the pattern (its digit-group lengths don't fit, and it only has
+# one separator, not two).
+DATE_SEP = r'[/\-‐-―−.]'
 
 # =================================================================
 # EXISTING: Robust Helper functions (Untouched)

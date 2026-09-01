@@ -35,8 +35,12 @@ const MONTH_ABBR: Record<string, string> = {
 // unrecognized month NAME is rejected outright) before being trusted — an
 // unrelated space-containing string reaching here either fails to match
 // this fully-anchored pattern at all, or gets caught by that validation and
-// returned unchanged.
-const SEP = '(?:[\\/\\-‐-―−]|\\s+)';
+// returned unchanged. Also includes a literal "." (confirmed on a real
+// ICICI Bank statement, whose dates print as "06.04.2026") — same
+// parse_bank_statement.py DATE_SEP widening, same rationale: this function
+// only ever runs on the already-identified date column, and the numeric
+// validation below still rejects anything that isn't a plausible date.
+const SEP = '(?:[\\/\\-‐-―−.]|\\s+)';
 const DATE_RE = new RegExp(`^(\\d{1,2})${SEP}(\\d{1,2}|[A-Za-z]{3,9})${SEP}(\\d{2,4})$`);
 
 /**
