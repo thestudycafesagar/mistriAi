@@ -1230,7 +1230,13 @@ function consolidateInvoiceRows(
       Rate: parseNum(row.Rate),
       HSNCode: row.HSNCode ?? '',
       ExtractedAmount: parseNum(row.TaxableValue),
-      Per: row.Unit ?? ''
+      // Named "Unit" (not "Per", the old name — Tally's own terminology for
+      // this field, but an ambiguous/unclear key for anyone consuming the
+      // JSON directly). Value is unchanged: whatever unit of measurement
+      // the invoice itself printed (pcs, box, NOS, KG, MTR, ...), straight
+      // from the schema's own Unit field (schemas.ts) — this was always a
+      // naming issue in this mapping layer, not a data-extraction one.
+      Unit: row.Unit ?? ''
     }));
 
     let voucherNo = first.VoucherNo ?? '';

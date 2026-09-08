@@ -85,7 +85,7 @@ export default function ResultsTable({ columns, rows, docType, rowCount, elapsed
           Item_Name: item.ItemName,
           HSNCode: item.HSNCode,
           Quantity: item.Quantity?.toString() ?? '',
-          Unit: item.Per,
+          Unit: item.Unit,
           Rate: item.Rate?.toString() ?? '',
           TaxableValue: item.ExtractedAmount?.toString() ?? '',
           IGSTAmount: mapped['IGST Amount']?.toString() ?? '',

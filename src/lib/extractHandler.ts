@@ -412,6 +412,7 @@ export async function formatInvoiceResponse(res: NextResponse): Promise<NextResp
     description:   item.ItemName  || '',
     hsnSac:        item.HSNCode   || '',
     goodsQuantity: item.Quantity != null && item.Quantity !== 0 ? item.Quantity : null,
+    unit:          item.Unit      || '',   // e.g. "pcs", "box", "NOS", "KG" — whatever the invoice itself printed
     goodsRate:     item.Rate     != null && item.Rate !== 0     ? item.Rate     : null,
     amount:        item.ExtractedAmount || 0,
   }));
