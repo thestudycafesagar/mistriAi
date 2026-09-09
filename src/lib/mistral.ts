@@ -804,6 +804,17 @@ export interface RunOcrResult {
   /** Only present for BANK_STATEMENT. */
   bankSummary?: BankStatementSummary;
   /**
+   * True when Mistral's OCR AI model produced these rows; false when the
+   * local, deterministic Python parser (pythonBankParser.ts) produced them
+   * instead, without any AI call at all. Only meaningful for
+   * BANK_STATEMENT — every other docType always goes through Mistral (there
+   * is no local parser for invoices), so this is always true for those, and
+   * extractHandler.ts only surfaces it in the API response for bank
+   * statements. Exists so the API/webapp response can report which engine
+   * actually extracted a given statement (see the `ai` response field).
+   */
+  usedAI: boolean;
+  /**
    * Present only when one or more chunks (pages) permanently failed after
    * exhausting every retry — e.g. a sustained burst of Mistral-side 502s.
    * `rows` still contains everything successfully extracted from every
@@ -872,7 +883,7 @@ export async function runOcr(
       // checked here — reconciled stays null ("not verified"), same as a
       // Mistral chunk that never showed both balances clearly enough.
       const bankSummary = reconcileBankStatement(finalRows, '', '');
-      return { rows: finalRows, bankSummary };
+      return { rows: finalRows, bankSummary, usedAI: false };
     }
   }
 
@@ -1174,7 +1185,16 @@ export async function runOcr(
     finalRows = consolidateInvoiceRows(finalRows, docType, invoiceTotals);
   }
 
-  return { rows: finalRows, bankSummary, incompleteChunks: incompleteChunks.length ? incompleteChunks : undefined };
+  return {
+    rows: finalRows,
+    bankSummary,
+    incompleteChunks: incompleteChunks.length ? incompleteChunks : undefined,
+    // Everything reaching this point (Mistral chunk/image OCR path) came
+    // from the AI model — the only case where this function returns without
+    // usedAI: true is the early Python-parser return above, which never
+    // falls through to here.
+    usedAI: true,
+  };
 }
 
 // ── Invoice consolidation ─────────────────────────────────────────────────────

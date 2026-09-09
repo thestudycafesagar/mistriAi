@@ -85,6 +85,7 @@ if (result.success) {
   ],
   "processingTimeMs": 18342,
   "cached": false,
+  "ai": false,
   "bankSummary": {
     "totalDebit": "12345.00",
     "totalCredit": "9800.50",
@@ -105,6 +106,7 @@ if (result.success) {
 | `data` | Array of row objects. Every row has every column as a key; a field that wasn't present in the source document is an empty string `""`, never a fabricated value. |
 | `processingTimeMs` | Server-side time taken for this extraction, in milliseconds. |
 | `cached` | `true` if this exact file (by content) was already extracted before and this result was returned instantly without reprocessing. |
+| `ai` | Only present when `docType` is `BANK_STATEMENT`. `true` if Mistral's OCR AI model extracted this statement; `false` if it was extracted by the local, deterministic Python parser without any AI call at all (see the architecture notes on `pythonBankParser.ts` — it only handles native-text, not scanned, PDFs, and falls back to `true` automatically whenever it can't confidently parse a statement). A cache hit reports whichever engine originally produced the data, not which engine ran for this particular request. |
 | `bankSummary` | Only present when `docType` is `BANK_STATEMENT`. See below. |
 | `warning` / `incompleteChunks` | Only present if one or more pages could not be extracted after repeated retries (typically a transient OCR-provider outage) — see below. **Always check for this field even when `success` is `true`** — a `200`/`success:true` response with `incompleteChunks` present means the extraction is genuinely incomplete, not a full success. |
 

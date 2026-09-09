@@ -281,10 +281,17 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     let bankSummary: BankStatementSummary | undefined;
     let servedFromCache = false;
     let incompleteChunks: IncompleteChunk[] | undefined;
+    // Which engine produced `rows` — Mistral's OCR AI model (true) or the
+    // local, non-AI Python parser (false). Bank statements only; see the
+    // `ai` response field below. Left undefined (and therefore omitted from
+    // the response) for a cache hit against an entry written before this
+    // field existed — we'd rather say nothing than guess wrong.
+    let usedAI: boolean | undefined;
 
     if (cached) {
       rows = cached.rows;
       bankSummary = cached.meta?.bankSummary ? JSON.parse(cached.meta.bankSummary) : undefined;
+      usedAI = cached.meta?.usedAI !== undefined ? cached.meta.usedAI === 'true' : undefined;
       servedFromCache = true;
     } else {
       // ── Enqueue the OCR task ────────────────────────────────────────────────
@@ -306,6 +313,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
       rows = result.rows;
       bankSummary = result.bankSummary;
       incompleteChunks = result.incompleteChunks;
+      usedAI = result.usedAI;
       // Never cache a result where one or more pages permanently failed
       // (e.g. a burst of Mistral-side 502s) — the whole-file cache exists to
       // instantly replay content we've already read CORRECTLY. Caching an
@@ -313,7 +321,12 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
       // to get the missing page this time) just gets served the same
       // incomplete data back again instead of a fresh attempt.
       if (!incompleteChunks) {
-        setCached(docType, fileHash, rows, bankSummary ? { bankSummary: JSON.stringify(bankSummary) } : undefined);
+        // usedAI is stored alongside bankSummary so a future cache hit
+        // still reports which engine ORIGINALLY produced this data, rather
+        // than a fresh run's result silently losing that information.
+        const meta: Record<string, string> = { usedAI: String(usedAI) };
+        if (bankSummary) meta.bankSummary = JSON.stringify(bankSummary);
+        setCached(docType, fileHash, rows, meta);
       }
     }
     const processingTimeMs = Date.now() - startedAt;
@@ -335,6 +348,16 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     if (companyName) responsePayload.companyName = companyName;
     if (companyGSTIN) responsePayload.companyGSTIN = companyGSTIN;
     if (bankSummary) responsePayload.bankSummary = bankSummary;
+    // Bank statements only, per docType — true when Mistral's OCR AI model
+    // extracted this statement, false when the local, non-AI Python parser
+    // did. Lets both API callers and the webapp itself tell which engine
+    // handled a given scan (e.g. to track AI vs. non-AI usage over time).
+    // Omitted (not `ai: null`/false-by-default) on the rare cache hit
+    // against a pre-existing cache entry that predates this field, so an
+    // unknown origin is never misreported as one engine or the other.
+    if (docType === 'BANK_STATEMENT' && usedAI !== undefined) {
+      responsePayload.ai = usedAI;
+    }
     if (incompleteChunks) {
       // Deliberately still a 200 with success:true — most of the document
       // WAS extracted successfully and that data is real and usable — but
