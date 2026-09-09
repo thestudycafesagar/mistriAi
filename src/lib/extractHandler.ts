@@ -16,6 +16,7 @@ import { enqueueOcr, QueueSaturatedError } from './queue';
 import { runOcr, hasMistralApiKey, type BankStatementSummary, type IncompleteChunk } from './mistral';
 import { SCHEMAS, type DocumentType } from './schemas';
 import { hashFile, getCached, setCached } from './ocrCache';
+import { saveMismatchedFile } from './mismatchedStore';
 
 const ALLOWED_MIME = [
   'application/pdf',
@@ -308,12 +309,30 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
             { status: 503, headers: { 'Retry-After': '10' } },
           );
         }
+        // Both engines (Python parser and/or Mistral, whichever apply to
+        // this docType) failed to produce a result at all — save the file
+        // for later review before the error response goes out. Fire-and-
+        // forget: must never delay or affect the response below.
+        void saveMismatchedFile(file, docType, err instanceof Error ? err.message : String(err));
         throw err;
       }
       rows = result.rows;
       bankSummary = result.bankSummary;
       incompleteChunks = result.incompleteChunks;
       usedAI = result.usedAI;
+      // A request that passed validation but came back with literally zero
+      // rows is, from the caller's perspective, a file that "didn't get
+      // extracted" just as much as a thrown error — e.g. a bank statement
+      // where a local-parser edge case silently filtered every row down to
+      // none before ever reaching Mistral. Save it the same way, still
+      // fire-and-forget, still without changing the (successful) response.
+      if (rows.length === 0) {
+        void saveMismatchedFile(
+          file,
+          docType,
+          incompleteChunks ? 'extraction failed for every page (see incompleteChunks)' : 'extraction succeeded but returned zero rows',
+        );
+      }
       // Never cache a result where one or more pages permanently failed
       // (e.g. a burst of Mistral-side 502s) — the whole-file cache exists to
       // instantly replay content we've already read CORRECTLY. Caching an
