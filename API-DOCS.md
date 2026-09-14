@@ -161,7 +161,7 @@ If a page permanently fails after 5 retry attempts (e.g. a burst of `502` errors
 
 | Status | Meaning | What to do |
 |---|---|---|
-| `400` | Bad request — missing file, invalid/missing `docType`, unsupported file type, or file too large | Fix the request; don't retry as-is |
+| `400` | Bad request — missing file, invalid/missing `docType`, unsupported file type, file too large, or a password-protected PDF | Fix the request; don't retry as-is |
 | `500` | Server error — includes misconfiguration (no Mistral API key set) or an extraction failure that exhausted retries | Safe to retry once; if it persists, contact the server owner |
 | `503` | Server is at capacity (too many requests queued) | Back off and retry — see below |
 

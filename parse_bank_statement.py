@@ -5,6 +5,7 @@ import pdfplumber
 import pandas as pd
 from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
+from pdfminer.pdfdocument import PDFPasswordIncorrect, PDFEncryptionError
 
 # =================================================================
 # Keyword matching helper (regex, word-boundary-anchored)
@@ -789,6 +790,37 @@ def split_embedded_crdr_amount(df):
     return df
 
 # =================================================================
+# Password/encryption check
+# =================================================================
+
+def check_password_protected(file_path):
+    """
+    True only when this PDF genuinely cannot be opened at all without a
+    password neither this script nor Mistral has (pdfminer raises
+    PDFPasswordIncorrect/PDFEncryptionError trying to even read the file's
+    structure). False for a non-PDF file, a PDF that opens fine (including
+    one that's encrypted purely for owner-level restrictions like blocking
+    printing/editing — no password needed to open, and pythonBankParser.ts's
+    normal flow already handles that case correctly), or any OTHER failure
+    opening the file (corrupt PDF, etc.) — this check only ever asserts
+    "protected" when certain, and defers everything else to the normal
+    parse/OCR path so a genuinely different problem is reported as itself,
+    not misreported as a password issue.
+    """
+    ext = file_path.lower().rsplit('.', 1)[-1]
+    if ext != 'pdf':
+        return False
+    try:
+        with pdfplumber.open(file_path):
+            pass
+        return False
+    except Exception as e:
+        inner = e.args[0] if getattr(e, 'args', None) else None
+        ctx = getattr(e, '__context__', None)
+        return isinstance(inner, (PDFPasswordIncorrect, PDFEncryptionError)) or \
+            isinstance(ctx, (PDFPasswordIncorrect, PDFEncryptionError))
+
+# =================================================================
 # Main parser (HYBRID MODE: Text + OCR)
 # =================================================================
 
@@ -1186,6 +1218,19 @@ if __name__ == "__main__":
     if not os.path.exists(FILE_PATH):
         print(f"File not found: {FILE_PATH}. Please provide a valid file path.")
         sys.exit(1)
+
+    # Fast pre-check mode: `python parse_bank_statement.py <file> --check-only`
+    # does ONLY the password/encryption check above and exits immediately —
+    # no table extraction. Used by src/lib/pdfPasswordCheck.ts to test a PDF
+    # of ANY docType (bank statement or invoice) up front, before either
+    # engine spends time on a file neither can actually open. Exit code 3
+    # means password-protected; 0 means it's fine to proceed. Checked before
+    # the normal argv[2]=output-path handling below so "--check-only" is
+    # never mistaken for an output file path.
+    if '--check-only' in sys.argv:
+        protected = check_password_protected(FILE_PATH)
+        print('PASSWORD_PROTECTED' if protected else 'OK')
+        sys.exit(3 if protected else 0)
 
     if len(sys.argv) >= 3:
         EXCEL_OUTPUT_PATH = sys.argv[2]

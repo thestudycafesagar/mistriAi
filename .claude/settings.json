@@ -10,7 +10,13 @@
       "Bash(rm -f \"c:\\\\Users\\\\user\\\\Desktop\\\\pdf-web\\\\.tmp-test-python-parser.mjs\" \"c:\\\\Users\\\\user\\\\Desktop\\\\pdf-web\\\\.tmp-test-python-parser.log\")",
       "Bash(npx tsx *)",
       "Bash(rm -f \"c:\\\\Users\\\\user\\\\Desktop\\\\pdf-web\\\\.tmp-test-python-parser.mts\" && ls \"C:\\\\Users\\\\user\\\\AppData\\\\Local\\\\Temp\\\\mistri-ai-bank-parse\\\\\" 2>&1)",
-      "Read(//c/Users/user/AppData/Local/Temp/**)"
+      "Read(//c/Users/user/AppData/Local/Temp/**)",
+      "Bash(curl -s -X POST http://localhost:4002/api/extract/invoice -F \"file=@1789214067513_19fbd321.pdf;type=application/pdf\" -F \"docType=SALES_INVOICE\" -F \"companyName=Anthropic PBC\" -F \"companyGSTIN=\")",
+      "Bash(curl -s -X POST http://localhost:4002/api/extract/invoice -F \"file=@1789214067513_19fbd321.pdf;type=application/pdf\" -F \"docType=PURCHASE_INVOICE\")",
+      "Bash(curl -s -X POST http://localhost:4003/api/extract/bank-statement -F \"file=@_test_password_protected.pdf;type=application/pdf\")",
+      "Bash(curl -s -X POST http://localhost:4003/api/extract/invoice -F \"file=@_test_password_protected.pdf;type=application/pdf\" -F \"docType=SALES_INVOICE\")",
+      "Bash(curl -s -X POST http://localhost:4003/api/extract/invoice -F \"file=@_test_password_protected.pdf;type=application/pdf\" -F \"docType=PURCHASE_INVOICE\")",
+      "Bash(curl -s -X POST http://localhost:4003/api/extract -F \"file=@_test_password_protected.pdf;type=application/pdf\" -F \"docType=BANK_STATEMENT\")"
     ]
   }
 }

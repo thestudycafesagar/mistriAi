@@ -17,6 +17,7 @@ import { runOcr, hasMistralApiKey, type BankStatementSummary, type IncompleteChu
 import { SCHEMAS, type DocumentType } from './schemas';
 import { hashFile, getCached, setCached } from './ocrCache';
 import { saveMismatchedFile } from './mismatchedStore';
+import { isPasswordProtectedPdf } from './pdfPasswordCheck';
 
 const ALLOWED_MIME = [
   'application/pdf',
@@ -267,6 +268,25 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
       return NextResponse.json(
         { success: false, error: 'Server configuration error: no Mistral API key is configured (MISTRAL_API_KEY / MISTRAL_API_KEYS).' },
         { status: 500 },
+      );
+    }
+
+    // A PDF that genuinely requires a password to open fails identically on
+    // BOTH engines (the local Python parser and Mistral), so there's no
+    // point queueing it at all — reject it here, the same way as any other
+    // 400 validation failure, with a specific reason instead of a generic
+    // extraction error. Does not affect a PDF that's merely encrypted for
+    // owner-level print/edit restrictions with no password needed to open —
+    // that already works today and this check does not touch it.
+    if (mimeType === 'application/pdf' && await isPasswordProtectedPdf(file)) {
+      logValidationFailure(file, receivedFields, 'PDF is password-protected');
+      const docLabel = docType === 'BANK_STATEMENT' ? 'statement' : 'invoice';
+      return NextResponse.json(
+        {
+          success: false,
+          error: `This PDF is password-protected and cannot be read. Please remove the password protection (or re-export the ${docLabel} without one) and try again.`,
+        },
+        { status: 400 },
       );
     }
 
