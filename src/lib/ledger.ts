@@ -92,7 +92,7 @@ const UPI_BANK_CODES = new Set([
   'SBIN', 'HDFC', 'ICIC', 'UTIB', 'YESB', 'KKBK', 'PUNB', 'BARB', 'IDFB',
   'INDB', 'RATN', 'FDRL', 'KARB', 'SIBL', 'CSBK', 'DCBL', 'BDBL', 'CNRB',
   'UBIN', 'IBKL', 'UCBA', 'CBIN', 'IDIB', 'IOBA', 'MAHB', 'PSIB', 'PYTM',
-  'AIRP', 'FINO', 'JIOP', 'AUBL', 'ESFB', 'UJVN',
+  'AIRP', 'FINO', 'JIOP', 'AUBL', 'ESFB', 'UJVN', 'KVBL', 'APGB', 'BKID',
 ]);
 
 function isUpiBankCode(token: string): boolean {
@@ -158,7 +158,13 @@ function pickPartyToken(rawTokens: string[]): string | null {
  * the very next segment (which is sometimes empty or a bank code).
  */
 function extractUpiParty(desc: string): string | null {
-  if (!/^UPI\b/i.test(desc) || !desc.includes('/')) return null;
+  // Matches UPI, UPIAR (UPI Auto-pay Recurring debit), UPIAB (UPI Auto-pay
+  // Beneficiary/credit) — all standard RBI-mandated narration prefixes used
+  // by Indian banks. The original ^UPI\b regex required a word boundary after
+  // "UPI", which means \W or end-of-string — the letter "A"/"R" in UPIAB/
+  // UPIAR is a word character, so \b did NOT match there, causing every such
+  // transaction to bail here and fall through to "Suspense A/c".
+  if (!/^UPIA?R?B?\b/i.test(desc) || !desc.includes('/')) return null;
 
   const tokens = desc.split('/').map(t => t.trim());
   const markerIndex = tokens.findIndex(t => /^(DR|CR)$/i.test(t));
@@ -221,7 +227,7 @@ export function suggestBankLedger(description: string, modelSuggestion?: string)
   // numbers, bank names/IFSC codes, routing remarks) and take what's left,
   // rather than assuming a fixed position.
   if (/^(MMT|IMPS|NEFT|RTGS)\b/i.test(desc)) {
-    const delimiter = desc.includes('/') ? '/' : desc.includes('-') ? '-' : null;
+    const delimiter = desc.includes('/') ? '/' : desc.includes('-') ? '-' : desc.includes(':') ? ':' : null;
     if (delimiter) {
       const party = pickPartyToken(desc.split(delimiter));
       if (party) {

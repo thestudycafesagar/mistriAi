@@ -7,6 +7,46 @@ from openpyxl import load_workbook
 from openpyxl.utils import get_column_letter
 from pdfminer.pdfdocument import PDFPasswordIncorrect, PDFEncryptionError
 
+# ---------------------------------------------------------------------------
+# Optional: Ledger Classification (zero-side-effect — never breaks extraction)
+# ---------------------------------------------------------------------------
+try:
+    from ledger_categorizer import LedgerCategorizer as _LedgerCategorizer
+    _LEDGER_CATEGORIZER_AVAILABLE = True
+except ImportError:
+    _LedgerCategorizer = None  # type: ignore
+    _LEDGER_CATEGORIZER_AVAILABLE = False
+
+
+def apply_ledger_classification(df, history_df=None):
+    """
+    Add a 'Suggested_Ledger' column to the bank statement DataFrame using the
+    4-layer LedgerCategorizer cascade (sanitize -> keyword rules -> fuzzy
+    match -> LLM stub).  Returns a *new* DataFrame; the original is not
+    mutated.  If ledger_categorizer.py is not installed or any error occurs,
+    the DataFrame is returned unchanged so extraction never fails because of
+    this optional step.
+
+    Parameters
+    ----------
+    df         : the fully-cleaned bank statement DataFrame.
+    history_df : optional pandas DataFrame of past (Narration, Ledger)
+                 mappings for Layer 3 fuzzy matching.  Pass None to skip.
+
+    Returns
+    -------
+    pd.DataFrame
+        New DataFrame with all original columns plus 'Suggested_Ledger'.
+    """
+    if not _LEDGER_CATEGORIZER_AVAILABLE:
+        return df
+    try:
+        categorizer = _LedgerCategorizer(history_df=history_df)
+        return categorizer.apply(df)
+    except Exception as exc:  # pragma: no cover
+        print(f"[!] LedgerCategorizer failed (non-fatal): {exc}")
+        return df
+
 # =================================================================
 # Keyword matching helper (regex, word-boundary-anchored)
 # =================================================================
@@ -1175,6 +1215,12 @@ def parse_bank_statement(file_path, output_excel_path):
 
     df.replace("", pd.NA, inplace=True)
     df.dropna(how='all', inplace=True)
+
+    # ── Ledger Classification (additive — appends 'Suggested_Ledger' column) ──
+    # Runs AFTER all cleaning, filtering, and deduplication are complete.
+    # Uses df.assign() internally so no existing column is ever mutated.
+    # If ledger_categorizer.py is absent or raises, df is returned unchanged.
+    df = apply_ledger_classification(df)
 
     df.to_excel(output_excel_path, index=False, engine='openpyxl')
     
