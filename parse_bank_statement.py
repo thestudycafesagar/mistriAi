@@ -262,11 +262,44 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
                 y_rows[matched] = []
             y_rows[matched].append(w)
 
-        for y in sorted(y_rows):
+        sorted_ys = sorted(y_rows)
+        for yi, y in enumerate(sorted_ys):
             rw = sorted(y_rows[y], key=lambda w: w['x0'])
             rt = ' '.join(w['text'].lower() for w in rw)
+            # A wrapped 2-3 line header can have its 'date'/'txn' anchor word
+            # on a LOWER line than its more distinguishing labels — e.g. one
+            # real IDBI statement prints "GL. | Value | Tran | ... |
+            # Transaction | Transaction | Balance" on one line and "Date |
+            # Date | Number | Debit | Amount | Credit | Amount" on the next.
+            # Checking only THIS row's own text anchors on the lower "Date...
+            # Amount" line instead, which then excludes the upper line from
+            # the header band entirely (band_words_excluding_date_rows only
+            # looks 5px up, 25px down) — collapsing "GL. Date"/"Value Date"
+            # down to two bare duplicate "Date" columns and "Transaction
+            # [Debit] Amount"/"Transaction [Credit] Amount" down to two
+            # duplicate "Transaction Amount" columns (see also the debit/
+            # credit addition to target_headers below) — a pandas duplicate-
+            # column-name crash downstream (`df[col].str` raises because a
+            # duplicate label makes `df[col]` a DataFrame, not a Series).
+            # Peeking at the next couple of close rows for 'date'/'txn' only
+            # (mirrors detect_header()'s own 3-row block lookahead for the
+            # gridline path) lets a qualifying row still anchor at its own
+            # FIRST line. `matches` deliberately stays scoped to THIS row's
+            # own text, not the peeked block — an early attempt that widened
+            # both false-positived on two unrelated single-field metadata
+            # lines sitting close together (a real "Opening Balance : ..."
+            # line + a "Peg Review date : ..." line 15px below it combined to
+            # look like a 2-keyword-plus-date header). A genuine header row
+            # already carries >=2 keyword matches on its own (per-column
+            # labels sitting side by side); only the date word itself
+            # legitimately lives on an adjacent wrapped line.
+            date_lookahead = rt
+            for ny in sorted_ys[yi + 1:yi + 3]:
+                if ny - y > 20:
+                    break
+                date_lookahead += ' ' + ' '.join(w['text'].lower() for w in sorted(y_rows[ny], key=lambda w: w['x0']))
             matches = sum(1 for t in target_headers if t in rt)
-            if ('date' in rt or 'txn' in rt) and matches >= 2:
+            if ('date' in date_lookahead or 'txn' in date_lookahead) and matches >= 2:
                 if first_header_y is None:
                     first_header_y = y
                     data_start_page = pg_idx
@@ -407,7 +440,17 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
             return False
         if all(DIVIDER_RE.match(t) for t in texts):
             return True
-        if all(AMOUNT_VALUE_RE.match(t) for t in texts):
+        # Require >=2 amount tokens (matches this function's own "two
+        # amounts, no label" B/F description above) — a SINGLE lone amount
+        # is exactly the shape of a real transaction's own Withdrawal/Deposit
+        # value wrapped onto its own line, which a 1-token threshold used to
+        # catch too. Confirmed on a real Bank of Baroda statement whose
+        # 3-line-per-transaction layout prints the amount on a line by
+        # itself, sandwiched between the date/balance line above and the
+        # rest of the narration below — the old 1-token rule dropped that
+        # amount outright before it ever reached the merge step, leaving the
+        # transaction's Debit/Credit blank (94% of 3798 rows affected).
+        if len(texts) >= 2 and all(AMOUNT_VALUE_RE.match(t) for t in texts):
             return True
         return False
 
@@ -870,7 +913,13 @@ def parse_bank_statement(file_path, output_excel_path):
     target_headers = [
         "date", "txn date", "transaction date", "value date", "posting date",
         "balance", "amount", "withdrawal", "deposit", "value date",
-        "narration", "txn", "transaction", "category", "chq", "cheque", "ref", "particulars", "remarks"
+        "narration", "txn", "transaction", "category", "chq", "cheque", "ref", "particulars", "remarks",
+        # "debit"/"credit" themselves were missing — a header like "Debit
+        # Amount"/"Credit Amount" only matched on the word "Amount", so both
+        # columns collapsed to the identical generic name "Transaction
+        # Amount"/"Amount" (a real IDBI statement's shape). Same category as
+        # amount_keywords further down, which already includes these.
+        "debit", "credit",
     ]
     
     pages_tables = []

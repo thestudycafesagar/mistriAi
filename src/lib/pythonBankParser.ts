@@ -158,8 +158,16 @@ function normalizeKey(k: string): string {
   return k.toLowerCase().replace(/\s+/g, '');
 }
 
+// Try the space-preserved lowercased form FIRST (a real multi-word header
+// like "Transaction Debit Amount" needs the space between "Debit" and its
+// neighbors as a genuine word boundary — despacing it to
+// "transactiondebitamount" embeds "debit" on both sides and hasKeyword()
+// correctly refuses to match it, silently blanking Debit/Credit for a real
+// IDBI-format statement). Fall back to the fully despaced form only when
+// nothing matches with spaces intact, so the original stray-space-inside-
+// one-word case above ("Withdra wal (Dr)") still resolves via that pass.
 function findKey(keys: string[], predicate: (normalized: string) => boolean): string | undefined {
-  return keys.find(k => predicate(normalizeKey(k)));
+  return keys.find(k => predicate(k.toLowerCase())) ?? keys.find(k => predicate(normalizeKey(k)));
 }
 
 // Matches `keyword` in `normalized` when there's a non-alphanumeric boundary
