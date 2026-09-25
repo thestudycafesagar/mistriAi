@@ -361,6 +361,25 @@ export async function tryPythonBankStatementParse(file: File): Promise<Record<st
       return null;
     }
 
+    // Same reasoning, for DATE: a real transaction always has one (RULE 1 in
+    // schemas.ts). Confirmed on a real ICICI statement whose header put a
+    // serial-number column ("S No.") before "Transaction Date" — a column-
+    // index bug in parse_bank_statement.py (now fixed) meant DATE came back
+    // blank for all 1115/1115 rows while Debit/Credit/Balance were still
+    // correctly populated, so the Debit/Credit gate above didn't catch it
+    // at all and the broken result was silently accepted as a "success".
+    // This is the same class of gap the Debit/Credit check exists for —
+    // there will be other date-column-naming variants nobody's hit yet.
+    const blankDateCount = rows.filter(r => !r.DATE).length;
+    const blankDateRatio = blankDateCount / rows.length;
+    if (rows.length >= 5 && blankDateRatio > 0.3) {
+      console.warn(
+        `[pythonBankParser] ${blankDateCount}/${rows.length} row(s) (${(blankDateRatio * 100).toFixed(0)}%) have no DATE — ` +
+        `the local parser likely didn't recognize this statement's date column. Falling back to Mistral OCR instead of returning incomplete data.`,
+      );
+      return null;
+    }
+
     console.log(`[pythonBankParser] Local parser succeeded — ${rows.length} transaction(s) extracted, skipping Mistral OCR for this document.`);
     return rows;
   } catch (err) {

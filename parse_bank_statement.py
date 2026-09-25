@@ -362,8 +362,25 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
                 idx = i
         return idx
 
-    # Date column x-zone = everything to the left of the second column start
-    date_col_x_max = col_starts[1] - 5 if len(col_starts) > 1 else 120
+    # Date column x-zone. Used to matter only for column 0, since every
+    # statement seen until now put Date first — but a real ICICI statement
+    # puts a serial-number column ("S No.") BEFORE "Transaction Date", so
+    # Date is column 1, not 0. The old hardcoded "x < col_starts[1]" zone
+    # then covered ONLY the S No. column, never the actual date values
+    # (which sit further right, under column 1) — is_anchor was never True
+    # for any row, anchor_indices came back empty, and the whole extractor
+    # silently returned (None, None). Locate the real date column by NAME
+    # instead of assuming index 0, and bound its zone on both sides so a
+    # preceding column's own values (e.g. "1", "2", ... in S No.) don't get
+    # swept into the date zone and corrupt DATE_PAT's match the same way.
+    date_idx = next((i for i, name in enumerate(col_names) if 'date' in name.lower()), 0)
+    # No left bound needed when Date IS column 0 (every previously-working
+    # statement) — preserves that behavior exactly. A small buffer (not a
+    # hard column boundary) when it isn't, since a date VALUE can still
+    # start slightly left of its own header word, same reasoning as the
+    # right-side "-5" margins used throughout this function.
+    date_col_x_min = col_starts[date_idx] - 15 if date_idx > 0 else 0
+    date_col_x_max = col_starts[date_idx + 1] - 5 if date_idx + 1 < len(col_starts) else 120
 
     # ── Amount-column clustering (fixes right-aligned numeric columns) ────
     # Header labels are left-anchored, but amounts (WITHDRAWALS/DEPOSITS/BALANCE
@@ -482,8 +499,13 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
             if any(skip in row_text for skip in SKIP_PHRASES) or BF_PAT.search(row_text):
                 continue
 
-            # An anchor row has a date-pattern word within the date-column x-zone
-            date_zone_words = [w for w in row_words if w['x0'] < date_col_x_max]
+            # An anchor row has a date-pattern word within the date-column x-zone.
+            # Bounded on the left too (date_col_x_min) — without it, a preceding
+            # column's own value (e.g. "1"/"2"/... in a real "S No." column) gets
+            # swept in ahead of the date, and DATE_PAT.match() (anchored at the
+            # string start) fails on "1 01.04.2025" the same way it would on any
+            # other non-date-led text.
+            date_zone_words = [w for w in row_words if date_col_x_min <= w['x0'] < date_col_x_max]
             date_zone_text = ' '.join(w['text'] for w in date_zone_words).strip()
             is_anchor = bool(DATE_PAT.match(date_zone_text))
 
@@ -495,19 +517,20 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
                 continue
 
             # Assign words to columns.
-            # Special rule: the Date column (col 0) should ONLY contain the date value.
-            # Any word starting beyond the date column x-zone belongs to narration (col 1+).
+            # Special rule: the Date column should ONLY contain the date value.
+            # Any word starting beyond the date column x-zone belongs to narration
+            # (the column right after Date — date_idx+1, not always literally 1).
             row_by_col = {}
             for w in row_words:
                 x = w['x0']
-                if x < date_col_x_max:
-                    ci = 0  # date zone
+                if date_col_x_min <= x < date_col_x_max:
+                    ci = date_idx  # date zone
                 elif cluster_to_col and AMOUNT_VALUE_RE.match(w['text'].strip()):
                     ci = get_amount_col_idx(w['x1'])  # right-aligned amount: match by x1 cluster
                 else:
                     ci = get_col_idx(x)
-                    if ci == 0:
-                        ci = 1  # force into narration if get_col_idx returned 0 for non-date x
+                    if ci == date_idx:
+                        ci = date_idx + 1  # force into narration if get_col_idx returned the date column for non-date x
                 row_by_col[ci] = (row_by_col.get(ci, '') + ' ' + w['text']).strip()
 
             all_categorized.append({
