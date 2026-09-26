@@ -403,9 +403,10 @@ function buildAnnotationFormat(schemaObj: object, schemaName: string) {
 
 /**
  * Split a PDF File into smaller chunks of `pagesPerChunk` pages each.
- * Returns an array of File objects, each representing a chunk.
+ * Returns the chunk Files plus the source PDF's total page count (used to
+ * report `aiPagesScanned` on the Mistral path — see RunOcrResult).
  */
-async function splitPdf(file: File, pagesPerChunk: number): Promise<File[]> {
+async function splitPdf(file: File, pagesPerChunk: number): Promise<{ chunks: File[]; totalPages: number }> {
   const arrayBuffer = await file.arrayBuffer();
   // Many bank-issued PDFs are flagged "encrypted" purely for owner-password
   // restrictions (block editing/printing) with no user password required to
@@ -418,7 +419,7 @@ async function splitPdf(file: File, pagesPerChunk: number): Promise<File[]> {
   const totalPages = pdfDoc.getPageCount();
 
   if (totalPages <= pagesPerChunk) {
-    return [file];
+    return { chunks: [file], totalPages };
   }
 
   if (pdfDoc.isEncrypted) {
@@ -442,7 +443,7 @@ async function splitPdf(file: File, pagesPerChunk: number): Promise<File[]> {
       `pdf-lib cannot decrypt content streams to split it safely, so sending it to Mistral as a single ` +
       `request instead of chunking.`,
     );
-    return [file];
+    return { chunks: [file], totalPages };
   }
 
   const chunks: File[] = [];
@@ -464,7 +465,7 @@ async function splitPdf(file: File, pagesPerChunk: number): Promise<File[]> {
     chunks.push(chunkFile);
   }
 
-  return chunks;
+  return { chunks, totalPages };
 }
 
 // Matches a DD/MM/YYYY-ish date at the start of a markdown table row/line —
@@ -815,6 +816,15 @@ export interface RunOcrResult {
    */
   usedAI: boolean;
   /**
+   * How many pages Mistral's OCR AI model actually scanned. Only meaningful
+   * when `usedAI` is true — undefined on the Python-sourced early return
+   * (extractHandler.ts only surfaces this in the response when the AI did
+   * the work, per the `aiPagesScanned` response field). 1 for a single
+   * image; the source PDF's real page count otherwise (not the chunk
+   * count — PAGES_PER_CHUNK can group multiple pages into one chunk).
+   */
+  aiPagesScanned?: number;
+  /**
    * Present only when one or more chunks (pages) permanently failed after
    * exhausting every retry — e.g. a sustained burst of Mistral-side 502s.
    * `rows` still contains everything successfully extracted from every
@@ -901,6 +911,10 @@ export async function runOcr(
   // per-chunk catch block below for why a chunk failure no longer fails the
   // whole document. Empty for the common case (every chunk succeeded).
   const incompleteChunks: IncompleteChunk[] = [];
+  // How many pages Mistral actually scanned — set below per input kind
+  // (PDF: splitPdf()'s own page count; image: always 1). Surfaced as
+  // `aiPagesScanned` in the API response.
+  let aiPagesScanned: number;
 
   if (isPdf(file.type)) {
     // ── PDF path: split → upload chunks (bounded parallel) → ocr.process → merge ──
@@ -909,7 +923,8 @@ export async function runOcr(
     // bounds how many run at once so a 200-page PDF doesn't take dozens of
     // times as long as a single small chunk.
     const pagesPerChunk = PAGES_PER_CHUNK[docType];
-    const chunks = await splitPdf(file, pagesPerChunk);
+    const { chunks, totalPages } = await splitPdf(file, pagesPerChunk);
+    aiPagesScanned = totalPages;
     const chunkConcurrency = CHUNK_CONCURRENCY[docType];
     console.log(
       `[Mistral OCR] PDF split into ${chunks.length} chunks (max ${pagesPerChunk} pages each), ` +
@@ -1083,6 +1098,7 @@ export async function runOcr(
     }
   } else {
     // ── Image path: base64 data URL → ocr.process ─────────────────────────────
+    aiPagesScanned = 1;
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
     const base64 = buffer.toString('base64');
@@ -1194,6 +1210,7 @@ export async function runOcr(
     // usedAI: true is the early Python-parser return above, which never
     // falls through to here.
     usedAI: true,
+    aiPagesScanned,
   };
 }
 

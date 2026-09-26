@@ -308,11 +308,15 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     // the response) for a cache hit against an entry written before this
     // field existed — we'd rather say nothing than guess wrong.
     let usedAI: boolean | undefined;
+    // How many pages Mistral scanned — only meaningful/reported when
+    // usedAI is true (see the `aiPagesScanned` response field below).
+    let aiPagesScanned: number | undefined;
 
     if (cached) {
       rows = cached.rows;
       bankSummary = cached.meta?.bankSummary ? JSON.parse(cached.meta.bankSummary) : undefined;
       usedAI = cached.meta?.usedAI !== undefined ? cached.meta.usedAI === 'true' : undefined;
+      aiPagesScanned = cached.meta?.aiPagesScanned !== undefined ? Number(cached.meta.aiPagesScanned) : undefined;
       servedFromCache = true;
     } else {
       // ── Enqueue the OCR task ────────────────────────────────────────────────
@@ -340,6 +344,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
       bankSummary = result.bankSummary;
       incompleteChunks = result.incompleteChunks;
       usedAI = result.usedAI;
+      aiPagesScanned = result.aiPagesScanned;
       // A request that passed validation but came back with literally zero
       // rows is, from the caller's perspective, a file that "didn't get
       // extracted" just as much as a thrown error — e.g. a bank statement
@@ -365,6 +370,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
         // than a fresh run's result silently losing that information.
         const meta: Record<string, string> = { usedAI: String(usedAI) };
         if (bankSummary) meta.bankSummary = JSON.stringify(bankSummary);
+        if (aiPagesScanned !== undefined) meta.aiPagesScanned = String(aiPagesScanned);
         setCached(docType, fileHash, rows, meta);
       }
     }
@@ -396,6 +402,12 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     // unknown origin is never misreported as one engine or the other.
     if (docType === 'BANK_STATEMENT' && usedAI !== undefined) {
       responsePayload.ai = usedAI;
+    }
+    // Only when Mistral's AI actually did the scanning — never for a
+    // BANK_STATEMENT the local Python parser handled (usedAI === false),
+    // where there's no AI page count to report at all.
+    if (usedAI === true && aiPagesScanned !== undefined) {
+      responsePayload.aiPagesScanned = aiPagesScanned;
     }
     if (incompleteChunks) {
       // Deliberately still a 200 with success:true — most of the document
