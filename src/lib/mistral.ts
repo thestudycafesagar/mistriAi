@@ -825,6 +825,12 @@ export interface RunOcrResult {
    */
   aiPagesScanned?: number;
   /**
+   * Page count for the local, non-AI Python parser path — only set when
+   * `usedAI` is false. Mirrors `aiPagesScanned`'s shape exactly (a bare
+   * number, not an object).
+   */
+  plumberPages?: number;
+  /**
    * Present only when one or more chunks (pages) permanently failed after
    * exhausting every retry — e.g. a sustained burst of Mistral-side 502s.
    * `rows` still contains everything successfully extracted from every
@@ -893,7 +899,11 @@ export async function runOcr(
       // checked here — reconciled stays null ("not verified"), same as a
       // Mistral chunk that never showed both balances clearly enough.
       const bankSummary = reconcileBankStatement(finalRows, '', '');
-      return { rows: finalRows, bankSummary, usedAI: false };
+      // Page count for the local (pdfplumber-based) parser path — mirrors
+      // aiPagesScanned below, just object-shaped and under its own key per
+      // request, since this is a different engine (no Mistral call at all).
+      const plumberPages = (await PDFDocument.load(await file.arrayBuffer(), { ignoreEncryption: true })).getPageCount();
+      return { rows: finalRows, bankSummary, usedAI: false, plumberPages };
     }
   }
 

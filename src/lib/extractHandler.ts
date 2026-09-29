@@ -311,12 +311,16 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     // How many pages Mistral scanned — only meaningful/reported when
     // usedAI is true (see the `aiPagesScanned` response field below).
     let aiPagesScanned: number | undefined;
+    // Page count for the local, non-AI Python parser path — only set when
+    // usedAI is false (see the `plumberPages` response field below).
+    let plumberPages: number | undefined;
 
     if (cached) {
       rows = cached.rows;
       bankSummary = cached.meta?.bankSummary ? JSON.parse(cached.meta.bankSummary) : undefined;
       usedAI = cached.meta?.usedAI !== undefined ? cached.meta.usedAI === 'true' : undefined;
       aiPagesScanned = cached.meta?.aiPagesScanned !== undefined ? Number(cached.meta.aiPagesScanned) : undefined;
+      plumberPages = cached.meta?.plumberPages !== undefined ? Number(cached.meta.plumberPages) : undefined;
       servedFromCache = true;
     } else {
       // ── Enqueue the OCR task ────────────────────────────────────────────────
@@ -345,6 +349,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
       incompleteChunks = result.incompleteChunks;
       usedAI = result.usedAI;
       aiPagesScanned = result.aiPagesScanned;
+      plumberPages = result.plumberPages;
       // A request that passed validation but came back with literally zero
       // rows is, from the caller's perspective, a file that "didn't get
       // extracted" just as much as a thrown error — e.g. a bank statement
@@ -371,6 +376,7 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
         const meta: Record<string, string> = { usedAI: String(usedAI) };
         if (bankSummary) meta.bankSummary = JSON.stringify(bankSummary);
         if (aiPagesScanned !== undefined) meta.aiPagesScanned = String(aiPagesScanned);
+        if (plumberPages !== undefined) meta.plumberPages = String(plumberPages);
         setCached(docType, fileHash, rows, meta);
       }
     }
@@ -408,6 +414,11 @@ export async function handleExtractRequest(req: NextRequest, options: ExtractRou
     // where there's no AI page count to report at all.
     if (usedAI === true && aiPagesScanned !== undefined) {
       responsePayload.aiPagesScanned = aiPagesScanned;
+    }
+    // The local, non-AI Python parser's page count — mirrors aiPagesScanned
+    // above but only ever alongside usedAI === false, never both.
+    if (usedAI === false && plumberPages !== undefined) {
+      responsePayload.plumberPages = plumberPages;
     }
     if (incompleteChunks) {
       // Deliberately still a 200 with success:true — most of the document
