@@ -184,7 +184,7 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
     # None), and falls back to the far cruder "standard style" table loop —
     # producing exactly the kind of narration-shifted, rows-glued-to-the-
     # wrong-transaction corruption this extractor exists to avoid.
-    DATE_PAT = re.compile(r'^\d{1,2}' + DATE_SEP + r'(?:\d{1,2}|[A-Za-z]{3,9})' + DATE_SEP + r'\d{2,4}(?:\s|$)', re.IGNORECASE)
+    DATE_PAT = re.compile(r'^\d{1,2}' + DATE_SEP + r'(?:\d{1,2}|[A-Za-z]{3,9})' + DATE_SEP + r'\d{2,4}(?:\s|$|[A-Za-z])', re.IGNORECASE)
 
     def band_words_excluding_date_rows(words, center_y, start_offset=-5, end_offset=25):
         """
@@ -433,6 +433,7 @@ def extract_transactions_by_word_coords(pdf_path, target_headers):
         'eff avail', 'count of lien', ':12 pm', ':12 am', ' pm )', ' am )',
         'transaction list', 'cumulative total', 'grand total', 'brought forward',
         'end of statement', 'computer-generated', 'computer generated',
+        'total:', 'account related',
     ]
     BF_PAT = re.compile(r'\bb\s*/\s*f\b', re.IGNORECASE)  # "B/F" brought-forward marker
     # Divider lines between the transaction table and totals footer are
@@ -1190,6 +1191,35 @@ def parse_bank_statement(file_path, output_excel_path):
                     all_data.append(current_txn)
 
     # ── Build DataFrame and Export ───────────────────────────────────────
+    # Post-table-loop fallback: if the gridline extraction produced no data
+    # (or only a bare totals/summary row with no real date — e.g. an ICICI
+    # statement where the transaction rows are rendered as free-text words
+    # between the gridline borders, not inside any table cell, so pdfplumber's
+    # gridline extractor only captures the header row and a "Total:" footer row
+    # while every actual transaction is invisible to it), try the word-
+    # coordinate extractor as a last resort before giving up entirely.
+    # This is different from the earlier fragmentation-ratio check (which only
+    # runs for non-one_table_per_txn PDFs) — here we've already run the
+    # gridline path all the way through and found it produced nothing useful.
+    if not coord_extractor_succeeded and is_native_pdf:
+        # Also trigger when all_data is non-empty but contains no row with a
+        # real transaction date — e.g. a gridline extractor that captured ONLY
+        # the "Total:" footer row while every actual transaction was rendered as
+        # free text outside any table border (confirmed: ICICI statement whose
+        # gridlines only delimit the header and a trailing totals row, leaving
+        # 8 real transactions invisible to pdfplumber's table extractor).
+        has_dated_row = any(
+            row and row[0] and _TABLE_DATE_RE.match(str(row[0]).strip())
+            for row in all_data
+        )
+        if not all_data or not has_dated_row:
+            print("    -> Gridline extraction yielded no transactions. Trying word-coordinate extractor as fallback.")
+            coord_headers, coord_rows = extract_transactions_by_word_coords(file_path, target_headers)
+            if coord_headers and coord_rows:
+                headers = coord_headers
+                all_data = coord_rows
+                print(f"    -> Word-coordinate extractor found {len(coord_rows)} transactions.")
+
     if not all_data:
         print("No transactional data found. Check the document format.")
         return False
